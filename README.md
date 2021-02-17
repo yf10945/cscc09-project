@@ -29,7 +29,7 @@ Key features that will be completed by the Beta version
 
 -   Play the previous/next song in playlist
 
--   View song info/lyric
+-   View song info/lyrics
 
 -   Go to a separate room to do karaoke
 
