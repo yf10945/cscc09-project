@@ -17,7 +17,7 @@ This web app is a music player app that supports karaoke with your friends.
 Key features that will be completed by the Beta version
 -------------------------------------------------------
 
--   Add a song with lyric 
+-   Add a song with lyrics
 
 -   Delete a song
 
@@ -54,7 +54,7 @@ Technology that we will use for building the app and deploying it
 Description of the top 5 technical challenges
 ---------------------------------------------
 
-1.  Creating a separate room where at least two people can play karaoke.
+1.  Creating a separate room where at least two people can play karaoke
 
 2.  Learning new frameworks for the project such as React, GraphQL and MongoDB
 
