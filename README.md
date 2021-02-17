@@ -42,6 +42,8 @@ Additional features that will be complete by the Final version
 
 -   WebRTC for karaoke rooms
 
+-   Adding comments for a song under a certain timestamp
+
 Technology that we will use for building the app and deploying it
 -----------------------------------------------------------------
 
