@@ -1,6 +1,7 @@
 import AddSongPage from "./AddSongPage";
 import LoginPage from "./LoginPage";
 import AboutUsPage from "./AboutUsPage";
+import DisplayPlaylists from "./DisplayPlaylists";
 import "./styles.css";
 import React from "react";
 
@@ -13,6 +14,7 @@ class App extends React.Component {
     this.redirectToLogin = this.redirectToLogin.bind(this);
     this.redirectToAddSong = this.redirectToAddSong.bind(this);
     this.redirectToAboutUs = this.redirectToAboutUs.bind(this);
+    this.redirectToDisplayPlaylists = this.redirectToDisplayPlaylists.bind(this);
   }
 
   redirectToLogin() {
@@ -33,14 +35,23 @@ class App extends React.Component {
     });
   }
 
+  redirectToDisplayPlaylists() {
+    this.setState({
+      currentPage: "DisplayPlaylists"
+    });
+  }
+
   render() {
     let page = null;
     if (this.state.currentPage === "Login") {
-      page = <LoginPage />;
+      page = <LoginPage 
+        redirectToDisplayPlaylists={this.redirectToDisplayPlaylists}/>;
     } else if (this.state.currentPage === "AddSong") {
       page = <AddSongPage />;
     } else if (this.state.currentPage === "AboutUs") {
       page = <AboutUsPage />;
+    } else if (this.state.currentPage === "DisplayPlaylists") {
+      page = <DisplayPlaylists />;
     }
     return (
       <div className="App">
@@ -48,6 +59,7 @@ class App extends React.Component {
         <button onClick={this.redirectToLogin}>Login</button>
         <button onClick={this.redirectToAddSong}>AddSong</button>
         <button onClick={this.redirectToAboutUs}>AboutUs</button>
+        <button onClick={this.redirectToDisplayPlaylists}>DisplayPlaylists</button>
       </div>
     );
   }
