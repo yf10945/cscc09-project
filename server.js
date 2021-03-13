@@ -7,7 +7,7 @@ const passport = require('passport');
 const authenticate = require('./authenticate');
 const mongoose = require('mongoose');
 
-const User = require('./models/user');
+const User = require('./models/User');
 // temp schema 
 var schema = buildSchema(`
   type Query {
