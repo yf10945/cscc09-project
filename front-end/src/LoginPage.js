@@ -29,6 +29,8 @@ class LoginPage extends React.Component {
     .then((res) => {
         if (res.status !== 200 ){
           this.setState({errorMessage: res.status + " " +  res.statusText});
+        } else {
+          this.props.redirectToDisplayPlaylists();
         }
         return res;
     })
@@ -51,6 +53,8 @@ class LoginPage extends React.Component {
     .then((res) => {
         if (res.status !== 200 ){
           this.setState({errorMessage: res.status + " " + res.statusText});
+        } else {
+          this.props.redirectToDisplayPlaylists();
         }
         return res;
     })

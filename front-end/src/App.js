@@ -44,7 +44,8 @@ class App extends React.Component {
   render() {
     let page = null;
     if (this.state.currentPage === "Login") {
-      page = <LoginPage />;
+      page = <LoginPage 
+        redirectToDisplayPlaylists={this.redirectToDisplayPlaylists}/>;
     } else if (this.state.currentPage === "AddSong") {
       page = <AddSongPage />;
     } else if (this.state.currentPage === "AboutUs") {
