@@ -6,6 +6,7 @@ import AboutUsPage from "./components/AboutUsPage";
 import DisplayPlaylists from "./components/DisplayPlaylists";
 import "./styles.css";
 import WelcomePage from "./components/WelcomePage";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
         <Route path="/addsong" component={AddSongPage} />
         <Route path="/playlists" component={DisplayPlaylists} />
         <Route path="/login" component={LoginPage} />
-        {/* <Route component={PageNotFound} /> */}
+        <Route component={PageNotFound} />
       </Switch>
     </React.Fragment>
   );

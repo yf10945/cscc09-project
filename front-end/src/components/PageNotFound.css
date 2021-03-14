@@ -1,0 +1,14 @@
+.page-not-found {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+.pnf-error-message {
+    display: grid;
+    place-items: center;
+}
+
+.back-to-welcome > p {
+    font-size: 32px;
+}
