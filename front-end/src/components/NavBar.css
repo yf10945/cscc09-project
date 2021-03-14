@@ -1,0 +1,39 @@
+
+.NavContainer {
+    display: grid;
+    height: 100%; 
+    width: 120px; 
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    
+}
+  
+li a{
+    display: block;
+    width: 120px;
+    padding: 8px 0px 8px 0px;
+    color:aqua;
+    text-decoration: none;
+}
+
+li a{
+    display: block;
+    width: 120px;
+    padding: 8px 0px 8px 0px;
+    color:aqua;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #555;
+    color: white;
+}
