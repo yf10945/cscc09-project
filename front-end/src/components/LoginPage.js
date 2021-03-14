@@ -1,8 +1,7 @@
-// import "./styles.css";
+import "../styles.css";
 import React from "react";
-import { withRouter } from "react-router-dom";
-
-
+import { withRouter, Link } from "react-router-dom";
+import "./LoginPage.css";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -76,19 +75,20 @@ class LoginPage extends React.Component {
   
   render() {
     return (
-      <div className="Login">
+      <div className="Login main-theme">
         <img
           src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
           alt="logo"
           className="icon"
         />
+        <h1>Login</h1>
         <p id="error" className="error">{this.state.errorMessage}</p>
         <form className="complex_form">
           <input
             type="text"
             name="username"
             className="form_element"
-            placeholder="Enter a username"
+            placeholder="Username"
             value={this.state.email} 
             onChange={this.handleEmailChange}
             required
@@ -97,7 +97,7 @@ class LoginPage extends React.Component {
             type="password"
             name="password"
             className="form_element"
-            placeholder="Enter a password"
+            placeholder="Password"
             value={this.state.password}
             onChange={this.handlePasswordChange}
             required
@@ -107,20 +107,25 @@ class LoginPage extends React.Component {
               id="signin"
               type="button" 
               name="action" 
-              className="btn" 
+              className="btn main-button-theme" 
               onClick={this.signin}
             >
               Sign in
             </button>
-            <button 
+            {/* <button 
               id="signup" 
               type="button" 
               name="action" 
               className="btn" 
               onClick={this.signup}>
               Sign up
-            </button>
+            </button> */}
           </div>
+          <h3>Don't have an account?&nbsp;
+            <Link to="/signup" className="signup-link undecorated-link decorated-when-hovered-link">
+                Sign up now!
+            </Link>
+          </h3>
         </form>
       </div>
     );
