@@ -10,7 +10,7 @@ function PageNotFound() {
                 <h2>404: Page does not exist :(</h2>
             </div>
             <Link to="/" className="back-to-welcome undecorated-link decorated-when-hovered-link">
-                <p className="main-theme">Back to Home</p>
+                <p className="main-theme-no-background">Back to Home</p>
             </Link>   
         </div>
     )

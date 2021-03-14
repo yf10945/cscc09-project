@@ -21,7 +21,12 @@
 
 /* window background colour*/
 .main-theme {
-	background-color: rgb(63, 61, 61);
+	background-color: rgb(56, 55, 55);
+	color: white;
+}
+
+/* main theme without background color repetition */
+.main-theme-no-background {
 	color: white;
 }
 

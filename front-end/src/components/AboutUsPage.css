@@ -1,0 +1,19 @@
+.about-us-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+}
+
+.about-us-page > h1 {
+    font-size: 40px;
+}
+
+.about-us-page > p {
+    font-size: 20px;
+}
+
+.back-to-welcome > p {
+    margin: 40px;
+    font-size: 25px !important;
+}
