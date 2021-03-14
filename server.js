@@ -18,7 +18,7 @@ var schema = buildSchema(`
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
   if (err)
-    console.log(err.message)
+    console.log(err.message);
   else
     console.log('MongoDB Successfully Connected ...');
 });
