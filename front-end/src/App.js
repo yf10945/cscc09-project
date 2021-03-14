@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import AddSongPage from "./components/AddSongPage";
 import LoginPage from "./components/LoginPage";
 import AboutUsPage from "./components/AboutUsPage";
-import DisplayPlaylists from "./components/DisplayPlaylists";
+import Dashboard from "./components/Dashboard";
 import "./styles.css";
 import WelcomePage from "./components/WelcomePage";
 import PageNotFound from "./components/PageNotFound";
@@ -17,7 +17,7 @@ function App() {
         <Route exact path="/" component={WelcomePage} />
         <Route path="/aboutus" component={AboutUsPage} />
         <Route path="/addsong" component={AddSongPage} />
-        <Route path="/playlists" component={DisplayPlaylists} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignupPage} />
         <Route component={PageNotFound} />

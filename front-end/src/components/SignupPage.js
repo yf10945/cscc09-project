@@ -31,7 +31,7 @@ class SignupPage extends Component {
             if (res.status !== 200 ){
               this.setState({errorMessage: res.status + " " +  res.statusText});
             } else {
-              this.props.history.push("/playlists");
+              this.props.history.push("/dashboard");
             }
             return res;
         })
