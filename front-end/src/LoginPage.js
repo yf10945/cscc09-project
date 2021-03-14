@@ -1,5 +1,8 @@
 import "./styles.css";
 import React from "react";
+import { withRouter } from "react-router-dom";
+
+
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -30,7 +33,7 @@ class LoginPage extends React.Component {
         if (res.status !== 200 ){
           this.setState({errorMessage: res.status + " " +  res.statusText});
         } else {
-          this.props.redirectToDisplayPlaylists();
+          this.props.history.push("/playlists");
         }
         return res;
     })
@@ -54,7 +57,7 @@ class LoginPage extends React.Component {
         if (res.status !== 200 ){
           this.setState({errorMessage: res.status + " " + res.statusText});
         } else {
-          this.props.redirectToDisplayPlaylists();
+          this.props.history.push("/playlists");
         }
         return res;
     })
