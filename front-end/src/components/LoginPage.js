@@ -1,6 +1,6 @@
 import "../styles.css";
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./LoginPage.css";
 
 class LoginPage extends React.Component {
@@ -12,33 +12,8 @@ class LoginPage extends React.Component {
       errorMessage: ""
     };
     this.signin = this.signin.bind(this);
-    this.signup = this.signup.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-  }
-
-  async signup() {
-    let email = this.state.email;
-    let pwd = this.state.password;
-    var fetchOptions = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email: email, password:pwd}),
-    };
-    return fetch("/signup", fetchOptions)
-    .then((res) => {
-        if (res.status !== 200 ){
-          this.setState({errorMessage: res.status + " " +  res.statusText});
-        } else {
-          this.props.history.push("/playlists");
-        }
-        return res;
-    })
-    .catch((error) => {
-      this.setState({errorMessage: 'Error connecting to login api: ' + error});
-    });
   }
   
   async signin( ) {
@@ -112,18 +87,10 @@ class LoginPage extends React.Component {
             >
               Sign in
             </button>
-            {/* <button 
-              id="signup" 
-              type="button" 
-              name="action" 
-              className="btn" 
-              onClick={this.signup}>
-              Sign up
-            </button> */}
           </div>
           <h3>Don't have an account?&nbsp;
             <Link to="/signup" className="signup-link undecorated-link decorated-when-hovered-link">
-                Sign up now!
+                Sign up here!
             </Link>
           </h3>
         </form>

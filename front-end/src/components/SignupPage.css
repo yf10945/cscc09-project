@@ -51,14 +51,14 @@
     transform: scale(1.08);
 }
 
-.Login {
+.signup-page {
 	display: flex;
 	flex-direction: column;
     place-items: center;
     height: 100vh;
 }
 
-.signup-link {
+.login-link {
 	color: white;
-	text-decoration: underline;
+    text-decoration: underline;
 }
