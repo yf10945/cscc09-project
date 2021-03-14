@@ -1,9 +1,14 @@
-// import "./styles.css";
+import "../styles.css";
+import { withRouter } from "react-router";
+import NavBar from "./NavBar";
 
 export default function DisplayPlaylists() {
     return (
         <div className="DisplayPlaylists">
-            <h1>My Playlists</h1>
+            <NavBar />
+            <div className="main">
+                <h1>My Playlists</h1>
+            </div>
         </div>
       );
 }
