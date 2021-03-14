@@ -1,7 +1,28 @@
 ﻿.App {
 	font-family: sans-serif;
 	text-align: center;
-	background-color: #AAAAAA;
+	/* background-color: #AAAAAA;
+	color: white; */
+}
+
+.undecorated-link {
+	text-decoration: none;
+}
+
+.decorated-when-hovered-link:hover {
+	text-decoration: underline;
+	text-decoration-color: white;
+}
+
+/* window background colour*/
+.main-button-theme {
+	background-color: rgb(33, 177, 45);
+}
+
+/* window background colour*/
+.main-theme {
+	background-color: rgb(63, 61, 61);
+	color: white;
 }
 
 .complex_form {

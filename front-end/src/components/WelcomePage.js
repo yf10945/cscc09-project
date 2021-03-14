@@ -1,14 +1,35 @@
 import React from 'react';
 import "./WelcomePage.css";
+import "../styles.css";
 import { Link } from 'react-router-dom';
 
 function WelcomePage() {
 
     return (
-        <div className="welcome-page">
-            <h1>Welcome</h1>
-            <Link to='/aboutus'>
-                <p>About Us</p>
+        <div className="welcome-page main-theme">
+            <img
+                src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+                alt="logo"
+                className="logo"
+            />
+            <div className="welcome-page-text">
+                <h1>catJAM</h1>
+                <h3>Listen to music and karaoke with your friends!</h3>
+            </div>
+            <div className="welcome-buttons">
+                <Link to="/login" className="undecorated-link">
+                    <div className="login-button main-button-theme">
+                        Log In
+                    </div>
+                </Link>
+                <Link to="/signup" className="undecorated-link">
+                    <div className="signup-button main-button-theme">
+                        Sign Up
+                    </div>
+                </Link>
+            </div>
+            <Link to="/aboutus" className="about-us-link undecorated-link decorated-when-hovered-link">
+                <p className="main-theme">About Us</p>
             </Link>
         </div>
     )
