@@ -2,6 +2,7 @@ import "../styles.css";
 import React from "react";
 import { Link } from "react-router-dom";
 import "./LoginPage.css";
+import logo from "../Logo";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class LoginPage extends React.Component {
     return (
       <div className="Login main-theme">
         <img
-          src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+          src={logo}
           alt="logo"
           className="icon"
         />

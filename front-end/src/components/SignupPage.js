@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+
 import "./SignupPage.css";
 import "../styles.css";
 import { Link } from "react-router-dom";
+import logo from "../Logo";
 
 class SignupPage extends Component {
     constructor(props) {
@@ -52,7 +54,7 @@ class SignupPage extends Component {
         return (
             <div className="signup-page main-theme">
                 <img
-                    src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+                    src={logo}
                     alt="logo"
                     className="icon"
                 />
