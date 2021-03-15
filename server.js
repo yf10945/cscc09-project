@@ -15,6 +15,10 @@ const { buildSchema } = require('graphql');
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
 const S3_BUCKET = process.env.S3_BUCKET;
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -85,7 +89,6 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 app.get('/sign-s3', (req, res) => {
-  const s3 = new aws.S3();
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
   const s3Params = {
@@ -105,7 +108,7 @@ app.get('/sign-s3', (req, res) => {
       signedRequest: data,
       url: `https://c09.s3.us-east-2.amazonaws.com/${fileName}`
     };
-    res.write(JSON.stringify(returnData));
+    res.JSON(returnData);
     res.end();
   });
 });
