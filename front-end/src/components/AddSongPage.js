@@ -11,7 +11,26 @@ export default function AddSongPage() {
   const [SongFile, setFile] = useState("");
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    alert(`{Submitting Name ${SongFile}`)
+    fetch('/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          mutation 
+          { addSong
+            (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${SongLyric}", filepath:"${SongFile}") 
+            {_id}
+          }
+          `,
+      })
+     
+     
+    })
+      .then(r => r.json())
+      .then(data => console.log('data returned:', data));
   }  
 
   const handleFileUpload = e => {
@@ -68,7 +87,7 @@ export default function AddSongPage() {
           alt="logo"
           className="icon"
         />
-        <form class="complex_form" onSubmit={handleSubmit}>
+        <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"
             value={SongName}
