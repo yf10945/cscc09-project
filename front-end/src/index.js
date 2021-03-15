@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router} from 'react-router-dom';
+export { default as Burger } from "./components/Burger";
+export { default as NavBar } from "./components/NavBar";
 
 ReactDOM.render(
   <React.StrictMode>

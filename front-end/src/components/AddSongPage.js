@@ -1,10 +1,17 @@
+import React, { useState } from "react";
 import "../styles.css";
 import NavBar from "./NavBar";
+import Burger from "./Burger";
 
 export default function AddSongPage() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="AddSongPage">
-      <NavBar />
+    <div className="AddSongPage main-theme">
+      <div>
+          <Burger open={open} setOpen={setOpen} />
+          <NavBar open={open} setOpen={setOpen} />
+      </div>
       <div className="main"> 
         <img
           src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
