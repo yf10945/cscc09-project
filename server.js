@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const path = require('path');
 const { graphqlHTTP } = require('express-graphql');
 const passport = require('passport');
@@ -10,6 +11,10 @@ const User = require('./models/User');
 const Song = require('./models/Song');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
+
+const aws = require('aws-sdk');
+aws.config.region = 'us-east-2';
+
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -79,6 +84,32 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
+app.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
+
 app.use(
   '/graphql', 
   graphqlHTTP({
@@ -87,6 +118,7 @@ app.use(
     graphiql: true
   }),
 );
+
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -100,3 +132,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+const S3_BUCKET = process.env.S3_BUCKET;
