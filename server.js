@@ -15,7 +15,7 @@ const { buildSchema } = require('graphql');
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
 const S3_BUCKET = process.env.S3_BUCKET;
-const s3 = new AWS.S3({
+const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
