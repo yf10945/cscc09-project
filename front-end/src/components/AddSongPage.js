@@ -8,7 +8,7 @@ export default function AddSongPage() {
   const [SongName, setName] = useState("");
   const [SongArtist, setArtist] = useState("");
   const [SongLyric, setLyric] = useState("");
-  const [SongFile, setFile] = useState(null);
+  const [SongFile, setFile] = useState("");
   const handleSubmit = (evt) => {
     evt.preventDefault();
     alert(`{Submitting Name ${SongFile}`)
@@ -26,8 +26,7 @@ export default function AddSongPage() {
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
-          document.getElementById('preview').src = url;
-          document.getElementById('avatar-url').value = url;
+          setFile(url);
         }
         else{
           alert('Could not upload file.');
@@ -39,7 +38,7 @@ export default function AddSongPage() {
 
   const getSignedRequest = (file) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    xhr.open('GET', `/sign-s3?file-name=${encodeURIComponent(file.name)}&file-type=${file.type}`);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){

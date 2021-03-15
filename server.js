@@ -14,7 +14,7 @@ const { buildSchema } = require('graphql');
 
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
-
+const S3_BUCKET = process.env.S3_BUCKET;
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -133,4 +133,3 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-const S3_BUCKET = process.env.S3_BUCKET;
