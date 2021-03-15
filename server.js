@@ -2,18 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
 const passport = require('passport');
 const authenticate = require('./authenticate');
 const mongoose = require('mongoose');
 
 const User = require('./models/User');
-// temp schema 
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
+const Song = require('./models/Song');
+const ObjectId = require('mongoose').Types.ObjectId; 
+const { buildSchema } = require('graphql');
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -23,6 +19,33 @@ mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
     console.log('MongoDB Successfully Connected ...');
 });
 
+var schema = buildSchema(`
+  type Song {
+    _id: ID!
+    songName: String
+    artist: String
+    filepath: String
+    lyrics: String
+  }
+  type Query {
+    getSongById(_id: ID!) : Song
+  }
+  type Mutation {
+    addSong(songName: String, artist: String, filepath: String, lyrics: String  ): Song
+  }
+`);
+
+var root = {
+  getSongById: async (song) => {
+    const data = await Song.findOne({_id :new ObjectId(song._id)});
+    return data;
+  },
+  addSong: async (song) => {
+    var doc = {songName: song.songName ,artist: song.artist, filepath: song.filepath, lyrics: song.lyrics };
+    const newSong = await Song.create(doc);
+    return newSong;
+  }
+};
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -57,9 +80,11 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 app.use(
-  '/graphql', authenticate.verifyUser,
+  '/graphql', 
   graphqlHTTP({
-    schema: schema
+    schema: schema,
+    rootValue: root,
+    graphiql: true
   }),
 );
 
