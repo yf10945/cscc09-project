@@ -55,7 +55,7 @@ app.use(passport.initialize());
 
 
 app.post('/signup', (req, res) => {
-  User.register(new User({ email: req.body.email }), req.body.password, (err, user) => {
+  User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
     if (err) {
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');

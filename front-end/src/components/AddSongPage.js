@@ -1,47 +1,26 @@
 import React, { useState } from "react";
 import "../styles.css";
 import NavBar from "./NavBar";
+import Burger from "./Burger";
 
-class AddSongPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      songname: "",
-      artist: "",
-      file: null,
-      lyrics: "",
-      errorMessage: ""
-    };
-    this.addsong = this.addsong.bind(this);
-    this.handleSongNameChange = this.handleSongNameChange.bind(this);
-    this.handleArtistChange = this.handleArtistChange.bind(this);
-    this.handleFileChange = this.handleFileChange.bind(this);
-    this.handleLyricChange = this.handleLyricChange.bind(this);
-  }
+export default function AddSongPage() {
+  const [open, setOpen] = useState(false);
+  const [SongName, setName] = useState("");
+  const [SongArtist, setArtist] = useState("");
+  const [SongLyric, setLyric] = useState("");
+  const [SongFile, setFile] = useState(null);
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    alert(`{Submitting Name ${SongFile}`)
+  }  
 
-  async addsong() {
+  const handleFileUpload = e => {
+    setFile(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
 
-  }
-  
-  handleSongNameChange(e) {
-    this.setState({songname: e.target.value});
-  }
-  
-  handleArtistChange(e) {
-    this.setState({artist: e.target.value});
-  }
-
-  handleFileChange(e) {
-    this.setState({file: e.target.files[0]});
-  }
-
-  handleLyricChange(e) {
-    this.setState({lyrics: e.target.value});
-  }
-  
-  render() {
-  	return(
-  	  <div className="AddSongPage main-theme">
+  return (
+    <div className="AddSongPage main-theme">
       <div>
           <Burger open={open} setOpen={setOpen} />
           <NavBar open={open} setOpen={setOpen} />
@@ -52,21 +31,21 @@ class AddSongPage extends React.Component {
           alt="logo"
           className="icon"
         />
-        <form class="complex_form">
+        <form class="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"
-            name="SongName"
+            value={SongName}
             className="form_element"
             placeholder="Enter the song name"
-            onChange={this.handleSongNameChange}
+            onChange={e => setName(e.target.value)}
             required
           />
           <input
             type="text"
-            name="SongArtist"
+            value={SongArtist}
             className="form_element"
             placeholder="Enter the song artist"
-            onChange={this.handleArtistChange}
+            onChange={e => setArtist(e.target.value)}
             required
           />
           <label className="form_element">Select a file for the song:</label>
@@ -76,14 +55,14 @@ class AddSongPage extends React.Component {
             name="SongFile"
             className="form_element"
             accept="audio/*"
-            onChange={this.handleFileChange}
+            onChange={handleFileUpload}
             required
           />
           <textarea
-            name="SongLyric"
+            value={SongLyric}
             className="form_element"
             placeholder="Enter the song lyric"
-            onChange={this.handleLyricChange}
+            onChange={e => setLyric(e.target.value)}
             required
           />
           <div>
@@ -94,6 +73,5 @@ class AddSongPage extends React.Component {
         </form>
       </div>
     </div>
-	})
+  );
 }
-export default AddSongPage;
