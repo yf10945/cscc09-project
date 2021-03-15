@@ -1,7 +1,6 @@
+import React, { useState } from "react";
 import "../styles.css";
 import NavBar from "./NavBar";
-import React from "react";
-
 
 class AddSongPage extends React.Component {
   constructor(props) {
@@ -41,9 +40,12 @@ class AddSongPage extends React.Component {
   }
   
   render() {
-    return (
-      <div className="AddSongPage">
-      <NavBar />
+  	return(
+  	  <div className="AddSongPage main-theme">
+      <div>
+          <Burger open={open} setOpen={setOpen} />
+          <NavBar open={open} setOpen={setOpen} />
+      </div>
       <div className="main"> 
         <img
           src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
@@ -92,8 +94,6 @@ class AddSongPage extends React.Component {
         </form>
       </div>
     </div>
-    );
-  }
-};
-
+	})
+}
 export default AddSongPage;

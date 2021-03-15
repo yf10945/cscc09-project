@@ -1,0 +1,21 @@
+.navbar-option {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    cursor: pointer;
+    transition: 200ms color ease-in;
+    margin: 0 5px;
+    background-color: transparent;
+}
+
+.navbar-option:hover {
+    text-decoration: underline;
+}
+
+.navbar-option:active {
+    color: grey;
+}
+
+.navbar-option-icon {
+    padding: 0 10px;
+}

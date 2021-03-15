@@ -1,8 +1,8 @@
-// import "./styles.css";
+import "../styles.css";
 import React from "react";
-import { withRouter } from "react-router-dom";
-
-
+import { Link } from "react-router-dom";
+import "./LoginPage.css";
+import logo from "../Logo";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -13,33 +13,8 @@ class LoginPage extends React.Component {
       errorMessage: ""
     };
     this.signin = this.signin.bind(this);
-    this.signup = this.signup.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-  }
-
-  async signup() {
-    let email = this.state.email;
-    let pwd = this.state.password;
-    var fetchOptions = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email: email, password:pwd}),
-    };
-    return fetch("/signup", fetchOptions)
-    .then((res) => {
-        if (res.status !== 200 ){
-          this.setState({errorMessage: res.status + " " +  res.statusText});
-        } else {
-          this.props.history.push("/playlists");
-        }
-        return res;
-    })
-    .catch((error) => {
-      this.setState({errorMessage: 'Error connecting to login api: ' + error});
-    });
   }
   
   async signin( ) {
@@ -57,7 +32,7 @@ class LoginPage extends React.Component {
         if (res.status !== 200 ){
           this.setState({errorMessage: res.status + " " + res.statusText});
         } else {
-          this.props.history.push("/playlists");
+          this.props.history.push("/dashboard");
         }
         return res;
     })
@@ -76,19 +51,20 @@ class LoginPage extends React.Component {
   
   render() {
     return (
-      <div className="Login">
+      <div className="Login main-theme">
         <img
-          src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+          src={logo}
           alt="logo"
           className="icon"
         />
+        <h1>Login</h1>
         <p id="error" className="error">{this.state.errorMessage}</p>
         <form className="complex_form">
           <input
             type="text"
             name="username"
             className="form_element"
-            placeholder="Enter a username"
+            placeholder="Username"
             value={this.state.email} 
             onChange={this.handleEmailChange}
             required
@@ -97,7 +73,7 @@ class LoginPage extends React.Component {
             type="password"
             name="password"
             className="form_element"
-            placeholder="Enter a password"
+            placeholder="Password"
             value={this.state.password}
             onChange={this.handlePasswordChange}
             required
@@ -107,20 +83,17 @@ class LoginPage extends React.Component {
               id="signin"
               type="button" 
               name="action" 
-              className="btn" 
+              className="btn main-button-theme" 
               onClick={this.signin}
             >
               Sign in
             </button>
-            <button 
-              id="signup" 
-              type="button" 
-              name="action" 
-              className="btn" 
-              onClick={this.signup}>
-              Sign up
-            </button>
           </div>
+          <h3>Don't have an account?&nbsp;
+            <Link to="/signup" className="signup-link undecorated-link decorated-when-hovered-link">
+                Sign up here!
+            </Link>
+          </h3>
         </form>
       </div>
     );
