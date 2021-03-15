@@ -11,11 +11,10 @@ const User = require('./models/User');
 const Song = require('./models/Song');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
-
+var enforce = require('express-sslify');
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
 const S3_BUCKET = process.env.S3_BUCKET;
-
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -81,6 +80,7 @@ app.post('/signup', (req, res) => {
 app.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.generateToken({ _id: req.user._id });
   res.statusCode = 200;
+  res.cookie('jwt', token , { expires: new Date(Date.now() + 50000), httpOnly: true, secure: true });
   res.setHeader('Content-Type', 'application/json');
   res.json({ token: token, status: 'Successfully Logged In' });
 });
@@ -122,7 +122,7 @@ app.use(
   }),
 );
 
-
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
