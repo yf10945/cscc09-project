@@ -37,12 +37,14 @@ export default function AddSongPage() {
         .then((response) => {
           if (response.ok) {
             setError("");
-            var res = response.json();
-            setMessage("Song with id "+ res.data.addSong._id +" is successfully added to database.");
+            return response.json();
           } else {
             setError(response.status + " " +  response.statusText);
-            setMessage("");
+            throw new Error(response.statusText);
           }
+        })
+        .then((data) => {
+          setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
         })
         .catch(error => setMessage("") );
       }
