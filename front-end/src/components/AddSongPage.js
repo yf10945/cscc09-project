@@ -12,13 +12,11 @@ export default function AddSongPage() {
   const [errorMessage, setError] = useState("");
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    let jwt = document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     fetch('/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'JWT '+ jwt
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         query: `

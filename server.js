@@ -12,6 +12,8 @@ const Song = require('./models/Song');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
 var enforce = require('express-sslify');
+var cookieParser = require('cookie-parser')
+
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -57,6 +59,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
+app.use(cookieParser())
+
 
 
 app.post('/signup', (req, res) => {
@@ -83,7 +87,7 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.generateToken({ _id: req.user._id });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+  res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: true, secure: true, sameSite:"strict" });
   res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
@@ -117,7 +121,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', authenticate.verifyUser, 
+  '/graphql', authenticate.verifyUser,
   graphqlHTTP({
     schema: schema,
     rootValue: root,
