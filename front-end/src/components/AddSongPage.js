@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,  useRef } from "react";
 import "../styles.css";
+import "./AddSongPage.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 
@@ -10,31 +11,48 @@ export default function AddSongPage() {
   const [SongLyric, setLyric] = useState("");
   const [SongFile, setFile] = useState("");
   const [errorMessage, setError] = useState("");
+  const [Message, setMessage] = useState("");
+  const [uploadFinished, setUploadFinished] = useState(false);
+  const audioRef = useRef();
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch('/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        query: `
-          mutation 
-          { addSong
-            (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${SongLyric}", filepath:"${SongFile}") 
-            {_id}
-          }
-          `,
+    if (uploadFinished) {
+      fetch('/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          query: `
+            mutation 
+            { addSong
+              (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${SongLyric}", filepath:"${SongFile}") 
+              {_id}
+            }
+            `,
+        })
+      
       })
-     
-     
-    })
-      .then(r => r.json())
-      .then(data => console.log('data returned:', data));
+        .then((response) => {
+          if (response.ok) {
+            setError("");
+            return response.json();
+          } else {
+            setError(response.status + " " +  response.statusText);
+            throw new Error(response.statusText);
+          }
+        })
+        .then((data) => {
+          setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
+        })
+        .catch(error => setMessage("") );
+      }
   }  
 
   const handleFileUpload = e => {
+    setUploadFinished(false);
+    setMessage("Uploading file, please wait...");
     setFile(e.target.files[0]);
     console.log(e.target.files[0]);
     getSignedRequest(e.target.files[0]);
@@ -47,9 +65,15 @@ export default function AddSongPage() {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
           setFile(url);
+          setUploadFinished(true);
+          setMessage("Upload Finished!");
+          if(audioRef.current){
+            audioRef.current.pause();
+            audioRef.current.load();
+          }
         }
         else{
-          alert('Could not upload file.');
+          setMessage('Could not upload file.');
         }
       }
     };
@@ -67,7 +91,7 @@ export default function AddSongPage() {
           uploadFile(file, response.signedRequest, response.url);
         }
         else{
-          alert('Could not get signed URL.');
+          setMessage('Could not get signed URL.');
         }
       }
     };
@@ -82,17 +106,19 @@ export default function AddSongPage() {
           <Burger open={open} setOpen={setOpen} />
           <NavBar open={open} setOpen={setOpen} />
       </div>
-      <div className="main"> 
-        <img
+      <div className="AddSong main"> 
+        <img 
           src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
           alt="logo"
           className="icon"
         />
+        <p>{Message}</p>
+        <p class="error">{errorMessage}</p>
         <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"
             value={SongName}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song name"
             onChange={e => setName(e.target.value)}
             required
@@ -100,7 +126,7 @@ export default function AddSongPage() {
           <input
             type="text"
             value={SongArtist}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song artist"
             onChange={e => setArtist(e.target.value)}
             required
@@ -117,13 +143,18 @@ export default function AddSongPage() {
           />
           <textarea
             value={SongLyric}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song lyric"
             onChange={e => setLyric(e.target.value)}
             required
           />
+          File preview:
+          <audio controls ref={audioRef}>
+            <source src={SongFile} type="audio/mp3"/> 
+          Your browser does not support the audio element.
+          </audio>
           <div>
-            <button id="addsong" name="action" class="btn">
+            <button id="addsong" name="action" class="btn main-button-theme">
               Add Song
             </button>
           </div>
