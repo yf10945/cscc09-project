@@ -97,7 +97,6 @@ app.get('/sign-s3', (req, res) => {
     accessKeyId: "process.env.AWSAccessKey",
     secretAccessKey: "process.env.AWSSecretKey"
   });
-  console.log(req.cookies['jwt']);
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
   const s3Params = {
