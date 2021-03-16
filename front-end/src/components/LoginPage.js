@@ -8,24 +8,24 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      username: "",
       password: "",
       errorMessage: ""
     };
     this.signin = this.signin.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
   
   async signin( ) {
-    let email = this.state.email;
+    let username = this.state.username;
     let pwd = this.state.password;
     var fetchOptions = {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
       },
-      body: JSON.stringify({email: email, password:pwd}),
+      body: JSON.stringify({username: username, password:pwd}),
     };
     return fetch("/login", fetchOptions)
     .then((res) => {
@@ -41,8 +41,8 @@ class LoginPage extends React.Component {
     });
   }
   
-  handleEmailChange(e) {
-    this.setState({email: e.target.value});
+  handleUsernameChange(e) {
+    this.setState({username: e.target.value});
   }
   
   handlePasswordChange(e) {
@@ -65,8 +65,8 @@ class LoginPage extends React.Component {
             name="username"
             className="form_element"
             placeholder="Username"
-            value={this.state.email} 
-            onChange={this.handleEmailChange}
+            value={this.state.username} 
+            onChange={this.handleUsernameChange}
             required
           />
           <input

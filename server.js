@@ -1,19 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const path = require('path');
 const { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
 const passport = require('passport');
 const authenticate = require('./authenticate');
 const mongoose = require('mongoose');
 
 const User = require('./models/User');
-// temp schema 
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
+const Song = require('./models/Song');
+const ObjectId = require('mongoose').Types.ObjectId; 
+const { buildSchema } = require('graphql');
+
+const aws = require('aws-sdk');
+aws.config.region = 'us-east-2';
+const S3_BUCKET = process.env.S3_BUCKET;
+
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -23,6 +25,33 @@ mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
     console.log('MongoDB Successfully Connected ...');
 });
 
+var schema = buildSchema(`
+  type Song {
+    _id: ID!
+    songName: String
+    artist: String
+    filepath: String
+    lyrics: String
+  }
+  type Query {
+    getSongById(_id: ID!) : Song
+  }
+  type Mutation {
+    addSong(songName: String, artist: String, filepath: String, lyrics: String  ): Song
+  }
+`);
+
+var root = {
+  getSongById: async (song) => {
+    const data = await Song.findOne({_id :new ObjectId(song._id)});
+    return data;
+  },
+  addSong: async (song) => {
+    var doc = {songName: song.songName ,artist: song.artist, filepath: song.filepath, lyrics: song.lyrics };
+    const newSong = await Song.create(doc);
+    return newSong;
+  }
+};
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -32,7 +61,7 @@ app.use(passport.initialize());
 
 
 app.post('/signup', (req, res) => {
-  User.register(new User({ email: req.body.email }), req.body.password, (err, user) => {
+  User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
     if (err) {
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
@@ -56,12 +85,43 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
+app.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3({
+    accessKeyId: "process.env.AWSAccessKey",
+    secretAccessKey: "process.env.AWSSecretKey"
+  });
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: 'c09',
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://c09.s3.us-east-2.amazonaws.com/${fileName}`
+    };
+    res.json(returnData);
+  });
+});
+
 app.use(
-  '/graphql', authenticate.verifyUser,
+  '/graphql', 
   graphqlHTTP({
-    schema: schema
+    schema: schema,
+    rootValue: root,
+    graphiql: true
   }),
 );
+
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -75,3 +135,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+

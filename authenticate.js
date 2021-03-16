@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const key = "some-random-key";
 // local strategy
-exports.local = passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
+exports.local = passport.use(new LocalStrategy({ usernameField: 'username' }, User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // JWT strategy

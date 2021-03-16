@@ -5,6 +5,75 @@ import Burger from "./Burger";
 
 export default function AddSongPage() {
   const [open, setOpen] = useState(false);
+  const [SongName, setName] = useState("");
+  const [SongArtist, setArtist] = useState("");
+  const [SongLyric, setLyric] = useState("");
+  const [SongFile, setFile] = useState("");
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    fetch('/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          mutation 
+          { addSong
+            (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${SongLyric}", filepath:"${SongFile}") 
+            {_id}
+          }
+          `,
+      })
+     
+     
+    })
+      .then(r => r.json())
+      .then(data => console.log('data returned:', data));
+  }  
+
+  const handleFileUpload = e => {
+    setFile(e.target.files[0]);
+    console.log(e.target.files[0]);
+    getSignedRequest(e.target.files[0]);
+  };
+
+  const uploadFile = (file, signedRequest, url) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', signedRequest);
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          setFile(url);
+        }
+        else{
+          alert('Could not upload file.');
+        }
+      }
+    };
+    xhr.send(file);
+  }
+
+  const getSignedRequest = (file) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/sign-s3?file-name=${encodeURIComponent(file.name)}&file-type=${file.type}`);
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          console.log(xhr.response);
+          const response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.signedRequest, response.url);
+        }
+        else{
+          alert('Could not get signed URL.');
+        }
+      }
+    };
+    xhr.send();
+  }
+
+
 
   return (
     <div className="AddSongPage main-theme">
@@ -18,19 +87,21 @@ export default function AddSongPage() {
           alt="logo"
           className="icon"
         />
-        <form class="complex_form">
+        <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"
-            name="SongName"
+            value={SongName}
             className="form_element"
             placeholder="Enter the song name"
+            onChange={e => setName(e.target.value)}
             required
           />
           <input
             type="text"
-            name="SongArtist"
+            value={SongArtist}
             className="form_element"
             placeholder="Enter the song artist"
+            onChange={e => setArtist(e.target.value)}
             required
           />
           <label className="form_element">Select a file for the song:</label>
@@ -40,13 +111,14 @@ export default function AddSongPage() {
             name="SongFile"
             className="form_element"
             accept="audio/*"
+            onChange={handleFileUpload}
             required
           />
-          <input
-            type="textarea"
-            name="SongLyric"
+          <textarea
+            value={SongLyric}
             className="form_element"
             placeholder="Enter the song lyric"
+            onChange={e => setLyric(e.target.value)}
             required
           />
           <div>
