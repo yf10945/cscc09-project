@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,  useRef } from "react";
 import "../styles.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
@@ -12,6 +12,7 @@ export default function AddSongPage() {
   const [errorMessage, setError] = useState("");
   const [Message, setMessage] = useState("");
   const [uploadFinished, setUploadFinished] = useState(false);
+  const audioRef = useRef();
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (uploadFinished) {
@@ -65,6 +66,10 @@ export default function AddSongPage() {
           setFile(url);
           setUploadFinished(true);
           setMessage("Upload Finished!");
+          if(audioRef.current){
+            audioRef.current.pause();
+            audioRef.current.load();
+          }
         }
         else{
           setMessage('Could not upload file.');
@@ -142,6 +147,11 @@ export default function AddSongPage() {
             onChange={e => setLyric(e.target.value)}
             required
           />
+          File preview:
+          <audio controls ref={audioRef}>
+            <source src={SongFile} type="audio/mp3"/> 
+          Your browser does not support the audio element.
+          </audio>
           <div>
             <button id="addsong" name="action" class="btn">
               Add Song
