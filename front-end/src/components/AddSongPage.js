@@ -9,13 +9,16 @@ export default function AddSongPage() {
   const [SongArtist, setArtist] = useState("");
   const [SongLyric, setLyric] = useState("");
   const [SongFile, setFile] = useState("");
+  const [errorMessage, setError] = useState("");
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    let jwt = document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     fetch('/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Authorization': 'JWT '+ jwt
       },
       body: JSON.stringify({
         query: `

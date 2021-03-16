@@ -54,8 +54,8 @@ var root = {
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 
@@ -71,6 +71,8 @@ app.post('/signup', (req, res) => {
         const token = authenticate.generateToken({ _id: req.user._id });
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+        res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
         res.json({ token: token, status: 'Successfully Logged In' });
       });
     }
@@ -80,8 +82,9 @@ app.post('/signup', (req, res) => {
 app.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.generateToken({ _id: req.user._id });
   res.statusCode = 200;
-  res.cookie('jwt', token , { expires: new Date(Date.now() + 50000), httpOnly: true, secure: true });
   res.setHeader('Content-Type', 'application/json');
+  res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+  res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
@@ -114,7 +117,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', 
+  '/graphql', authenticate.verifyUser, 
   graphqlHTTP({
     schema: schema,
     rootValue: root,
