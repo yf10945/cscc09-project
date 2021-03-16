@@ -116,7 +116,7 @@ export default function AddSongPage() {
           <input
             type="text"
             value={SongName}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song name"
             onChange={e => setName(e.target.value)}
             required
@@ -124,7 +124,7 @@ export default function AddSongPage() {
           <input
             type="text"
             value={SongArtist}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song artist"
             onChange={e => setArtist(e.target.value)}
             required
@@ -141,7 +141,7 @@ export default function AddSongPage() {
           />
           <textarea
             value={SongLyric}
-            className="form_element"
+            className="form_element input"
             placeholder="Enter the song lyric"
             onChange={e => setLyric(e.target.value)}
             required
@@ -152,7 +152,7 @@ export default function AddSongPage() {
           Your browser does not support the audio element.
           </audio>
           <div>
-            <button id="addsong" name="action" class="btn">
+            <button id="addsong" name="action" class="btn main-button-theme">
               Add Song
             </button>
           </div>
