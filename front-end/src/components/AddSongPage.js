@@ -1,5 +1,6 @@
 import React, { useState,  useRef } from "react";
 import "../styles.css";
+import "./AddSongPage.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 
@@ -36,16 +37,14 @@ export default function AddSongPage() {
         .then((response) => {
           if (response.ok) {
             setError("");
-            return response.json();
+            var res = response.json();
+            setMessage("Song with id "+ res.data.addSong._id +" is successfully added to database.");
           } else {
             setError(response.status + " " +  response.statusText);
+            setMessage("");
           }
         })
-        .then(data => {
-          console.log(data);
-          console.log(data.data);
-          setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
-        });
+        .catch(error => setMessage("") );
       }
   }  
 
@@ -105,8 +104,8 @@ export default function AddSongPage() {
           <Burger open={open} setOpen={setOpen} />
           <NavBar open={open} setOpen={setOpen} />
       </div>
-      <div className="main"> 
-        <img
+      <div className="AddSong main"> 
+        <img 
           src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
           alt="logo"
           className="icon"
