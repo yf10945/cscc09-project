@@ -11,11 +11,10 @@ const User = require('./models/User');
 const Song = require('./models/Song');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
-
+var enforce = require('express-sslify');
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
 const S3_BUCKET = process.env.S3_BUCKET;
-
 
 const uri = "mongodb+srv://admin:mongo@cluster0.z0caj.mongodb.net/project?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
@@ -55,8 +54,8 @@ var root = {
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 
@@ -72,6 +71,8 @@ app.post('/signup', (req, res) => {
         const token = authenticate.generateToken({ _id: req.user._id });
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
+        res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+        res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
         res.json({ token: token, status: 'Successfully Logged In' });
       });
     }
@@ -82,6 +83,8 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.generateToken({ _id: req.user._id });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
+  res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+  res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
@@ -114,7 +117,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', 
+  '/graphql', authenticate.verifyUser, 
   graphqlHTTP({
     schema: schema,
     rootValue: root,
@@ -122,7 +125,7 @@ app.use(
   }),
 );
 
-
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
