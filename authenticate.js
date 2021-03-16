@@ -13,8 +13,13 @@ passport.deserializeUser(User.deserializeUser());
 exports.generateToken = (user) => {
   return jwt.sign(user, key, { expiresIn: 86400 });
 };
+var cookieExtractor = function(req) {
+  var token = null;
+  if (req && req.cookies) token = req.cookies['jwt'];
+  return token;
+};
 const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('JWT'),
+  jwtFromRequest: cookieExtractor,
   secretOrKey: key
 };
 exports.jwtStrategy = passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
