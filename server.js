@@ -75,7 +75,7 @@ var root = {
     return newSong;
   }, 
   deleteSongById: async (song) => {
-    const deletledSong = await Song.findOne({_id :new ObjectId(song._id)});
+    const deletledSong = await Song.findOneAndDelete({_id :new ObjectId(song._id)});
     return song;
   },
   createPlaylist: async (playlist) => {
@@ -84,7 +84,7 @@ var root = {
     return newPlaylist;
   },
   deletePlaylistById: async (playlist) => {
-    const deletedPlaylist = await Playlist.findOne({_id :new ObjectId(playlist._id)});
+    const deletedPlaylist = await Playlist.findOneAndDelete({_id :new ObjectId(playlist._id)});
     return playlist;
   },
   addSongToPlaylist: async (req) => {
