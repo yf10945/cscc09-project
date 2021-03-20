@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 const User = require('./models/User');
 const Song = require('./models/Song');
+const Playlist = require('./models/Playlist');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
 var enforce = require('express-sslify');
@@ -34,11 +35,24 @@ var schema = buildSchema(`
     filepath: String
     lyrics: String
   }
+  type Playlist {
+    _id: ID!
+    title: String
+    user: String
+    songs: [Song]
+  }
   type Query {
     getSongById(_id: ID!) : Song
+    getPlaylistById(_id: ID!) : Playlist
+    getPlaylistsByUser(username: String) : [Playlist]
   }
   type Mutation {
     addSong(songName: String, artist: String, filepath: String, lyrics: String  ): Song
+    DeleteSongById(_id: ID!): Song
+    createPlaylist(title: String, user: String): Playlist
+    DeletePlaylistById(_id: ID!): Playlist
+    addSongToPlaylist(songId: ID!, playlistId: ID!): Playlist
+    removeSongFromPlaylist(songId: ID!, playlistId: ID!): Playlist
   }
 `);
 
@@ -47,11 +61,53 @@ var root = {
     const data = await Song.findOne({_id :new ObjectId(song._id)});
     return data;
   },
+  getPlaylistById: async (playlist) => {
+    const data = await Playlist.findOne({_id :new ObjectId(playlist._id)});
+    return data;
+  },
+  getPlaylistsByUser: async (playlist) => {
+    const data = await Playlist.find({user : playlist.username});
+    return data;
+  },
   addSong: async (song) => {
     var doc = {songName: song.songName ,artist: song.artist, filepath: song.filepath, lyrics: song.lyrics };
     const newSong = await Song.create(doc);
     return newSong;
-  }
+  }, 
+  deleteSongById: async (song) => {
+    const deletledSong = await Song.findOne({_id :new ObjectId(song._id)});
+    return song;
+  },
+  createPlaylist: async (playlist) => {
+    var doc = {title: playlist.title, user: playlist.user, songs:[]};
+    const newPlaylist = await Playlist.create(doc);
+    return newPlaylist;
+  },
+  deletePlaylistById: async (playlist) => {
+    const deletedPlaylist = await Playlist.findOne({_id :new ObjectId(playlist._id)});
+    return playlist;
+  },
+  addSongToPlaylist: async (req) => {
+    const song = await Song.findOne({_id :new ObjectId(req.songId)});
+    await Playlist.collection.update(
+      { _id : ObjectId(req.playlistId)},
+      { $pull: { songs: {_id: ObjectId(req.songId)}}}
+    )
+    const playlist = await Playlist.findOneAndUpdate(
+      { _id: req.playlistId },
+      { $push: {"songs": song}},
+      { new: true }
+    )
+    return playlist;
+  },
+  removeSongFromPlaylist: async (req) => {
+    const playlist = await Playlist.findOneAndUpdate(
+      { _id : ObjectId(req.playlistId)},
+      { $pull: { songs: {_id: ObjectId(req.songId)}}},
+      { new: true }
+    )
+    return playlist;
+  }, 
 };
 const app = express();
 const port = process.env.PORT || 5000;

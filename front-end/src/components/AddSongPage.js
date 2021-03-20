@@ -1,6 +1,7 @@
 import React, { useState,  useRef } from "react";
 import "../styles.css";
 import "./AddSongPage.css";
+import logo from "../Logo";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 
@@ -106,7 +107,7 @@ export default function AddSongPage() {
       </div>
       <div className="AddSong main"> 
         <img 
-          src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+          src={logo}
           alt="logo"
           className="icon"
         />
