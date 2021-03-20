@@ -48,9 +48,9 @@ var schema = buildSchema(`
   }
   type Mutation {
     addSong(songName: String, artist: String, filepath: String, lyrics: String  ): Song
-    DeleteSongById(_id: ID!): Song
+    deleteSongById(_id: ID!): Song
     createPlaylist(title: String, user: String): Playlist
-    DeletePlaylistById(_id: ID!): Playlist
+    deletePlaylistById(_id: ID!): Playlist
     addSongToPlaylist(songId: ID!, playlistId: ID!): Playlist
     removeSongFromPlaylist(songId: ID!, playlistId: ID!): Playlist
   }
