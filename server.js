@@ -43,6 +43,7 @@ var schema = buildSchema(`
   }
   type Query {
     getSongById(_id: ID!) : Song
+    getAllSongs : [Song]
     getPlaylistById(_id: ID!) : Playlist
     getPlaylistsByUser(username: String) : [Playlist]
   }
@@ -61,6 +62,10 @@ var root = {
     const data = await Song.findOne({_id :new ObjectId(song._id)});
     return data;
   },
+  getAllSongs: async () => {
+    const data = await Song.find({});
+    return data;
+  },
   getPlaylistById: async (playlist) => {
     const data = await Playlist.findOne({_id :new ObjectId(playlist._id)});
     return data;
@@ -75,8 +80,8 @@ var root = {
     return newSong;
   }, 
   deleteSongById: async (song) => {
-    const deletledSong = await Song.findOneAndDelete({_id :new ObjectId(song._id)});
-    return song;
+    const deletedSong = await Song.findOneAndDelete({_id :new ObjectId(song._id)});
+    return deletedSong;
   },
   createPlaylist: async (playlist) => {
     var doc = {title: playlist.title, user: playlist.user, songs:[]};
@@ -85,7 +90,7 @@ var root = {
   },
   deletePlaylistById: async (playlist) => {
     const deletedPlaylist = await Playlist.findOneAndDelete({_id :new ObjectId(playlist._id)});
-    return playlist;
+    return deletedPlaylist;
   },
   addSongToPlaylist: async (req) => {
     const song = await Song.findOne({_id :new ObjectId(req.songId)});
@@ -177,7 +182,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', authenticate.verifyUser,
+  '/graphql', 
   graphqlHTTP({
     schema: schema,
     rootValue: root,
