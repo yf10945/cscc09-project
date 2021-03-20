@@ -17,6 +17,7 @@ export default function Dashboard() {
             <div className="main">
                 <h1>Welcome</h1>
             </div>
+            {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
             <div ref={node}>
                 <Burger open={open} setOpen={setOpen} />
                 <NavBar open={open} setOpen={setOpen} />
