@@ -8,6 +8,7 @@ import "./styles.css";
 import WelcomePage from "./components/WelcomePage";
 import PageNotFound from "./components/PageNotFound";
 import SignupPage from "./components/SignupPage";
+import RoomPage from "./components/RoomPage";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignupPage} />
+        <Route path="/rooms" component={RoomPage} />
         <Route component={PageNotFound} />
       </Switch>
     </React.Fragment>
