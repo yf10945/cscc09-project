@@ -8,37 +8,8 @@ export default function Dashboard() {
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
-    const createRoom = () => {
-        let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        fetch('/graphql', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              query: `
-                mutation 
-                { createRoom
-                  (host:"${username}") 
-                  {_id}
-                }
-                `,
-            })
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.statusText);
-            }
-        })
-        .then((data) => {
-        })
-        .catch(error => {} );
-    }
-    useEffect(() => {
-        // code to run on component mount
+
+    const getRooms = () => {
         fetch('/graphql', {
             method: 'POST',
             headers: {
@@ -85,10 +56,47 @@ export default function Dashboard() {
                <div>Currently Playing: ${element.currentSong===null?"":element.currentSong}</div>`));
         })
         .catch(error => console.log(error) );
-          
-
+    }
+    const createRoom = () => {
+        let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              query: `
+                mutation 
+                { createRoom
+                  (host:"${username}") 
+                  {_id}
+                }
+                `,
+            })
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((data) => {
+            let roomList = document.querySelector(".RoomList");
+            roomList.insertAdjacentHTML('beforeend',
+              `<div>Room ID: ${data.data.createRoom._id}</div>
+               <div>Room Host: ${username}</div>
+               <div>Currently Playing: </div>`)
+        })
+        .catch(error => {} );
+    }
+    useEffect(() => {
+        // code to run on component mount
+        getRooms();
       }, [])
 
+    
     return (
         <div className="dashboard main-theme">
             <div className="main">
