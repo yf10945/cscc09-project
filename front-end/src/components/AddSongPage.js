@@ -1,6 +1,7 @@
 import React, { useState,  useRef } from "react";
 import "../styles.css";
 import "./AddSongPage.css";
+import logo from "../Logo";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 
@@ -54,7 +55,6 @@ export default function AddSongPage() {
     setUploadFinished(false);
     setMessage("Uploading file, please wait...");
     setFile(e.target.files[0]);
-    console.log(e.target.files[0]);
     getSignedRequest(e.target.files[0]);
   };
 
@@ -86,7 +86,6 @@ export default function AddSongPage() {
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
-          console.log(xhr.response);
           const response = JSON.parse(xhr.responseText);
           uploadFile(file, response.signedRequest, response.url);
         }
@@ -108,7 +107,7 @@ export default function AddSongPage() {
       </div>
       <div className="AddSong main"> 
         <img 
-          src="http://cdn.onlinewebfonts.com/svg/img_496903.png"
+          src={logo}
           alt="logo"
           className="icon"
         />
