@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const Song = require('./models/Song');
 const Playlist = require('./models/Playlist');
+const Room = require('./models/Room');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
 var enforce = require('express-sslify');
@@ -41,11 +42,19 @@ var schema = buildSchema(`
     user: String
     songs: [Song]
   }
+  type Room {
+    _id: ID!
+    host: String
+    users: [String]
+    currentSong: Song
+    queue: [Song]
+  }
   type Query {
     getSongById(_id: ID!) : Song
     getAllSongs : [Song]
     getPlaylistById(_id: ID!) : Playlist
     getPlaylistsByUser(username: String) : [Playlist]
+    getAllRooms: [Room]
   }
   type Mutation {
     addSong(songName: String, artist: String, filepath: String, lyrics: String  ): Song
@@ -54,6 +63,8 @@ var schema = buildSchema(`
     deletePlaylistById(_id: ID!): Playlist
     addSongToPlaylist(songId: ID!, playlistId: ID!): Playlist
     removeSongFromPlaylist(songId: ID!, playlistId: ID!): Playlist
+    createRoom(host: String): Room
+    deleteRoom(_id: ID!): Room
   }
 `);
 
@@ -72,6 +83,10 @@ var root = {
   },
   getPlaylistsByUser: async (playlist) => {
     const data = await Playlist.find({user : playlist.username});
+    return data;
+  },  
+  getAllRooms: async () => {
+    const data = await Room.find({});
     return data;
   },
   addSong: async (song) => {
@@ -118,6 +133,15 @@ var root = {
     )
     return playlist;
   }, 
+  createRoom: async (req)  => {
+    var doc = {host: req.host, user: [req.host], song: null, queue:[] };
+    const newRoom = await Room.create(doc);
+    return newRoom;
+  },
+  deleteRoom: async (req) => {
+    const deletedRoom = await Room.findOneAndDelete({_id :new ObjectId(req._id)});
+    return deletedRoom;
+  }
 };
 const app = express();
 const port = process.env.PORT || 5000;
