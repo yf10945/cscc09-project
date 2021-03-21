@@ -81,6 +81,11 @@ var root = {
   }, 
   deleteSongById: async (song) => {
     const deletedSong = await Song.findOneAndDelete({_id :new ObjectId(song._id)});
+    await Playlist.updateMany(
+      { },
+      { $pull: { songs: {_id: ObjectId(song._id)}}},
+      { multi: true }
+    )
     return deletedSong;
   },
   createPlaylist: async (playlist) => {
