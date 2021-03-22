@@ -68,6 +68,7 @@ function SongsPage() {
             <div className="main">
                 <h1>Your Songs</h1>
                 <div className="songs-list"></div>
+                <div className="footer"></div>
             </div>
             <div ref={node}>
                 <Burger open={open} setOpen={setOpen} />
