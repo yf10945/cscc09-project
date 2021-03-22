@@ -11,7 +11,7 @@ export const StyledNav = styled.div`
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
     background-color: rgb(83, 80, 80) !important;
-    position: absolute;
+    position: fixed;
     transition: transform 0.3s ease-in-out;
     transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
 `;

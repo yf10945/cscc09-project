@@ -4,6 +4,7 @@ import "./AddSongPage.css";
 import logo from "../Logo";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
+import { useOnClickOutside } from "./useOnClickOutside";
 
 export default function AddSongPage() {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,8 @@ export default function AddSongPage() {
   const [errorMessage, setError] = useState("");
   const [Message, setMessage] = useState("");
   const [uploadFinished, setUploadFinished] = useState(false);
+  const node = useRef();
+  useOnClickOutside(node, () => setOpen(false));
   const audioRef = useRef();
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -101,7 +104,7 @@ export default function AddSongPage() {
 
   return (
     <div className="AddSongPage main-theme">
-      <div>
+      <div ref={node}>
           <Burger open={open} setOpen={setOpen} />
           <NavBar open={open} setOpen={setOpen} />
       </div>

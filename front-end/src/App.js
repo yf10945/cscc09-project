@@ -9,6 +9,7 @@ import WelcomePage from "./components/WelcomePage";
 import PageNotFound from "./components/PageNotFound";
 import SignupPage from "./components/SignupPage";
 import RoomPage from "./components/RoomPage";
+import SongsPage from "./components/SongsPage";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignupPage} />
         <Route path="/rooms" component={RoomPage} />
+        <Route path="/songs" component={SongsPage} />
         <Route component={PageNotFound} />
       </Switch>
     </React.Fragment>
