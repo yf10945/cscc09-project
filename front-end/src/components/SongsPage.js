@@ -45,7 +45,7 @@ function SongsPage() {
             songsArray.forEach(element => {
                 songsList.insertAdjacentHTML('beforeend',
                     `
-                    <div class="song-box">
+                    <div class="song-box" id=${element._id}>
                         <div>Song ID: ${element._id}</div>
                         <div>Song Name: ${element.songName}</div>
                         <div>Artist: ${element.artist}</div>
@@ -57,11 +57,46 @@ function SongsPage() {
                                 Your browser does not support the
                                 <code>audio</code> element.
                         </audio>
+                        <button onClick="deleteSong(element._id)">Delete</button>
                     </div>                
                     `
                 );
             });
         });
+    };
+
+    const deleteSong = (id) => {
+        fetch('./graphql', {
+            method: 'POST',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        deleteOneSong(query: { _id: ${id}}) {
+                            _id
+                            songName
+                            artist
+                            filepath
+                            lyrics
+                        }
+                    }
+                `
+            }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((data) => {
+            let deletedSong = document.getElementById(id);
+            deletedSong.remove();
+        }).catch(error => console.log(error) );
     };
 
     useEffect(() => {
