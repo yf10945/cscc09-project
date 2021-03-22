@@ -51,6 +51,12 @@ function SongsPage() {
                         <div>Artist: ${element.artist}</div>
                         <div>File: ${element.filepath}</div>
                         <div>Lyrics: ${element.lyrics}</div>    
+                        <audio
+                            controls
+                            src="${element.filepath}">
+                                Your browser does not support the
+                                <code>audio</code> element.
+                        </audio>
                     </div>                
                     `
                 );
