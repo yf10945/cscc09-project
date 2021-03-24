@@ -115,7 +115,7 @@ export default function AddSongPage() {
           className="icon"
         />
         <p>{Message}</p>
-        <p class="error">{errorMessage}</p>
+        <p className="error">{errorMessage}</p>
         <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"

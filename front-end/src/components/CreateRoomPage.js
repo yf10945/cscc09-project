@@ -3,9 +3,12 @@ import "../styles.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
+import { element } from "prop-types";
+import { join } from "path";
 
 export default function CreateRoomPage (props) {
     const [open, setOpen] = useState(false);
+    const [roomList, setRoomList] = useState([]);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
 
@@ -49,14 +52,11 @@ export default function CreateRoomPage (props) {
         })
         .then((data) => {
             let roomArray = data.data.getAllRooms;
-            let roomList = document.querySelector(".RoomList");
-            roomArray.forEach(element => roomList.insertAdjacentHTML('beforeend',
-              `<div>Room ID: ${element._id}</div>
-               <div>Room Host: ${element.host}</div>
-               <div>Currently Playing: ${element.currentSong===null?"":element.currentSong}</div>`));
+            setRoomList(roomArray);
         })
         .catch(error => console.log(error) );
     }
+
     const createRoom = () => {
         let username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
         fetch('/graphql', {
@@ -92,14 +92,24 @@ export default function CreateRoomPage (props) {
         // code to run on component mount
         getRooms();
       }, [])
-
-    
+    const joinRoom = (_id) => {
+        props.history.push(`rooms/room/${_id}`);
+    }
+    const roomListHTML = roomList.map((element) =>
+        <div className="Room" key={element._id}>
+            <div>Room ID: {element._id}</div>
+            <div>Room Host: {element.host}</div>
+            <div>Currently Playing: {element.currentSong===null?"":element.currentSong}</div>
+            <button className = "btn" 
+                        onClick = {()=>joinRoom(element._id)}>Join room </button>
+        </div>)
+        ;
     return (
         <div className="dashboard main-theme">
             <div className="main">
                 <button className = "btn" 
                         onClick = {createRoom}> Create a room </button>
-                <div className="RoomList"></div>
+                {roomListHTML}
             </div>
             {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
             <div ref={node}>
