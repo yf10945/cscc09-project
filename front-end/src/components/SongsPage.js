@@ -57,7 +57,7 @@ function SongsPage() {
                                 Your browser does not support the
                                 <code>audio</code> element.
                         </audio>
-                        $<button onClick=${deleteSong(element._id)}>Delete</button>
+                        <button onClick="deleteSong(element._id)">Delete</button>
                     </div>                
                     `
                 );

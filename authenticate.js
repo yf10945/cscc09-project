@@ -11,7 +11,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // JWT strategy
 exports.generateToken = (user) => {
-  return jwt.sign(user, key, { expiresIn: 86400 });
+  // return jwt.sign(user, key, { expiresIn: 86400 });
+  // temporary expire time below
+  return jwt.sign(user, key);
 };
 var cookieExtractor = function(req) {
   var token = null;
