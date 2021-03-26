@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
+import "./RoomPage.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
@@ -194,19 +195,19 @@ const Room = (props) => {
     }
 
     const songsHTML = songs.map((element) =>
-    <div className="Room" key={element._id}>
+    <div className="song-box" key={element._id}>
         <div>Song ID: {element._id}</div>
         <div>Song name: {element.songName}</div>
         <div>Song artist: {element.artist}</div>
         <div>Song file: {element.filepath}</div>
-        <div>Song lyric: {element.lyric}</div>
+        <div>Song lyric: {element.lyrics}</div>
         <button className = "btn" 
                     onClick = {()=>changeTrack(element.filepath)}>Change Song </button>
     </div>)
     ;
 
     return (
-        <div className="dashboard main-theme">
+        <div className="room-page main-theme">
         <div className="main">
         <div>
             <video muted ref={userVideo} autoPlay playsInline />
