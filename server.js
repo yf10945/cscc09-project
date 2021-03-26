@@ -276,7 +276,11 @@ io.on('connection', socket => {
     socket.on("send change time signal", payload => {
       io.emit("set audio time", {roomId: payload.roomId, time: payload.time});
     });
-    
+
+    socket.on("set song file signal", payload => {
+      io.emit("set song file", {roomId: payload.roomId, filepath: payload.filepath});
+    });
+
     socket.on('disconnect', () => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];

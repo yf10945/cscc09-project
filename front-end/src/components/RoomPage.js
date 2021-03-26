@@ -23,7 +23,6 @@ const Video = (props) => {
 }
 
 
-
 const videoConstraints = {
     height: window.innerHeight / 3,
     width: window.innerWidth / 3
@@ -36,6 +35,7 @@ const Room = (props) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
     const [prevTime, setTime] = useState();
+    const [songs, setSongs] = useState([]);
     const [songUrl, setSongurl] = useState('https://c09.s3.us-east-2.amazonaws.com/Aimer%20-%20Hana%20no%20Uta.mp3');
     const [open, setOpen] = useState(false);
     const node = useRef();
@@ -43,7 +43,42 @@ const Room = (props) => {
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
 
+    const getSongs = () => {
+        fetch('/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                    query {
+                        getAllSongs {
+                            _id
+                            songName
+                            artist
+                            filepath
+                            lyrics
+                        }
+                    }
+                `,
+            })
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((data) => {
+            let songsArray = data.data.getAllSongs;
+            setSongs(songsArray);
+        });
+    };
+    
     useEffect(() => {
+        getSongs();
         socketRef.current = io.connect("/");
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
@@ -90,6 +125,12 @@ const Room = (props) => {
             if (data.roomId === roomID) {
                 audioPlayer.current.currentTime = data.time;
                 setTime(data.time);
+            }
+         });
+         socketRef.current.on("set song file", data => {
+            if (data.roomId === roomID) {
+                setSongurl(data.filepath);
+                audioPlayer.current.load();
             }
          });
     }, []);
@@ -148,7 +189,21 @@ const Room = (props) => {
         setTime(audioPlayer.current.currentTime);
     }
 
+    function changeTrack(filepath) {
+        socketRef.current.emit("set song file signal",{roomId:roomID, filepath:filepath} );
+    }
 
+    const songsHTML = songs.map((element) =>
+    <div className="Room" key={element._id}>
+        <div>Song ID: {element._id}</div>
+        <div>Song name: {element.songName}</div>
+        <div>Song artist: {element.artist}</div>
+        <div>Song file: {element.filepath}</div>
+        <div>Song lyric: {element.lyric}</div>
+        <button className = "btn" 
+                    onClick = {()=>changeTrack(element.filepath)}>Change Song </button>
+    </div>)
+    ;
 
     return (
         <div className="dashboard main-theme">
@@ -161,6 +216,7 @@ const Room = (props) => {
                 );
             })}
             <audio controls ref={audioPlayer} onPlay={setPlay} onPause={setPause} onTimeUpdate={setAudioTime} room={roomID} src={songUrl}></audio>
+            {songsHTML}
         </div>
   
         </div>
