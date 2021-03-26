@@ -143,6 +143,7 @@ var root = {
     return deletedRoom;
   }
 };
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -264,6 +265,18 @@ io.on('connection', socket => {
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
+    socket.on("send play signal", payload => {
+      io.emit("play audio", {roomId: payload.roomId});
+    });
+
+    socket.on("send pause signal", payload => {
+      io.emit("pause audio", {roomId: payload.roomId});
+    });
+    
+    socket.on("send change time signal", payload => {
+      io.emit("set audio time", {roomId: payload.roomId, time: payload.time});
+    });
+    
     socket.on('disconnect', () => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
@@ -276,4 +289,3 @@ io.on('connection', socket => {
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
-

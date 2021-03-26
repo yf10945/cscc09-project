@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
 
+
 const Video = (props) => {
     const ref = useRef();
 
@@ -22,19 +23,24 @@ const Video = (props) => {
 }
 
 
+
 const videoConstraints = {
     height: window.innerHeight / 3,
     width: window.innerWidth / 3
 };
+
 
 const Room = (props) => {
     const [peers, setPeers] = useState([]);
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
+    const [prevTime, setTime] = useState();
+    const [songUrl, setSongurl] = useState('https://c09.s3.us-east-2.amazonaws.com/Aimer%20-%20Hana%20no%20Uta.mp3');
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
+    const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
 
     useEffect(() => {
@@ -70,14 +76,33 @@ const Room = (props) => {
                 item.peer.signal(payload.signal);
             });
         })
+        socketRef.current.on("play audio", data => {
+            if (data.roomId === roomID) {
+                audioPlayer.current.play();
+            }
+         });
+        socketRef.current.on("pause audio", data => {
+            if (data.roomId === roomID) {
+                audioPlayer.current.pause();
+            }
+         });
+         socketRef.current.on("set audio time", data => {
+            if (data.roomId === roomID) {
+                audioPlayer.current.currentTime = data.time;
+                setTime(data.time);
+            }
+         });
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
+
+        
+        // or share using WebRTC
         const peer = new Peer({
             initiator: true,
             trickle: false,
-            stream,
-        });
+            stream
+        })
 
         peer.on("signal", signal => {
             socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
@@ -102,6 +127,29 @@ const Room = (props) => {
         return peer;
     }
 
+    function setPlay() {
+        socketRef.current.emit("send play signal", {roomId: roomID});
+    }
+
+    function setPause() {
+        socketRef.current.emit("send pause signal", {roomId: roomID});
+    }
+
+    function setAudioTime() {
+        if (Math.abs(audioPlayer.current.currentTime - prevTime) > 1) {
+            let time = audioPlayer.current.currentTime;
+            audioPlayer.current.load();
+            audioPlayer.current.pause();
+            setTimeout(function() {
+                socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
+            }, 1000 )   
+            setTime(time);
+        }
+        setTime(audioPlayer.current.currentTime);
+    }
+
+
+
     return (
         <div className="dashboard main-theme">
         <div className="main">
@@ -112,6 +160,7 @@ const Room = (props) => {
                     <Video key={index} peer={peer} />
                 );
             })}
+            <audio controls ref={audioPlayer} onPlay={setPlay} onPause={setPause} onTimeUpdate={setAudioTime} room={roomID} src={songUrl}></audio>
         </div>
   
         </div>
