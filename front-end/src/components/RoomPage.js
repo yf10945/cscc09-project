@@ -1,5 +1,5 @@
   
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
@@ -7,7 +7,7 @@ import "./RoomPage.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
-
+import { Lrc, parseLrc} from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
@@ -35,9 +35,11 @@ const Room = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
-    const [prevTime, setTime] = useState();
+    const lrcRef = useRef();
+    const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
-    const [songUrl, setSongurl] = useState('https://c09.s3.us-east-2.amazonaws.com/Aimer%20-%20Hana%20no%20Uta.mp3');
+    const [songLyric, setLyric] = useState("");
+    const [songUrl, setSongurl] = useState("");
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
@@ -134,6 +136,15 @@ const Room = (props) => {
                 audioPlayer.current.load();
             }
          });
+         socketRef.current.on("set lyrics", data => {
+            if (data.roomId === roomID) {
+                let lyric = data.lyrics.replaceAll("\\n",'\n');
+                setLyric(lyric);
+            }
+         });
+         console.log(audioPlayer.current.currentTime);
+         console.log(songLyric); 
+         console.log(parseLrc(songLyric))
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
@@ -190,9 +201,29 @@ const Room = (props) => {
         setTime(audioPlayer.current.currentTime);
     }
 
-    function changeTrack(filepath) {
+    function changeTrack(filepath, lyrics) {
         socketRef.current.emit("set song file signal",{roomId:roomID, filepath:filepath} );
+        socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyrics});
     }
+
+    const lineRenderer = useCallback(({ lrcLine, index, active }) => {
+        const { content } = lrcLine;
+        return (
+          <div
+            style={{
+              textAlign: 'center',
+              padding: '10px 0',
+              color: active ? 'green' : 'inherit',
+              transform: `scale(${active ? 1.2 : 1})`,
+              transition: 'transform 300ms',
+            }}
+          >
+            {content}
+          </div>
+        );
+      }, []);
+      
+      const onCurrentLineChange = useCallback((line) => console.log(line), []);
 
     const songsHTML = songs.map((element) =>
     <div className="song-box" key={element._id}>
@@ -200,9 +231,8 @@ const Room = (props) => {
         <div>Song name: {element.songName}</div>
         <div>Song artist: {element.artist}</div>
         <div>Song file: {element.filepath}</div>
-        <div>Song lyric: {element.lyrics}</div>
         <button className = "btn" 
-                    onClick = {()=>changeTrack(element.filepath)}>Change Song </button>
+                    onClick = {()=>changeTrack(element.filepath, element.lyrics)}>Change Song </button>
     </div>)
     ;
 
@@ -217,6 +247,14 @@ const Room = (props) => {
                 );
             })}
             <audio controls ref={audioPlayer} onPlay={setPlay} onPause={setPause} onTimeUpdate={setAudioTime} room={roomID} src={songUrl}></audio>
+            <Lrc
+                ref={lrcRef}
+                lrc={songLyric}
+                currentTime={prevTime*1000}
+                lineRenderer={lineRenderer}
+                onCurrentLineChange={onCurrentLineChange}
+                className = "lrc"
+            />
             {songsHTML}
         </div>
   

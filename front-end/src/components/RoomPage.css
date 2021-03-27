@@ -22,3 +22,18 @@
 audio {
     display:flex;
 }
+
+.lrc {
+    height:120px;
+    flex: 1;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .lrc::-webkit-scrollbar {
+      display: none;
+  }
+  

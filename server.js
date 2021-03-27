@@ -281,6 +281,10 @@ io.on('connection', socket => {
       io.emit("set song file", {roomId: payload.roomId, filepath: payload.filepath});
     });
 
+    socket.on("set lyrics signal", payload => {
+      io.emit("set lyrics", {roomId: payload.roomId, lyrics: payload.lyrics});
+    });
+
     socket.on('disconnect', () => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
