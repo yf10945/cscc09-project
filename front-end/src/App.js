@@ -9,7 +9,9 @@ import WelcomePage from "./components/WelcomePage";
 import PageNotFound from "./components/PageNotFound";
 import SignupPage from "./components/SignupPage";
 import RoomPage from "./components/RoomPage";
+import CreateRoomPage from "./components/CreateRoomPage";
 import SongsPage from "./components/SongsPage";
+
 
 function App() {
 
@@ -22,7 +24,8 @@ function App() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignupPage} />
-        <Route path="/rooms" component={RoomPage} />
+        <Route path="/rooms" exact component={CreateRoomPage} />
+        <Route path="/rooms/room/:roomID" component={RoomPage} />
         <Route path="/songs" component={SongsPage} />
         <Route component={PageNotFound} />
       </Switch>

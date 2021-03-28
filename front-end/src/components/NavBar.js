@@ -12,8 +12,10 @@ import { StyledNav } from "./NavBar.styled";
 export default function NavBar({ open, setOpen }) {
     const [username, setName] = useState("");
     useEffect(() => {
-        let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'))[2];
-        setName(username);
+        let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
+        if (username !== null) {
+            setName(username[2]);
+        }
     }, [username]);
     
     return (

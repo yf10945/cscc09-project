@@ -21,6 +21,7 @@ export default function AddSongPage() {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (uploadFinished) {
+      let lyric = SongLyric.replaceAll("\n","\\\\n");
       fetch('/graphql', {
         method: 'POST',
         headers: {
@@ -31,7 +32,7 @@ export default function AddSongPage() {
           query: `
             mutation 
             { addSong
-              (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${SongLyric}", filepath:"${SongFile}") 
+              (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${lyric}", filepath:"${SongFile}") 
               {_id}
             }
             `,
@@ -115,7 +116,7 @@ export default function AddSongPage() {
           className="icon"
         />
         <p>{Message}</p>
-        <p class="error">{errorMessage}</p>
+        <p className="error">{errorMessage}</p>
         <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"

@@ -143,14 +143,14 @@ var root = {
     return deletedRoom;
   }
 };
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
-app.use(cookieParser())
-
+app.use(cookieParser());
 
 
 app.post('/signup', (req, res) => {
@@ -230,6 +230,70 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, 'front-end/build', 'index.html'));
   });
 }
+const http = require("http");
+const socket = require("socket.io");
+const server = http.createServer(app);
+const io = socket(server);
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const users = {};
 
+const socketToRoom = {};
+
+io.on('connection', socket => {
+    socket.on("join room", roomID => {
+        if (users[roomID]) {
+            const length = users[roomID].length;
+            if (length === 4) {
+                socket.emit("room full");
+                return;
+            }
+            users[roomID].push(socket.id);
+        } else {
+            users[roomID] = [socket.id];
+        }
+        socketToRoom[socket.id] = roomID;
+        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+
+        socket.emit("all users", usersInThisRoom);
+    });
+
+    socket.on("sending signal", payload => {
+        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+    });
+
+    socket.on("returning signal", payload => {
+        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+    });
+
+    socket.on("send play signal", payload => {
+      io.emit("play audio", {roomId: payload.roomId});
+    });
+
+    socket.on("send pause signal", payload => {
+      io.emit("pause audio", {roomId: payload.roomId});
+    });
+    
+    socket.on("send change time signal", payload => {
+      io.emit("set audio time", {roomId: payload.roomId, time: payload.time});
+    });
+
+    socket.on("set song file signal", payload => {
+      io.emit("set song file", {roomId: payload.roomId, filepath: payload.filepath});
+    });
+
+    socket.on("set lyrics signal", payload => {
+      io.emit("set lyrics", {roomId: payload.roomId, lyrics: payload.lyrics});
+    });
+
+    socket.on('disconnect', () => {
+        const roomID = socketToRoom[socket.id];
+        let room = users[roomID];
+        if (room) {
+            room = room.filter(id => id !== socket.id);
+            users[roomID] = room;
+        }
+    });
+
+});
+
+server.listen(port, () => console.log(`Listening on port ${port}`));
