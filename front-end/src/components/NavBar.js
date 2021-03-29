@@ -41,6 +41,9 @@ export default function NavBar({ open, setOpen }) {
             <Link to="/addsong" className="navbar-link">
                 <NavBarOption Icon={Add} title="Add Song" />
             </Link>
+            <Link to="/addplaylist" className="navbar-link">
+                <NavBarOption Icon={Add} title="Add Playlist" />
+            </Link>
             <Link to="/profile" className="profile">
                 <NavBarOption title={username}/>
             </Link>

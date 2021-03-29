@@ -10,7 +10,6 @@ function SongsPage() {
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
-
     const getSongs = () => {
         fetch('/graphql', {
             method: 'POST',
@@ -58,6 +57,7 @@ function SongsPage() {
                                 <code>audio</code> element.
                         </audio>
                         <button onClick="deleteSong(element._id)">Delete</button>
+                        <button onClick="(element._id)">Delete</button>
                     </div>                
                     `
                 );
