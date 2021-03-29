@@ -11,6 +11,7 @@ import SignupPage from "./components/SignupPage";
 import RoomPage from "./components/RoomPage";
 import CreateRoomPage from "./components/CreateRoomPage";
 import SongsPage from "./components/SongsPage";
+import playlists from "./components/playlists";
 
 
 function App() {
