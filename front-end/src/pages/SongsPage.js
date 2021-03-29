@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles.css";
 import "./SongsPage.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import MusicPlayer from "./MusicPlayer";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import Burger from "../components/Burger";
+import MusicPlayer from "../components/MusicPlayer";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 
 function SongsPage() {
     const [open, setOpen] = useState(false);

@@ -4,9 +4,9 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import Burger from "../components/Burger";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 import { Lrc, parseLrc} from '@mebtte/react-lrc';
 
 const Video = (props) => {

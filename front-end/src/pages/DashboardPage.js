@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import "../styles.css";
-import "./Dashboard.css";
+import "./DashboardPage.css";
 import { withRouter } from "react-router";
-import NavBar from "./NavBar";
-import MusicPlayer from "./MusicPlayer";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import MusicPlayer from "../components/MusicPlayer";
+import Burger from "../components/Burger";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 
 export default function Dashboard() {
     const [open, setOpen] = useState(false);

@@ -2,9 +2,9 @@ import React, { useState,  useRef } from "react";
 import "../styles.css";
 import "./AddSongPage.css";
 import logo from "../Logo";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import Burger from "../components/Burger";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 
 export default function AddSongPage() {
   const [open, setOpen] = useState(false);
