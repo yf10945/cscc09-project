@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles.css";
-import "./SongsPage.css";
+import "./playlists.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 import MusicPlayer from "./MusicPlayer";
 import { useOnClickOutside } from "./useOnClickOutside";
 
-function SongsPage() {
+function playlists() {
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
@@ -120,4 +120,4 @@ function SongsPage() {
     )
 }
 
-export default SongsPage
+export default playlists;

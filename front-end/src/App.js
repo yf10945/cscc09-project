@@ -27,6 +27,7 @@ function App() {
         <Route path="/rooms" exact component={CreateRoomPage} />
         <Route path="/rooms/room/:roomID" component={RoomPage} />
         <Route path="/songs" component={SongsPage} />
+        <Route path="/playlists" component={playlists} />
         <Route component={PageNotFound} />
       </Switch>
     </React.Fragment>
