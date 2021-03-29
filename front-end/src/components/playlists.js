@@ -6,7 +6,7 @@ import Burger from "./Burger";
 import MusicPlayer from "./MusicPlayer";
 import { useOnClickOutside } from "./useOnClickOutside";
 
-function playlists() {
+function Playlists() {
     const [open, setOpen] = useState(false);
     const node = useRef();
     useOnClickOutside(node, () => setOpen(false));
@@ -120,4 +120,4 @@ function playlists() {
     )
 }
 
-export default playlists;
+export default Playlists;

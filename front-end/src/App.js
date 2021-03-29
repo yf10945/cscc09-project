@@ -11,7 +11,7 @@ import SignupPage from "./components/SignupPage";
 import RoomPage from "./components/RoomPage";
 import CreateRoomPage from "./components/CreateRoomPage";
 import SongsPage from "./components/SongsPage";
-import playlists from "./components/playlists";
+import Playlists from "./components/playlists";
 
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
         <Route path="/rooms" exact component={CreateRoomPage} />
         <Route path="/rooms/room/:roomID" component={RoomPage} />
         <Route path="/songs" component={SongsPage} />
-        <Route path="/playlists" component={playlists} />
+        <Route path="/playlists" component={Playlists} />
         <Route component={PageNotFound} />
       </Switch>
     </React.Fragment>
