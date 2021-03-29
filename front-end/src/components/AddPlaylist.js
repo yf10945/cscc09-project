@@ -7,8 +7,15 @@ import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
 
 export default function AddSongPage() {
+  const [username, setName] = useState("");
+    useEffect(() => {
+        let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
+        if (username !== null) {
+            setName(username[2]);
+        }
+    }, [username]);
   const [open, setOpen] = useState(false);
-  const [SongName, setName] = useState("");
+  const [PlaylistName, setPName] = useState("");
   const [SongArtist, setArtist] = useState("");
   const [SongLyric, setLyric] = useState("");
   const [SongFile, setFile] = useState("");
@@ -31,8 +38,8 @@ export default function AddSongPage() {
         body: JSON.stringify({
           query: `
             mutation 
-            { addSong
-              (songName:"${SongName}", artist:"${SongArtist}", lyrics:"${lyric}", filepath:"${SongFile}") 
+            { createPlaylist
+              (title:"${PlaylistName}", user:"${username}") 
               {_id}
             }
             `,
@@ -49,59 +56,12 @@ export default function AddSongPage() {
           }
         })
         .then((data) => {
-          setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
+          //setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
+          console.log(data);
         })
         .catch(error => setMessage("") );
       }
   }  
-
-  const handleFileUpload = e => {
-    setUploadFinished(false);
-    setMessage("Uploading file, please wait...");
-    setFile(e.target.files[0]);
-    getSignedRequest(e.target.files[0]);
-  };
-
-  const uploadFile = (file, signedRequest, url) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          setFile(url);
-          setUploadFinished(true);
-          setMessage("Upload Finished!");
-          if(audioRef.current){
-            audioRef.current.pause();
-            audioRef.current.load();
-          }
-        }
-        else{
-          setMessage('Could not upload file.');
-        }
-      }
-    };
-    xhr.send(file);
-  }
-
-  const getSignedRequest = (file) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${encodeURIComponent(file.name)}&file-type=${file.type}`);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          const response = JSON.parse(xhr.responseText);
-          uploadFile(file, response.signedRequest, response.url);
-        }
-        else{
-          setMessage('Could not get signed URL.');
-        }
-      }
-    };
-    xhr.send();
-  }
-
-
 
   return (
     <div className="AddSongPage main-theme">
@@ -120,45 +80,15 @@ export default function AddSongPage() {
         <form className="complex_form" onSubmit={handleSubmit}>
           <input
             type="text"
-            value={SongName}
+            value={PlaylistName}
             className="form_element input"
-            placeholder="Enter the song name"
-            onChange={e => setName(e.target.value)}
+            placeholder="Enter playlist name"
+            onChange={e => setPName(e.target.value)}
             required
           />
-          <input
-            type="text"
-            value={SongArtist}
-            className="form_element input"
-            placeholder="Enter the song artist"
-            onChange={e => setArtist(e.target.value)}
-            required
-          />
-          <label className="form_element">Select a file for the song:</label>
-          <input
-            type="file"
-            id="SongFile"
-            name="SongFile"
-            className="form_element"
-            accept="audio/*"
-            onChange={handleFileUpload}
-            required
-          />
-          <textarea
-            value={SongLyric}
-            className="form_element input"
-            placeholder="Enter the song lyric"
-            onChange={e => setLyric(e.target.value)}
-            required
-          />
-          File preview:
-          <audio controls ref={audioRef}>
-            <source src={SongFile} type="audio/mp3"/> 
-          Your browser does not support the audio element.
-          </audio>
           <div>
-            <button id="addsong" name="action" class="btn main-button-theme">
-              Add Song
+            <button id="addplay" name="action" class="btn main-button-theme">
+              Add Playlist
             </button>
           </div>
         </form>
