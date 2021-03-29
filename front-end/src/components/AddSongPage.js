@@ -20,6 +20,8 @@ export default function AddSongPage() {
   const audioRef = useRef();
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    if (uploadFinished) {
+      let lyric = SongLyric.replaceAll("\n","\\\\n");
       fetch('/graphql', {
         method: 'POST',
         headers: {
@@ -50,7 +52,8 @@ export default function AddSongPage() {
           setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
         })
         .catch(error => setMessage("") );
-  }
+      }
+  }  
 
   const handleFileUpload = e => {
     setUploadFinished(false);

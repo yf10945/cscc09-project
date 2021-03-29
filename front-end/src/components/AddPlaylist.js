@@ -18,14 +18,12 @@ export default function AddSongPage() {
   const [PlaylistName, setPName] = useState("");
   const [errorMessage, setError] = useState("");
   const [Message, setMessage] = useState("");
-  const [uploadFinished, setUploadFinished] = useState(false);
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   const audioRef = useRef();
   const handleSubmit = (evt) => {
     console.log("hi");
     evt.preventDefault();
-    if (uploadFinished) {
       let lyric = SongLyric.replaceAll("\n","\\\\n");
       fetch('/graphql', {
         method: 'POST',
@@ -58,7 +56,6 @@ export default function AddSongPage() {
           console.log(data);
         })
         .catch(error => setMessage("") );
-      }
   }  
 
   return (
