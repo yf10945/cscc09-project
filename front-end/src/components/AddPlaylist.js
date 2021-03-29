@@ -16,9 +16,6 @@ export default function AddSongPage() {
     }, [username]);
   const [open, setOpen] = useState(false);
   const [PlaylistName, setPName] = useState("");
-  const [SongArtist, setArtist] = useState("");
-  const [SongLyric, setLyric] = useState("");
-  const [SongFile, setFile] = useState("");
   const [errorMessage, setError] = useState("");
   const [Message, setMessage] = useState("");
   const [uploadFinished, setUploadFinished] = useState(false);
@@ -26,6 +23,7 @@ export default function AddSongPage() {
   useOnClickOutside(node, () => setOpen(false));
   const audioRef = useRef();
   const handleSubmit = (evt) => {
+    console.log("hi");
     evt.preventDefault();
     if (uploadFinished) {
       let lyric = SongLyric.replaceAll("\n","\\\\n");
