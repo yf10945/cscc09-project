@@ -24,7 +24,6 @@ export default function AddSongPage() {
   const handleSubmit = (evt) => {
     console.log("hi");
     evt.preventDefault();
-      let lyric = SongLyric.replaceAll("\n","\\\\n");
       fetch('/graphql', {
         method: 'POST',
         headers: {
