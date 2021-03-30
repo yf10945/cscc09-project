@@ -9,7 +9,9 @@ import { Menu } from '@material-ui/core';
 import { bool, func } from 'prop-types';
 import { StyledNav } from "./NavBar.styled";
 
-export default function NavBar({ open, setOpen }) {
+{/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
+
+function NavBar({ open, setOpen }) {
     const [username, setName] = useState("");
     useEffect(() => {
         let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
@@ -55,3 +57,5 @@ Menu.propTypes = {
     open: bool.isRequired,
     setOpen: func.isRequired
 };
+
+export default NavBar

@@ -1,0 +1,8 @@
+.song-box {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: rgb(98, 100, 98);
+    display: flex;
+    width: 100%;
+}
