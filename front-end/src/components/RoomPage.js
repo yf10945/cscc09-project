@@ -7,7 +7,7 @@ import "./RoomPage.css";
 import NavBar from "./NavBar";
 import Burger from "./Burger";
 import { useOnClickOutside } from "./useOnClickOutside";
-import { Lrc, parseLrc} from '@mebtte/react-lrc';
+import { Lrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
@@ -219,8 +219,6 @@ const Room = (props) => {
           </div>
         );
       }, []);
-      
-      const onCurrentLineChange = useCallback((line) => console.log(line), []);
 
     const songsHTML = songs.map((element) =>
     <div className="song-box" key={element._id}>
@@ -249,7 +247,6 @@ const Room = (props) => {
                 lrc={songLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
-                onCurrentLineChange={onCurrentLineChange}
                 className = "lrc"
             />
             {songsHTML}

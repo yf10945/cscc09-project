@@ -121,7 +121,6 @@ export default function AddSongPage() {
     );
   }, []);
   
-  const onCurrentLineChange = useCallback((line) => console.log(line), []);
 
   function setAudioTime() {
     setTime(audioRef.current.currentTime); 
@@ -215,7 +214,6 @@ export default function AddSongPage() {
                 lrc={SongLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
-                onCurrentLineChange={onCurrentLineChange}
                 className = "lrc"
             />
         </div>
