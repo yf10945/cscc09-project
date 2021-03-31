@@ -81,6 +81,7 @@ textarea {
 
 .preview {
 	display: flex;
+    width:100%;
 	flex-direction: column;
 	text-align: center;
 	min-height:300px;
