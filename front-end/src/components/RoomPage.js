@@ -142,9 +142,6 @@ const Room = (props) => {
                 setLyric(lyric);
             }
          });
-         console.log(audioPlayer.current.currentTime);
-         console.log(songLyric); 
-         console.log(parseLrc(songLyric))
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
