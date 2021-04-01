@@ -8,17 +8,23 @@ import NavBarOption from "./NavBarOption";
 import { Menu } from '@material-ui/core';
 import { bool, func } from 'prop-types';
 import { StyledNav } from "./NavBar.styled";
+import { useDataLayerValue } from "../dataLayer";
 
 {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
 
 function NavBar({ open, setOpen }) {
+    const [{ user }, dispatch] = useDataLayerValue();
     const [username, setName] = useState("");
     useEffect(() => {
         let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
         if (username !== null) {
+            dispatch({
+                type: 'SET_USER',
+                user: username[2] 
+            });
             setName(username[2]);
         }
-    }, [username]);
+    }, [dispatch, username]);
     
     return (
         <StyledNav open={open}>

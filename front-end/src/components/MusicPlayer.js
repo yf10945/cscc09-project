@@ -16,7 +16,7 @@ function MusicPlayer() {
         <div className="music-player">
             <div className="music-player-left">
                 <img src="" alt="" className="footer-album-logo"/>
-                <div class="music-player-songInfo">
+                <div className="music-player-songInfo">
                     <h4>song title</h4>
                     <p>artist</p>
                 </div>

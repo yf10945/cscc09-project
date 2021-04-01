@@ -21,7 +21,7 @@ function SongList({ songs, setSongs }) {
     //     }
     // ];
     return (
-        <div class="song-list">
+        <div className="song-list">
             {songs.length <= 0 ? (
                 <p className="no-songs">You currently have no songs.</p>
             ) : (
@@ -37,7 +37,7 @@ function SongList({ songs, setSongs }) {
                     </thead>
                     <tbody>
                         {songs.map((songlistentry) => (
-                            <SongListEntry songlistentry={songlistentry} setSongs={setSongs} />
+                            <SongListEntry key={songlistentry._id} songlistentry={songlistentry} setSongs={setSongs} />
                         ))}
                     </tbody>
                 </table>

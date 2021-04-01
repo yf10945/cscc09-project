@@ -5,10 +5,10 @@ import DeleteSongButton from './DeleteSongButton';
 
 function SongListEntry({ songlistentry, setSongs }) {
     const [playVisible, setPlayVisible] = useState(false);
-    console.log("songlistentry: " + songlistentry);
-    console.log("setSongs: " + setSongs);
+    // console.log("songlistentry: " + songlistentry);
+    // console.log("setSongs: " + setSongs);
     return (
-        <tr class="song-box" id={songlistentry._id} onMouseEnter={() => setPlayVisible(songlistentry._id)} onMouseLeave={() => setPlayVisible('')}>
+        <tr className="song-box" id={songlistentry._id} onMouseEnter={() => setPlayVisible(songlistentry._id)} onMouseLeave={() => setPlayVisible('')}>
             {/* <div>Song ID: {songlistentry._id}</div> */}
             <td className="play-pause-button">
                 <PlayPauseButton visible={playVisible === songlistentry._id} songId={songlistentry._id} song={songlistentry.filepath} />
