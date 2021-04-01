@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 function DeleteSongButton({ song, setSongs }) {
@@ -65,8 +65,7 @@ function DeleteSongButton({ song, setSongs }) {
             }
         })
         .then((data) => {
-            console.log(data);
-            console.log(setSongs);
+            // console.log(data);
             getSongs(setSongs);
         })
         .catch(error => console.log(error));
