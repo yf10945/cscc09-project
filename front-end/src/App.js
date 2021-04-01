@@ -11,11 +11,11 @@ import SignupPage from "./pages/SignupPage";
 import RoomPage from "./pages/RoomPage";
 import CreateRoomPage from "./pages/CreateRoomPage";
 import SongsPage from "./pages/SongsPage";
+import { useDataLayerValue } from "./dataLayer";
 
 
 function App() {
-
-  return (
+    return (
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={WelcomePage} />
