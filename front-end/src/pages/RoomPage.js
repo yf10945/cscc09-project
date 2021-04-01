@@ -226,7 +226,7 @@ const Room = (props) => {
       const onCurrentLineChange = useCallback((line) => console.log(line), []);
 
     const songsHTML = songs.map((element) =>
-    <div className="song-box" key={element._id}>
+    <div className="songs-box" key={element._id}>
         <div>Song ID: {element._id}</div>
         <div>Song name: {element.songName}</div>
         <div>Song artist: {element.artist}</div>

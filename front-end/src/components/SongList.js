@@ -1,5 +1,6 @@
 import React from 'react';
 import SongListEntry from './SongListEntry';
+import "./SongList.css";
 
 function SongList({ songs }) {
     // no-db mock data for testing
@@ -21,9 +22,25 @@ function SongList({ songs }) {
     // ];
     return (
         <div class="song-list">
-            {songs.map((songlistentry) => (
-                <SongListEntry key={songlistentry._id} songlistentry={songlistentry} />
-            ))}
+            {songs.length <= 0 ? (
+                <p className="no-songs">You currently have no songs.</p>
+            ) : (
+                <table>
+                    <thead>
+                        <tr className="table-labels">
+                            <th className="play-pause-button-header" />
+                            <th className="song-name-header">Title</th>
+                            <th className="artists-header">Artist(s)</th>
+                            {/* <th>Duration</th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {songs.map((songlistentry) => (
+                            <SongListEntry key={songlistentry._id} songlistentry={songlistentry} />
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     )
 }

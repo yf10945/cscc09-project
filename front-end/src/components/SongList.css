@@ -1,4 +1,33 @@
-.song-list {
-    display: flex;
-    width: 100%;
+.no-songs {
+    font-size: 30px;
+    width: 80vw;
+}
+
+.song-list table {
+    width: 80vw;
+    border-collapse: collapse;
+    table-layout: auto;
+    overflow: hidden;
+}
+
+.song-list table thead {
+    display: block;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.table-labels {
+    border-bottom: 1px solid white;
+}
+
+.play-pause-button-header {
+    width: 1vw;
+}
+
+.song-name-header {
+    width: 10vw;
+}
+
+.artists-header {
+    width: 37vw;
 }
