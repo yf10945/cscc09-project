@@ -2,7 +2,7 @@ import React from 'react';
 import SongListEntry from './SongListEntry';
 import "./SongList.css";
 
-function SongList({ songs }) {
+function SongList({ songs, setSongs }) {
     // no-db mock data for testing
     // const renderSongs = [
     //     {
@@ -37,7 +37,7 @@ function SongList({ songs }) {
                     </thead>
                     <tbody>
                         {songs.map((songlistentry) => (
-                            <SongListEntry key={songlistentry._id} songlistentry={songlistentry} />
+                            <SongListEntry songlistentry={songlistentry} setSongs={setSongs} />
                         ))}
                     </tbody>
                 </table>

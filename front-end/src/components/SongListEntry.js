@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import PlayPauseButton from './PlayPauseButton';
 import './SongListEntry.css';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteSongButton from './DeleteSongButton';
 
-const SongListEntry = (props) => {
-    const { songlistentry } = props;
+function SongListEntry({ songlistentry, setSongs }) {
     const [playVisible, setPlayVisible] = useState(false);
-
+    console.log("songlistentry: " + songlistentry);
+    console.log("setSongs: " + setSongs);
     return (
         <tr class="song-box" id={songlistentry._id} onMouseEnter={() => setPlayVisible(songlistentry._id)} onMouseLeave={() => setPlayVisible('')}>
             {/* <div>Song ID: {songlistentry._id}</div> */}
             <td className="play-pause-button">
-                <PlayPauseButton visible={playVisible === songlistentry._id} song={songlistentry._id} />
+                <PlayPauseButton visible={playVisible === songlistentry._id} songId={songlistentry._id} song={songlistentry.filepath} />
             </td>
             <td className="song-name">{songlistentry.songName}</td>
             <td className="artists">{songlistentry.artist}</td>
             <td>
-                <DeleteIcon />
+                <DeleteSongButton song={songlistentry._id} setSongs={setSongs} />
             </td>
             {/* <div>File: {songlistentry.filepath}</div> */}
             {/* <div>Lyrics: {songlistentry.lyrics}</div>     */}
@@ -29,6 +29,6 @@ const SongListEntry = (props) => {
 
         </tr>  
     );
-};
+}
 
-export default SongListEntry;
+export default SongListEntry
