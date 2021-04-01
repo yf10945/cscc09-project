@@ -10,10 +10,8 @@
 
 .footer {
     height: 100px;
-    z-index: -1;
-    position: relative;
 }
 
 .main {
-    height: 100vh;
+    min-height: 100vh;
 }
