@@ -29,9 +29,11 @@ function MusicPlayer() {
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
+
     const toggleAudio = () => {
-        audio.current.paused ? audio.current.play() : audio.current.pause();
+        (audio.current.paused && playing) ? audio.current.play() : audio.current.pause();
     };
+
     const changeVolume = (e, newVolume) => {
         dispatch({
             type: 'SET_VOLUME',
@@ -39,6 +41,7 @@ function MusicPlayer() {
         });
         audio.current.volume = newVolume;
     };
+
     const handleProgress = (e) => {
         var compute = (e.target.value * duration) / 100;
         setCurrentTime(compute);
@@ -100,9 +103,15 @@ function MusicPlayer() {
                     <div className="previous-button" onClick={previousSong}>
                         <SkipPreviousIcon className="music-player-icon" />
                     </div>
-                    <div className="play-button" onClick={() => {togglePlaying(); toggleAudio();}}>
-                        <PlayCircleOutlineIcon className={"music-player-icon-" + (playing ? "hide" : "")} fontSize="large" />
-                        <PauseCircleOutlineIcon className={"music-player-icon-" + (playing ? "" : "hide")} fontSize="large" />
+                    <div className="play-button" 
+                        onClick={() => {
+                            if (playingSong != null) {
+                                togglePlaying();
+                                toggleAudio();
+                            }
+                        }}>
+                        <PlayCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
+                        <PauseCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
                     </div>
                     <div className="next-button" onClick={nextSong}>
                         <SkipNextIcon className="music-player-icon" />
