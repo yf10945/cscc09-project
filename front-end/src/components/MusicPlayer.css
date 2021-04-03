@@ -120,6 +120,8 @@
     cursor: pointer;
     height: 20px;
     width: 10px;
+    position: relative;
+    bottom: 5px;
 }
 
 .progress-bar::-moz-range-track {
@@ -136,6 +138,8 @@
     cursor: pointer;
     height: 20px;
     width: 10px;
+    position: relative;
+    bottom: 5px;
 }
   
 .progress-bar::-ms-track {
@@ -162,6 +166,8 @@
     cursor: pointer;
     height: 20px;
     width: 10px;
+    position: relative;
+    bottom: 5px;
 }
 
 .progress-bar:focus::-ms-fill-lower {
