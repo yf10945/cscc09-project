@@ -11,7 +11,12 @@ function SongListEntry({ songlistentry, setSongs }) {
         <tr className="song-box" id={songlistentry._id} onMouseEnter={() => setPlayVisible(songlistentry._id)} onMouseLeave={() => setPlayVisible('')}>
             {/* <div>Song ID: {songlistentry._id}</div> */}
             <td className="play-pause-button">
-                <PlayPauseButton visible={playVisible === songlistentry._id} songId={songlistentry._id} song={songlistentry.filepath} />
+                <PlayPauseButton 
+                    visible={playVisible === songlistentry._id}
+                    songId={songlistentry._id}
+                    song={songlistentry.filepath}
+                    songTitle={songlistentry.songName}
+                    songArtists={songlistentry.artist} />
             </td>
             <td className="song-name">{songlistentry.songName}</td>
             <td className="artists">{songlistentry.artist}</td>
