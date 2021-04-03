@@ -93,7 +93,8 @@ function MusicPlayer() {
         location.pathname === "/aboutus" ||
         location.pathname === "/login" ||
         location.pathname === "/signup" ||
-        location.pathname === "/404") {
+        location.pathname === "/404" ||
+        location.pathname === "/addsong") {
       return null;
     }
 
