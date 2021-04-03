@@ -181,6 +181,9 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
+const { 
+  v4: uuidv4,
+} = require('uuid');
 
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3({
@@ -191,7 +194,7 @@ app.get('/sign-s3', (req, res) => {
   const fileType = req.query['file-type'];
   const s3Params = {
     Bucket: 'c09',
-    Key: fileName,
+    Key: uuidv4(),
     Expires: 60,
     ContentType: fileType,
     ACL: 'public-read'
@@ -204,7 +207,7 @@ app.get('/sign-s3', (req, res) => {
     }
     const returnData = {
       signedRequest: data,
-      url: `https://c09.s3.us-east-2.amazonaws.com/${fileName}`
+      url: `https://c09.s3.us-east-2.amazonaws.com/${s3Params.Key}`
     };
     res.json(returnData);
   });
@@ -256,6 +259,7 @@ io.on('connection', socket => {
 
         socket.emit("all users", usersInThisRoom);
     });
+
 
     socket.on("sending signal", payload => {
         io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
