@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import "./MusicPlayer.css";
 import "../styles.css";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
@@ -8,9 +8,12 @@ import ShuffleIcon from "@material-ui/icons/Shuffle";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
-import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
+// import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Grid, Slider } from "@material-ui/core";
 import { useDataLayerValue } from "../dataLayer";
+import { useLocation } from 'react-router-dom'; 
+import { ToggleOnOutlined } from '@material-ui/icons';
+
 
 function MusicPlayer() {
     const [{ 
@@ -30,16 +33,17 @@ function MusicPlayer() {
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
 
-    const toggleAudio = () => {
+    const toggleAudio = useCallback(() => {
         (audio.current.paused && playing) ? audio.current.play() : audio.current.pause();
-    };
+    }, [playing]);
 
     const changeVolume = (e, newVolume) => {
+        console.log(audio.current.paused);
         dispatch({
             type: 'SET_VOLUME',
             volume: newVolume
         });
-        audio.current.volume = newVolume;
+        audio.current.volume = volume;
     };
 
     const handleProgress = (e) => {
@@ -70,19 +74,25 @@ function MusicPlayer() {
         random: !random
     });
 
+    const location = useLocation();
+
     useEffect(() => {
-        audio.current.volume = volume;
+        toggleAudio();
+        togglePlaying();
+    }, [location]);
+
+    useEffect(() => {
         if (playing) {
             toggleAudio();
         }
-    }, [playing, volume, playingSong]);
+    }, [playing, playingSong, toggleAudio]);
 
     return (
         <div className="music-player">
             <audio 
                 onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
                 onCanPlay={(e) => setDuration(e.target.duration)}
-                onEnded={handleEnd}
+                onEnded={() => {togglePlaying();}} // add handleEnd later
                 ref={audio}
                 preload="true"
                 src={playingSong}
