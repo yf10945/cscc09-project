@@ -11,9 +11,8 @@ import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 // import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Grid, Slider } from "@material-ui/core";
 import { useDataLayerValue } from "../dataLayer";
-import { useLocation } from 'react-router-dom'; 
 import { ToggleOnOutlined } from '@material-ui/icons';
-
+import { useLocation } from "react-router-dom";
 
 function MusicPlayer() {
     const [{ 
@@ -27,7 +26,8 @@ function MusicPlayer() {
         random,
         playing,
         handleEnd,
-        volume
+        volume,
+        timestamp
     }, dispatch] = useDataLayerValue();
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
@@ -59,33 +59,43 @@ function MusicPlayer() {
         playing: !playing
     });
 
-    const setCurrentSong = (url) => dispatch({
+    const setCurrentSong = (url, title, artists) => dispatch({
         type: "SET_SONG",
-        playingSong: url
+        playingSong: url,
+        playingSongTitle: title,
+        playingSongArtists: artists
     });
 
-    const toggleRepeat = (url) => dispatch({
+    const toggleRepeat = () => dispatch({
         type: "TOGGLE_REPEAT",
         repeat: !repeat
     });
 
-    const toggleRandom = (url) => dispatch({
+    const toggleRandom = () => dispatch({
         type: "TOGGLE_RANDOM",
         random: !random
     });
 
-    const location = useLocation();
-
-    useEffect(() => {
-        toggleAudio();
-        togglePlaying();
-    }, [location]);
+    const setTimestamp = useCallback((time) => dispatch({
+        type: "SET_TIMESTAMP",
+        timestamp: time
+    }), [dispatch]);
 
     useEffect(() => {
         if (playing) {
             toggleAudio();
         }
     }, [playing, playingSong, toggleAudio]);
+
+    const location = useLocation();
+
+    if (location.pathname === "/" ||
+        location.pathname === "/aboutus" ||
+        location.pathname === "/login" ||
+        location.pathname === "/signup" ||
+        location.pathname === "/404") {
+      return null;
+    }
 
     return (
         <div className="music-player">

@@ -1,16 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles.css";
 import "./SongsPage.css";
-import NavBar from "../components/NavBar";
-import Burger from "../components/Burger";
-import MusicPlayer from "../components/MusicPlayer";
 import SongList from "../components/SongList";
-import { useOnClickOutside } from "../components/useOnClickOutside";
 
 function SongsPage() {
-    const [open, setOpen] = useState(false);
-    const node = useRef();
-    useOnClickOutside(node, () => setOpen(false));
     const [songs, setSongs] = useState([]);
 
     const getSongs = () => {
@@ -60,11 +53,6 @@ function SongsPage() {
                 {/* Add spacing between songs list and music control bar with footer*/}
                 <div className="footer"></div>
             </div>
-            <div ref={node}>
-                <Burger open={open} setOpen={setOpen} />
-                <NavBar open={open} setOpen={setOpen} />
-            </div>
-            <MusicPlayer />
         </div>
     )
 }

@@ -7,7 +7,8 @@ export const initialState = {
     repeat: false,
     playing: false,
     audio: null,
-    volume: 0.5
+    volume: 0.5,
+    timestamp: 0
 };
 
 const reducer = (state, action) => {
@@ -55,6 +56,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 playingSongArtists: action.playingSongArtists
+            };
+        case "SET_TIMESTAMP":
+            return {
+                ...state,
+                timestamp: action.timestamp
             };
         default:
             return state;

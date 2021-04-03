@@ -9,6 +9,7 @@ import { Menu } from '@material-ui/core';
 import { bool, func } from 'prop-types';
 import { StyledNav } from "./NavBar.styled";
 import { useDataLayerValue } from "../dataLayer";
+import { useLocation } from "react-router-dom";
 
 {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
 
@@ -25,15 +26,25 @@ function NavBar({ open, setOpen }) {
             setName(username[2]);
         }
     }, [dispatch, username]);
+
+    const location = useLocation();
+
+    if (location.pathname === "/" ||
+        location.pathname === "/aboutus" ||
+        location.pathname === "/login" ||
+        location.pathname === "/signup" ||
+        location.pathname === "/404") {
+      return null;
+    }
     
     return (
-        <StyledNav open={open}>
+        <StyledNav open={open} className="nav-bar">
             <img
             src={logo}
             alt="logo"
             className="navbar-icon"
             />
-            <h2>catJAM</h2>
+            <h2 className="main-theme-no-background">catJAM</h2>
             <Link to="/dashboard" className="navbar-link">
                 <NavBarOption Icon={Dashboard} title="Dashboard" />
             </Link>
