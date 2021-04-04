@@ -194,7 +194,7 @@
     position: relative;
 }
 
-.lrc {
+.music-player-lrc {
     overflow-y: scroll !important;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
@@ -208,6 +208,6 @@
     border-radius: 20px;
 }
 
-.lrc-hide {
+.music-player-lrc-hide {
     display: none;
 }

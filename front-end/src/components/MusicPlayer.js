@@ -210,7 +210,7 @@ function MusicPlayer() {
                                 lrc={songlist[playingSong].lyrics.replaceAll("\\n",'\n')}
                                 currentTime={currentTime * 1000}
                                 lineRenderer={lineRenderer}
-                                className = {"lrc" + (lyricsBox ? "" : "-hide")}
+                                className = {"music-player-lrc" + (lyricsBox ? "" : "-hide") +" lrc"}
                             />
                         </Draggable>
                         :
