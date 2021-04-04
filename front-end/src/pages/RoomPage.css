@@ -7,7 +7,19 @@
     padding-top: 30px;
     padding-bottom: 30px;
 }
+.message {
+    min-height:40px;
+    font-family:verdana;
+    font-size:150%;
+}
 
+video {
+    border:1px solid greenyellow;
+    min-height: 49%;
+    min-width: 49%;
+    height:49%;
+    width:49%;
+}
 .songs-box {
     margin: 20px;
     padding: 20px;

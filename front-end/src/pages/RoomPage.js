@@ -21,14 +21,9 @@ const Video = (props) => {
 }
 
 
-const videoConstraints = {
-    height: window.innerHeight / 3,
-    width: window.innerWidth / 3
-};
-
-
 const Room = (props) => {
     const [peers, setPeers] = useState([]);
+    const [message, setMessage] = useState(" ");
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
@@ -79,8 +74,10 @@ const Room = (props) => {
         socketRef.current = io.connect("/");
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
+            setMessage("Welcome to the room!");
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
+                setMessage("Please wait, loading video streams for user in room.");
                 const peers = [];
                 users.forEach(userID => {
                     const peer = createPeer(userID, socketRef.current.id, stream);
@@ -91,6 +88,9 @@ const Room = (props) => {
                     peers.push(peer);
                 })
                 setPeers(peers);
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
             })
 
             socketRef.current.on("user joined", payload => {
@@ -99,8 +99,13 @@ const Room = (props) => {
                     peerID: payload.callerID,
                     peer,
                 })
+                setMessage("Someone joined the room! Currently playing song will be paused.");
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
 
                 setPeers(users => [...users, peer]);
+                loadSong();
             });
 
             socketRef.current.on("receiving returned signal", payload => {
@@ -110,22 +115,41 @@ const Room = (props) => {
         })
         socketRef.current.on("play audio", data => {
             if (data.roomId === roomID) {
+                setMessage("User in room has resumed the song.");
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
                 audioPlayer.current.play();
             }
          });
         socketRef.current.on("pause audio", data => {
             if (data.roomId === roomID) {
+                setMessage("User in room has paused the song.");
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
                 audioPlayer.current.pause();
             }
          });
          socketRef.current.on("set audio time", data => {
             if (data.roomId === roomID) {
-                audioPlayer.current.currentTime = data.time;
-                setTime(data.time);
+                setMessage(`User in room has changed the time to ${data.time}`);
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
+                audioPlayer.current.pause();
+                if (Math.abs(audioPlayer.current.currentTime - data.time) > 1) { 
+                    audioPlayer.current.currentTime = data.time;
+                    setTime(data.time);
+                }
             }
          });
          socketRef.current.on("set song file", data => {
             if (data.roomId === roomID) {
+                setMessage(`User in room has changed the song. Lyrics is changed accordingly.`);
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
                 setSongurl(data.filepath);
                 audioPlayer.current.load();
             }
@@ -182,6 +206,13 @@ const Room = (props) => {
         socketRef.current.emit("send pause signal", {roomId: roomID});
     }
 
+    function loadSong() {
+        socketRef.current.emit("send pause signal", {roomId: roomID});
+        socketRef.current.emit("set song file signal",{roomId:roomID, filepath:songUrl} );
+        socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:songLyric});
+        socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+    }
+
     function setAudioTime() {
         if (Math.abs(audioPlayer.current.currentTime - prevTime) > 1) {
             let time = audioPlayer.current.currentTime;
@@ -235,6 +266,9 @@ const Room = (props) => {
         <div className="room-page main-theme">
         <div className="main">
         <div>
+            <div className="message">
+                {message}
+            </div>
             <video muted ref={userVideo} autoPlay playsInline />
             {peers.map((peer, index) => {
                 return (
