@@ -101,7 +101,8 @@ function MusicPlayer() {
         if (random) {
             setCurrentSong(Math.floor(Math.random() * songlist.length));
         } else if (playingSong === songlist.length - 1 || repeat) {
-            return;
+            togglePlaying();
+            setCurrentSong(0);
         } else {
             nextSong();
         }
