@@ -135,6 +135,7 @@ function MusicPlayer() {
     }, [playing, playingSong, toggleAudio]);
 
     const location = useLocation();
+    var hideBar = false;
 
     if (location.pathname === "/" ||
         location.pathname === "/aboutus" ||
@@ -142,11 +143,23 @@ function MusicPlayer() {
         location.pathname === "/signup" ||
         location.pathname === "/404" ||
         location.pathname === "/addsong") {
-      return null;
+        hideBar = true;
     }
 
+    useEffect(() => {
+        if (location.pathname === "/" ||
+            location.pathname === "/aboutus" ||
+            location.pathname === "/login" ||
+            location.pathname === "/signup" ||
+            location.pathname === "/404" ||
+            location.pathname === "/addsong") {
+            togglePlaying();
+            audio.current.pause();
+        }
+    }, [location]);
+
     return (
-        <div className="music-player">
+        <div className={"music-player" + (hideBar ? "-hide" : "")}>
             <audio 
                 onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
                 onCanPlay={(e) => setDuration(e.target.duration)}

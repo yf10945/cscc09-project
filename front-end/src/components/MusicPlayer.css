@@ -10,6 +10,10 @@
     z-index: 100;
 }
 
+.music-player-hide {
+    display: none;
+}
+
 .music-player-left {
     flex: 0.3;
     display: flex;
