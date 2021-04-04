@@ -153,7 +153,7 @@ function MusicPlayer() {
             location.pathname === "/signup" ||
             location.pathname === "/404" ||
             location.pathname === "/addsong") {
-            togglePlaying();
+            if (!audio.current.paused) togglePlaying();
             audio.current.pause();
         }
     }, [location]);
