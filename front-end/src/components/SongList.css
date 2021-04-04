@@ -1,5 +1,6 @@
 .song-list {
     padding-bottom: 50px;
+    display: flex;
 }
 .no-songs {
     font-size: 30px;
@@ -7,7 +8,7 @@
 }
 
 .song-list table {
-    width: 80vw;
+    width: 60vw;
     border-collapse: collapse;
     table-layout: auto;
 }
