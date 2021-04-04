@@ -4,9 +4,6 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
 import { Lrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
@@ -40,9 +37,6 @@ const Room = (props) => {
     const [songs, setSongs] = useState([]);
     const [songLyric, setLyric] = useState("");
     const [songUrl, setSongurl] = useState("");
-    const [open, setOpen] = useState(false);
-    const node = useRef();
-    useOnClickOutside(node, () => setOpen(false));
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
 
@@ -221,7 +215,7 @@ const Room = (props) => {
       }, []);
 
     const songsHTML = songs.map((element) =>
-    <div className="song-box" key={element._id}>
+    <div className="songs-box" key={element._id}>
         <div>Song ID: {element._id}</div>
         <div>Song name: {element.songName}</div>
         <div>Song artist: {element.artist}</div>
@@ -252,11 +246,6 @@ const Room = (props) => {
             {songsHTML}
         </div>
   
-        </div>
-        {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
-        <div ref={node}>
-            <Burger open={open} setOpen={setOpen} />
-            <NavBar open={open} setOpen={setOpen} />
         </div>
       </div>
   );

@@ -1,16 +1,10 @@
 import React, {useState, useRef, useEffect} from "react";
 import "../styles.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
 import { element } from "prop-types";
 import { join } from "path";
 
 export default function CreateRoomPage (props) {
-    const [open, setOpen] = useState(false);
     const [roomList, setRoomList] = useState([]);
-    const node = useRef();
-    useOnClickOutside(node, () => setOpen(false));
 
     const getRooms = () => {
         fetch('/graphql', {
@@ -110,11 +104,6 @@ export default function CreateRoomPage (props) {
                 <button className = "btn" 
                         onClick = {createRoom}> Create a room </button>
                 {roomListHTML}
-            </div>
-            {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
-            <div ref={node}>
-                <Burger open={open} setOpen={setOpen} />
-                <NavBar open={open} setOpen={setOpen} />
             </div>
         </div>
       );

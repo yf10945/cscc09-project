@@ -1,12 +1,13 @@
 .music-player {
     position: fixed;
     bottom: 0;
-    height: 5vh;
+    height: 7vh;
     width: 100vw;
     background-color: #282828;
     padding: 20px;
     display: flex;
     justify-content: space-between;
+    z-index: 100;
 }
 
 .music-player-left {
@@ -22,11 +23,26 @@
     padding: 0 100px;
     color: white;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    max-width: 300px;
+    max-width: 500px;
 }
 
+.center-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.center-top > div {
+    margin-left: 1vw;
+    margin-right: 1vw;
+}
+
+.song-progress-bar {
+    display: flex;
+    flex-direction: row;
+}
 .music-player-right {
     flex: 0.3;
     display: flex;
@@ -48,19 +64,126 @@
     color: #1ed15e;
 }
 
+.music-player-white {
+    color: white;
+}
+
+.music-player-songInfo {
+    margin-left: 10px;
+}
+
 .music-player-songInfo > h4 {
-    margin-bottom: 5px;
+    margin-bottom: 1px;
+    font-size: 18px;
 }
 
 .music-player-songInfo > p {
-    font-size: 12px;
+    font-size: 14px;
 }
 
-.music-player-icon:hover, .music-player-green:hover {
+.music-player-icon:hover, .music-player-icon-:hover, .music-player-icon-hide:hover, .music-player-green:hover, .music-player-white:hover {
     transition: transform 0.2s ease-in-out;
     transform: scale(1.2) !important;
 }
 
 .music-player-right * .MuiSlider-root {
     color: green;
+}
+
+.progress-bar {
+    -webkit-appearance: none;
+    min-width: 30vw;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none !important;
+    background: transparent;
+}
+
+.progress-bar::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 7px;
+    cursor: pointer;
+    background: rgb(126, 123, 123);
+    border-radius: 50px;
+}
+
+.progress-bar:focus::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: rgb(126, 123, 123);
+}
+
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border-radius: 25px;
+    background: white;
+    cursor: pointer;
+    height: 20px;
+    width: 10px;
+    position: relative;
+    bottom: 5px;
+}
+
+.progress-bar::-moz-range-track {
+    cursor: pointer;
+    background: rgb(126, 123, 123);
+    border-radius: 50px;
+    width: 100%;
+    height: 7px;
+}
+  
+.progress-bar::-moz-range-thumb {
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    height: 20px;
+    width: 10px;
+    position: relative;
+    bottom: 5px;
+}
+  
+.progress-bar::-ms-track {
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+    height: 7px;
+}
+  
+.progress-bar::-ms-fill-lower {
+    background: rgb(126, 123, 123);
+    border-radius: 50px;
+}
+
+.progress-bar::-ms-fill-upper {
+    background: rgb(126, 123, 123);
+    border-radius: 50px;
+}
+
+.progress-bar::-ms-thumb {
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    height: 20px;
+    width: 10px;
+    position: relative;
+    bottom: 5px;
+}
+
+.progress-bar:focus::-ms-fill-lower {
+    background: rgb(126, 123, 123);
+}
+
+.progress-bar:focus::-ms-fill-upper {
+    background: rgb(126, 123, 123);
+}
+
+.music-player-icon-hide {
+    display: none !important;
+}
+
+.play-button{
+    position: relative;
+    bottom: 5px;
 }
