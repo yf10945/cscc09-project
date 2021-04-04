@@ -1,8 +1,8 @@
 import React, {useState, useRef, useEffect} from "react";
 import "../styles.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import Burger from "../components/Burger";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 import { element } from "prop-types";
 import { join } from "path";
 

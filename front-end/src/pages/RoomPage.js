@@ -4,9 +4,9 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import NavBar from "./NavBar";
-import Burger from "./Burger";
-import { useOnClickOutside } from "./useOnClickOutside";
+import NavBar from "../components/NavBar";
+import Burger from "../components/Burger";
+import { useOnClickOutside } from "../components/useOnClickOutside";
 import { Lrc, parseLrc} from '@mebtte/react-lrc';
 
 const Video = (props) => {
@@ -226,7 +226,7 @@ const Room = (props) => {
       const onCurrentLineChange = useCallback((line) => console.log(line), []);
 
     const songsHTML = songs.map((element) =>
-    <div className="song-box" key={element._id}>
+    <div className="songs-box" key={element._id}>
         <div>Song ID: {element._id}</div>
         <div>Song name: {element.songName}</div>
         <div>Song artist: {element.artist}</div>

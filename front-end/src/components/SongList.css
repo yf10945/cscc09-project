@@ -1,0 +1,44 @@
+.song-list {
+    padding-bottom: 50px;
+}
+.no-songs {
+    font-size: 30px;
+    width: 80vw;
+}
+
+.song-list table {
+    width: 80vw;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.song-list table thead {
+    display: block;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* .song-list table tbody {
+    display: block;
+    overflow: auto;
+} */
+
+.table-labels {
+    border-bottom: 1px solid white;
+}
+
+.play-pause-button-header {
+    width: 1vw;
+}
+
+.song-name-header {
+    width: 10vw;
+}
+
+.artists-header {
+    width: 37vw;
+}
+
+.delete-header {
+    width: 10vw;
+}

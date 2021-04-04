@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+{/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
+
 export const StyledBurger = styled.button`
     position: fixed;
     top: 2%;
@@ -13,7 +15,7 @@ export const StyledBurger = styled.button`
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 10;
+    z-index: 300;
 
     &:focus {
         outline: none;
