@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../styles.css";
 import "./SongsPage.css";
 import SongList from "../components/SongList";
+import { useDataLayerValue } from "../dataLayer";
 
 function SongsPage() {
+    const [{ songlist }, dispatch] = useDataLayerValue();
     const [songs, setSongs] = useState([]);
 
     const getSongs = () => {
@@ -35,7 +37,13 @@ function SongsPage() {
             }
         })
         .then((data) => {
+            // console.log(data.data.getAllSongs);
             setSongs(data.data.getAllSongs);
+            dispatch({
+                type: "SET_SONGLIST",
+                songlist: data.data.getAllSongs
+            });
+            // console.log(songlist);
         })
         .catch(error => console.log(error));
     };

@@ -19,9 +19,7 @@ function MusicPlayer() {
         playingSong, 
         playingSongTitle,
         playingSongArtists,
-        songs,
-        nextSong,
-        previousSong,
+        songlist,
         repeat, 
         random,
         playing,
@@ -38,7 +36,6 @@ function MusicPlayer() {
     }, [playing]);
 
     const changeVolume = (e, newVolume) => {
-        console.log(audio.current.paused);
         dispatch({
             type: 'SET_VOLUME',
             volume: newVolume
@@ -59,11 +56,11 @@ function MusicPlayer() {
         playing: !playing
     });
 
-    const setCurrentSong = (url, title, artists) => dispatch({
+    const setCurrentSong = (index) => dispatch({
         type: "SET_SONG",
-        playingSong: url,
-        playingSongTitle: title,
-        playingSongArtists: artists
+        playingSong: index,
+        playingSongTitle: songlist[index].songName,
+        playingSongArtists: songlist[index].artist
     });
 
     const toggleRepeat = () => dispatch({
@@ -80,6 +77,36 @@ function MusicPlayer() {
         type: "SET_TIMESTAMP",
         timestamp: time
     }), [dispatch]);
+
+    const previousSong = () => {
+        if (random) {
+            setCurrentSong(Math.floor(Math.random() * songlist.length));
+        } else if (playingSong === 0) {
+            setCurrentSong(songlist.length - 1);
+        } else {
+            setCurrentSong(playingSong - 1);
+        }
+    };
+
+    const nextSong = () => {
+        if (random) {
+            setCurrentSong(Math.floor(Math.random() * songlist.length));
+        }else if (playingSong === songlist.length - 1) {
+            setCurrentSong(0);
+        } else {
+            setCurrentSong(playingSong + 1);
+        }
+    };
+
+    const songEnds = () => {
+        if (random) {
+            setCurrentSong(Math.floor(Math.random() * songlist.length));
+        } else if (playingSong === songlist.length - 1 || repeat) {
+            return;
+        } else {
+            nextSong();
+        }
+    };
 
     useEffect(() => {
         if (playing) {
@@ -103,10 +130,10 @@ function MusicPlayer() {
             <audio 
                 onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
                 onCanPlay={(e) => setDuration(e.target.duration)}
-                onEnded={() => {togglePlaying();}} // add handleEnd later
+                onEnded={songEnds} 
                 ref={audio}
                 preload="true"
-                src={playingSong}
+                src={songlist !== undefined && songlist.length > 0 && playingSong !== null ? songlist[playingSong].filepath : null}
                 loop={repeat}
             />
             <div className="music-player-left">
@@ -122,7 +149,7 @@ function MusicPlayer() {
                         <ShuffleIcon className={"music-player-" + (random ? "green" : "white")}  />
                     </div>
                     <div className="previous-button" onClick={previousSong}>
-                        <SkipPreviousIcon className="music-player-icon" />
+                        <SkipPreviousIcon className="music-player-icon" onClick={previousSong} />
                     </div>
                     <div className="play-button" 
                         onClick={() => {
@@ -135,7 +162,7 @@ function MusicPlayer() {
                         <PauseCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
                     </div>
                     <div className="next-button" onClick={nextSong}>
-                        <SkipNextIcon className="music-player-icon" />
+                        <SkipNextIcon className="music-player-icon" onClick={nextSong} />
                     </div>
                     <div className="repeat-button" onClick={toggleRepeat}>
                         <RepeatIcon className={"music-player-" + (repeat ? "green" : "white")} />
