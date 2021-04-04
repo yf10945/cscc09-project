@@ -65,6 +65,7 @@
 .input {
     width: 600px;
 }
+
 textarea {
 	min-height: 100px;
 }
@@ -81,9 +82,10 @@ textarea {
 
 .preview {
 	display: flex;
-    width:100%;
+  width:100%;
 	flex-direction: column;
 	text-align: center;
 	min-height:300px;
 	place-items: center;
+  height: 100vh;
 }

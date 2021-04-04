@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import { Lrc } from '@mebtte/react-lrc';
+import { Lrc, parseLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
@@ -136,6 +136,9 @@ const Room = (props) => {
                 setLyric(lyric);
             }
          });
+//          console.log(audioPlayer.current.currentTime);
+//          console.log(songLyric); 
+//          console.log(parseLrc(songLyric))
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
@@ -214,6 +217,9 @@ const Room = (props) => {
         );
       }, []);
 
+//       const onCurrentLineChange = useCallback((line) => console.log(line), []);
+
+
     const songsHTML = songs.map((element) =>
     <div className="songs-box" key={element._id}>
         <div>Song ID: {element._id}</div>
@@ -241,6 +247,9 @@ const Room = (props) => {
                 lrc={songLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
+
+//                 onCurrentLineChange={onCurrentLineChange}
+
                 className = "lrc"
             />
             {songsHTML}

@@ -1,3 +1,4 @@
+
 import React, { useState,  useRef, useCallback } from "react";
 import "../styles.css";
 import "./AddSongPage.css";
@@ -185,7 +186,6 @@ export default function AddSongPage() {
             onChange={e => setLyric(e.target.value)}
             required
           />
-
           <div>
             <button id="addsong" name="action" class="btn main-button-theme">
               Add Song
