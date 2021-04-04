@@ -4,10 +4,7 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import NavBar from "../components/NavBar";
-import Burger from "../components/Burger";
-import { useOnClickOutside } from "../components/useOnClickOutside";
-import { Lrc, parseLrc} from '@mebtte/react-lrc';
+import { Lrc, parseLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
@@ -40,9 +37,6 @@ const Room = (props) => {
     const [songs, setSongs] = useState([]);
     const [songLyric, setLyric] = useState("");
     const [songUrl, setSongurl] = useState("");
-    const [open, setOpen] = useState(false);
-    const node = useRef();
-    useOnClickOutside(node, () => setOpen(false));
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
 
@@ -142,9 +136,9 @@ const Room = (props) => {
                 setLyric(lyric);
             }
          });
-         console.log(audioPlayer.current.currentTime);
-         console.log(songLyric); 
-         console.log(parseLrc(songLyric))
+//          console.log(audioPlayer.current.currentTime);
+//          console.log(songLyric); 
+//          console.log(parseLrc(songLyric))
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
@@ -222,8 +216,9 @@ const Room = (props) => {
           </div>
         );
       }, []);
-      
-      const onCurrentLineChange = useCallback((line) => console.log(line), []);
+
+//       const onCurrentLineChange = useCallback((line) => console.log(line), []);
+
 
     const songsHTML = songs.map((element) =>
     <div className="songs-box" key={element._id}>
@@ -252,17 +247,14 @@ const Room = (props) => {
                 lrc={songLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
-                onCurrentLineChange={onCurrentLineChange}
+
+//                 onCurrentLineChange={onCurrentLineChange}
+
                 className = "lrc"
             />
             {songsHTML}
         </div>
   
-        </div>
-        {/* Burger Menu: https://css-tricks.com/hamburger-menu-with-a-side-of-react-hooks-and-styled-components/ */}
-        <div ref={node}>
-            <Burger open={open} setOpen={setOpen} />
-            <NavBar open={open} setOpen={setOpen} />
         </div>
       </div>
   );

@@ -1,13 +1,17 @@
-import React, { useState,  useRef } from "react";
+
+import React, { useState,  useRef, useCallback } from "react";
 import "../styles.css";
 import "./AddSongPage.css";
 import logo from "../Logo";
+import { Lrc } from '@mebtte/react-lrc';
 
 export default function AddSongPage() {
   const [SongName, setName] = useState("");
   const [SongArtist, setArtist] = useState("");
   const [SongLyric, setLyric] = useState("");
   const [SongFile, setFile] = useState("");
+  const [prevTime, setTime] = useState(0);
+  const [timeStamp, setTimeStamp] = useState("[00:00.00]");
   const [errorMessage, setError] = useState("");
   const [Message, setMessage] = useState("");
   const [uploadFinished, setUploadFinished] = useState(false);
@@ -95,7 +99,44 @@ export default function AddSongPage() {
     xhr.send();
   }
 
+  const lineRenderer = useCallback(({ lrcLine, index, active }) => {
+    const { content } = lrcLine;
+    return (
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '10px 0',
+          color: active ? 'green' : 'inherit',
+          transform: `scale(${active ? 1.2 : 1})`,
+          transition: 'transform 300ms',
+        }}
+      >
+        {content}
+      </div>
+    );
+  }, []);
+  
 
+  function setAudioTime() {
+    setTime(audioRef.current.currentTime); 
+    timeStampConverter(prevTime);
+  }
+
+  function timeStampConverter(time) {
+    let minute = Math.floor(time/60);
+    let second = Math.floor(time%60);
+    let hundredth = (time%60 - Math.floor(time%60)).toFixed(2);
+    let minuteString = minute.toString();
+    if (minuteString.length === 1) {
+      minuteString = "0"+ minuteString;
+    }
+    let secondString = second.toString();
+    if (secondString.length === 1) {
+      secondString = "0"+ secondString;
+    }
+    let hundredthString = hundredth.toString().slice(-3);;
+    setTimeStamp("[" + minuteString+":"+secondString+hundredthString+"]");
+  }
 
   return (
     <div className="AddSongPage main-theme">
@@ -137,21 +178,35 @@ export default function AddSongPage() {
           <textarea
             value={SongLyric}
             className="form_element input"
-            placeholder="Enter the song lyric"
+            placeholder="Enter the song lyric in the following format:
+[00:00.00]Line 1 lyrics
+[00:17.20]Line 2 lyrics
+[00:21.10]Line 3 lyrics
+            "
             onChange={e => setLyric(e.target.value)}
             required
           />
-          File preview:
-          <audio controls ref={audioRef}>
-            <source src={SongFile} type="audio/mp3"/> 
-          Your browser does not support the audio element.
-          </audio>
           <div>
             <button id="addsong" name="action" class="btn main-button-theme">
               Add Song
             </button>
           </div>
         </form>
+        <div className="preview">
+          File preview:
+          <audio controls ref={audioRef} onTimeUpdate={setAudioTime} >
+            <source src={SongFile} type="audio/mp3"/> 
+          Your browser does not support the audio element.
+          </audio>
+          <p>Current timestamp: {timeStamp}</p>
+          Lyric Preview:
+          <Lrc
+                lrc={SongLyric}
+                currentTime={prevTime*1000}
+                lineRenderer={lineRenderer}
+                className = "lrc"
+            />
+        </div>
       </div>
     </div>
   );
