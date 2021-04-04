@@ -195,11 +195,11 @@
 }
 
 .lrc {
-    overflow-y: scroll;
+    overflow-y: scroll !important;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     background-color: rgba(31, 30, 30, 0.9);
-    position: absolute;
+    position: absolute !important;
     min-width: 40vw;
     min-height: 30vh;
     bottom: 70px;
