@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SongListEntry from './SongListEntry';
 import "./SongList.css";
 
@@ -20,6 +20,7 @@ function SongList({ songs, setSongs }) {
     //         lyrics: 'lyrics here 2',
     //     }
     // ];
+
     return (
         <div className="song-list">
             {songs.length <= 0 ? (

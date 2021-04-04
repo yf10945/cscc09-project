@@ -248,7 +248,7 @@ const Room = (props) => {
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
 
-//                 onCurrentLineChange={onCurrentLineChange}
+                // onCurrentLineChange={onCurrentLineChange}
 
                 className = "lrc"
             />

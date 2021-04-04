@@ -8,11 +8,13 @@ import ShuffleIcon from "@material-ui/icons/Shuffle";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
-// import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
+import DescriptionIcon from '@material-ui/icons/Description';
+import DescriptionIconOutlined from '@material-ui/icons/DescriptionOutlined';
 import { Grid, Slider } from "@material-ui/core";
 import { useDataLayerValue } from "../dataLayer";
-import { ToggleOnOutlined } from '@material-ui/icons';
 import { useLocation } from "react-router-dom";
+import { Lrc } from '@mebtte/react-lrc';
+import Draggable, {DraggableCore} from 'react-draggable';
 
 function MusicPlayer() {
     const [{ 
@@ -29,10 +31,28 @@ function MusicPlayer() {
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
+    const [lyricsBox, toggleLyrics] = useState(false);
 
     const toggleAudio = useCallback(() => {
         (audio.current.paused && playing) ? audio.current.play() : audio.current.pause();
     }, [playing]);
+
+    const lineRenderer = useCallback(({ lrcLine, index, active }) => {
+        const { content } = lrcLine;
+        return (
+          <div
+            style={{
+              textAlign: 'center',
+              padding: '10px 0',
+              color: active ? 'green' : 'inherit',
+              transform: `scale(${active ? 1.2 : 1})`,
+              transition: 'transform 300ms',
+            }}
+          >
+            {content}
+          </div>
+        );
+    }, []);
 
     const changeVolume = (e, newVolume) => {
         dispatch({
@@ -101,7 +121,8 @@ function MusicPlayer() {
         if (random) {
             setCurrentSong(Math.floor(Math.random() * songlist.length));
         } else if (playingSong === songlist.length - 1 || repeat) {
-            return;
+            togglePlaying();
+            setCurrentSong(0);
         } else {
             nextSong();
         }
@@ -181,10 +202,26 @@ function MusicPlayer() {
                 </div>
             </div>
             <div className="music-player-right">
-                <Grid container spacing={2}>
-                    {/* <Grid item>
-                        <PlaylistPlayIcon />
-                    </Grid> */}
+                <Grid container spacing={3}>
+                    <Grid item className="lyrics-box">
+                        {songlist !== undefined && songlist.length > 0 && playingSong !== null ?
+                        <Draggable>
+                            <Lrc
+                                lrc={songlist[playingSong].lyrics.replaceAll("\\n",'\n')}
+                                currentTime={currentTime * 1000}
+                                lineRenderer={lineRenderer}
+                                className = {"music-player-lrc" + (lyricsBox ? "" : "-hide") +" lrc"}
+                            />
+                        </Draggable>
+                        :
+                        <div></div>
+                        }
+                        {lyricsBox ? 
+                        <DescriptionIcon className="lyrics-button" fontSize="medium" onClick={() => toggleLyrics(!lyricsBox)} />
+                        :
+                        <DescriptionIconOutlined className="lyrics-button" fontSize="medium" onClick={() => toggleLyrics(!lyricsBox)} />
+                        }
+                    </Grid>
                     <Grid item>
                         <VolumeDownIcon />
                     </Grid>
