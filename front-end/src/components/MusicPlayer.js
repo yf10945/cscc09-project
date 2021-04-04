@@ -23,7 +23,6 @@ function MusicPlayer() {
         repeat, 
         random,
         playing,
-        handleEnd,
         volume,
         timestamp
     }, dispatch] = useDataLayerValue();
