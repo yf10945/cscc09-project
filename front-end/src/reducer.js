@@ -9,7 +9,8 @@ export const initialState = {
     audio: null,
     volume: 0.5,
     timestamp: 0,
-    songlist: []
+    songlist: [],
+    playlist: null
 };
 
 const reducer = (state, action) => {
@@ -67,6 +68,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 songlist: action.songlist
+            };
+        case "SET_PLAYLIST":
+            return {
+                ...state,
+                playlist: action.playlist
             };
         default:
             return state;

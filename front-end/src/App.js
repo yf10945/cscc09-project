@@ -15,6 +15,7 @@ import MusicPlayer from "./components/MusicPlayer";
 import NavBar from "./components/NavBar";
 import Burger from "./components/Burger";
 import { useOnClickOutside } from "./components/useOnClickOutside";
+import PlaylistsPage from "./pages/PlaylistsPage";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/rooms" exact component={CreateRoomPage} />
         <Route path="/rooms/room/:roomID" component={RoomPage} />
         <Route path="/songs" component={SongsPage} />
+        <Route path="/playlists" component={PlaylistsPage} />
         <Route path="/404" component={PageNotFound} />
         <Route path="*">
           <Redirect to="/404" />

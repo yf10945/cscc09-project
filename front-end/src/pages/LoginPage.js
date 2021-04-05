@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./LoginPage.css";
 import logo from "../Logo";
+import DataLayerContext from "../dataLayer.js";
 
 class LoginPage extends React.Component {
   constructor(props) {

@@ -1,9 +1,8 @@
 import React from "react";
 import "../styles.css";
 import "./DashboardPage.css";
-import { withRouter } from "react-router";
 
-export default function Dashboard() {
+function Dashboard() {
 
     return (
         <div className="dashboard main-theme">
@@ -13,3 +12,5 @@ export default function Dashboard() {
         </div>
       );
 }
+
+export default Dashboard

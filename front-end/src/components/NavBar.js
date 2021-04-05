@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 function NavBar({ open, setOpen }) {
     const [{ user }, dispatch] = useDataLayerValue();
     const [username, setName] = useState("");
+    const location = useLocation();
     useEffect(() => {
         let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
         if (username !== null) {
@@ -25,9 +26,7 @@ function NavBar({ open, setOpen }) {
             });
             setName(username[2]);
         }
-    }, [dispatch, username]);
-
-    const location = useLocation();
+    }, [location, dispatch]);
 
     if (location.pathname === "/" ||
         location.pathname === "/aboutus" ||
