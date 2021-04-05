@@ -141,7 +141,7 @@ const Room = (props) => {
          });
          socketRef.current.on("set audio time", data => {
             if (data.roomId === roomID) {
-                setMessage(`User in room has changed the time to ${data.time}`);
+                setMessage(`User in room has changed the time to ${timeConverter(data.time)}`);
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
@@ -258,6 +258,12 @@ const Room = (props) => {
     function changeTrack(filepath, lyrics) {
         socketRef.current.emit("set song file signal",{roomId:roomID, filepath:filepath} );
         socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyrics});
+    }
+
+    function timeConverter(seconds) {
+        let minute = Math.floor(seconds/60);
+        let second = Math.floor(seconds%60);
+        return (minute.toString()+ ":" +second.toString());
     }
 
     const lineRenderer = useCallback(({ lrcLine, index, active }) => {
