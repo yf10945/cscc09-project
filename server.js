@@ -295,6 +295,7 @@ io.on('connection', socket => {
         if (room) {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
+            io.emit("user disconnected", {id: socket.id});
         }
     });
 
