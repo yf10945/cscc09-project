@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
-import { Lrc, parseLrc } from '@mebtte/react-lrc';
+import { Lrc, useLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
@@ -39,6 +39,7 @@ const Room = (props) => {
     const [songs, setSongs] = useState([]);
     const [songLyric, setLyric] = useState("");
     const [songUrl, setSongurl] = useState("");
+    const lyricRef = useRef("");
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
 
@@ -146,7 +147,7 @@ const Room = (props) => {
                     setMessage(" ");
                 }, 2000 )   
                 audioPlayer.current.pause();
-                if (Math.abs(audioPlayer.current.currentTime - data.time) > 1) { 
+                if (Math.abs(audioPlayer.current.currentTime - data.time) > 2) { 
                     audioPlayer.current.currentTime = data.time;
                     setTime(data.time);
                 }
@@ -166,6 +167,7 @@ const Room = (props) => {
             if (data.roomId === roomID) {
                 let lyric = data.lyrics.replaceAll("\\n",'\n');
                 setLyric(lyric);
+                lyricRef.current= lyric;
             }
          });
          socketRef.current.on("room full", data => {
@@ -177,7 +179,7 @@ const Room = (props) => {
          socketRef.current.on("user disconnected", data => {
             let i = peersRef.current.findIndex(peer => peer.peerID === data.id);
             let peerElement = peersRef.current.find(peer => peer.peerID === data.id);
-            if (peerElement !== null) {
+            if (peerElement !== null && peerElement !== undefined) {
                 if (peerElement.peer !== null) {
                     peerElement.peer.destroy();
                 }
@@ -188,6 +190,7 @@ const Room = (props) => {
                 }, 2000 )   
             } 
          });
+
 
 //          console.log(audioPlayer.current.currentTime);
 //          console.log(songLyric); 
@@ -237,13 +240,20 @@ const Room = (props) => {
 
     function loadSong() {
         socketRef.current.emit("send pause signal", {roomId: roomID});
-        socketRef.current.emit("set song file signal",{roomId:roomID, filepath:songUrl} );
-        socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:songLyric});
-        socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+        if (audioPlayer.current.src !== "") {
+            socketRef.current.emit("set song file signal",{roomId:roomID, filepath:audioPlayer.current.src});
+        }
+        
+        if (lyricRef.current !== "") {
+            socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyricRef.current});
+        }
+        if (audioPlayer.current.currentTime !== 0) {
+            socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+        }
     }
 
     function setAudioTime() {
-        if (Math.abs(audioPlayer.current.currentTime - prevTime) > 1) {
+        if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
             let time = audioPlayer.current.currentTime;
             audioPlayer.current.load();
             audioPlayer.current.pause();
