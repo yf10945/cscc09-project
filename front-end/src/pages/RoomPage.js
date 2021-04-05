@@ -8,15 +8,22 @@ import { Lrc, parseLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
     const ref = useRef();
+    const [closed, setClosed] = useState(false);
 
     useEffect(() => {
         props.peer.on("stream", stream => {
             ref.current.srcObject = stream;
         })
+
+        props.peer.on("close",  () => {
+            setClosed(true);
+        })
     }, []);
 
     return (
-        <video playsInline autoPlay ref={ref} />
+            closed ? null :
+                <video playsInline autoPlay ref={ref}/>
+            
     );
 }
 
@@ -108,6 +115,7 @@ const Room = (props) => {
                 loadSong();
             });
 
+
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
                 item.peer.signal(payload.signal);
@@ -160,6 +168,27 @@ const Room = (props) => {
                 setLyric(lyric);
             }
          });
+         socketRef.current.on("room full", data => {
+            setMessage(`Room is full, going back to list of rooms.`);
+            setTimeout(function() {
+                props.history.push(`/rooms`);
+            }, 2000 )   
+         });
+         socketRef.current.on("user disconnected", data => {
+            let i = peersRef.current.findIndex(peer => peer.peerID === data.id);
+            let peerElement = peersRef.current.find(peer => peer.peerID === data.id);
+            if (peerElement !== null) {
+                if (peerElement.peer !== null) {
+                    peerElement.peer.destroy();
+                }
+                peersRef.current.splice(i,1);
+                setMessage(`An user has disconnected from the room.`);
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
+            } 
+         });
+
 //          console.log(audioPlayer.current.currentTime);
 //          console.log(songLyric); 
 //          console.log(parseLrc(songLyric))
@@ -261,6 +290,7 @@ const Room = (props) => {
                     onClick = {()=>changeTrack(element.filepath, element.lyrics)}>Change Song </button>
     </div>)
     ;
+    
 
     return (
         <div className="room-page main-theme">
@@ -270,11 +300,9 @@ const Room = (props) => {
                 {message}
             </div>
             <video muted ref={userVideo} autoPlay playsInline />
-            {peers.map((peer, index) => {
-                return (
-                    <Video key={index} peer={peer} />
-                );
-            })}
+            {peersRef.current.map((peerRef) =>
+                    <Video key={peerRef.peerID} peer={peerRef.peer} />
+            )}
             <audio controls ref={audioPlayer} onPlay={setPlay} onPause={setPause} onTimeUpdate={setAudioTime} room={roomID} src={songUrl}></audio>
             <Lrc
                 ref={lrcRef}
