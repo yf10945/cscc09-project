@@ -230,9 +230,9 @@ function MusicPlayer() {
                         <div></div>
                         }
                         {lyricsBox ? 
-                        <DescriptionIcon className="lyrics-button" fontSize="medium" onClick={() => toggleLyrics(!lyricsBox)} />
+                        <DescriptionIcon className="lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
                         :
-                        <DescriptionIconOutlined className="lyrics-button" fontSize="medium" onClick={() => toggleLyrics(!lyricsBox)} />
+                        <DescriptionIconOutlined className="lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
                         }
                     </Grid>
                     <Grid item>

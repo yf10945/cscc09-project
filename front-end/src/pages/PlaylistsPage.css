@@ -15,3 +15,24 @@
 .main {
     min-height: 100vh;
 }
+
+.create-playlist {
+    display: flex;
+    background-color: rgb(34, 33, 33);
+    width: 160px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: transform .2s;
+}
+
+.create-playlist:hover {
+    background-color: rgb(14, 13, 13);
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.create-playlist-text {
+    margin: 5px;
+    font-weight: bold;
+    user-select: none;
+}

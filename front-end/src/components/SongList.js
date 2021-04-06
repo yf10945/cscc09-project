@@ -33,7 +33,6 @@ function SongList({ songs, setSongs }) {
                             <th className="song-name-header">Title</th>
                             <th className="artists-header">Artist(s)</th>
                             <th className="delete-header" />
-                            {/* <th>Duration</th> */}
                         </tr>
                     </thead>
                     <tbody>
