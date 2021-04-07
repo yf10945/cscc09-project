@@ -35,6 +35,7 @@ const Room = (props) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
     const lrcRef = useRef();
+    const [authorized, setAuthorized] = useState(false);
     const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
     const [songLyric, setLyric] = useState("");
@@ -68,17 +69,40 @@ const Room = (props) => {
             if (response.ok) {
                 return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                } else {
+                    throw new Error(response.statusText);
+                }
             }
         })
         .then((data) => {
+            setAuthorized(true);
             let songsArray = data.data.getAllSongs;
             setSongs(songsArray);
-        });
+            
+            init();
+            
+        })
+        .catch((error) => {
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+            console.log(error);
+        })
     };
     
     useEffect(() => {
         getSongs();
+
+
+
+//          console.log(audioPlayer.current.currentTime);
+//          console.log(songLyric); 
+//          console.log(parseLrc(songLyric))
+    }, []);
+
+    function init() {
         socketRef.current = io.connect("/");
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
@@ -190,12 +214,7 @@ const Room = (props) => {
                 }, 2000 )   
             } 
          });
-
-
-//          console.log(audioPlayer.current.currentTime);
-//          console.log(songLyric); 
-//          console.log(parseLrc(songLyric))
-    }, []);
+    }
 
     function createPeer(userToSignal, callerID, stream) {
 
@@ -309,6 +328,7 @@ const Room = (props) => {
     
 
     return (
+        authorized ? 
         <div className="room-page main-theme">
         <div className="main">
         <div>
@@ -334,7 +354,9 @@ const Room = (props) => {
         </div>
   
         </div>
-      </div>
+      </div> : <div> </div>
+    
+
   );
 };
 

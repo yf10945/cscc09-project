@@ -4,7 +4,7 @@ import "./SongsPage.css";
 import SongList from "../components/SongList";
 import { useDataLayerValue } from "../dataLayer";
 
-function SongsPage() {
+function SongsPage(props) {
     const [{ songlist }, dispatch] = useDataLayerValue();
     const [songs, setSongs] = useState([]);
 
@@ -33,7 +33,11 @@ function SongsPage() {
             if (response.ok) {
                 return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                } else {
+                    throw new Error(response.statusText);
+                }
             }
         })
         .then((data) => {
@@ -45,7 +49,12 @@ function SongsPage() {
             });
             // console.log(songlist);
         })
-        .catch(error => console.log(error));
+        .catch(error => { 
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+            console.log(error);
+        });
     };
 
     useEffect(() => {

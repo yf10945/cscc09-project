@@ -41,14 +41,21 @@ export default function CreateRoomPage (props) {
             if (response.ok) {
                 return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                }
+            
             }
         })
         .then((data) => {
             let roomArray = data.data.getAllRooms;
             setRoomList(roomArray);
         })
-        .catch(error => console.log(error) );
+        .catch(error => {
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+        });
     }
 
     const createRoom = () => {

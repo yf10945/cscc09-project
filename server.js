@@ -214,7 +214,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', 
+  '/graphql', authenticate.verifyUser,
   graphqlHTTP({
     schema: schema,
     rootValue: root,
@@ -237,12 +237,12 @@ const http = require("http");
 const socket = require("socket.io");
 const server = http.createServer(app);
 const io = socket(server);
-
 const users = {};
 
 const socketToRoom = {};
 
 io.on('connection', socket => {
+  
     socket.on("join room", roomID => {
         if (users[roomID]) {
             const length = users[roomID].length;
