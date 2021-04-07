@@ -5,6 +5,7 @@ import PlaylistShortcut from "./PlaylistShortcut";
 function PlaylistList({ playlists, setPlaylists }) {
     return (
         <div className="playlist-list">
+            <div className="playlist-grid">
             {playlists.length <= 0 ? (
                 <p className="no-songs">You currently have no playlists.</p>
             ) : (
@@ -16,9 +17,9 @@ function PlaylistList({ playlists, setPlaylists }) {
                         />
                 ))
             )}
+            </div>
         </div>
     )
 }
 
 export default PlaylistList
-

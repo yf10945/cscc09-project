@@ -1,3 +1,11 @@
 .playlist-list {
-    display: flex;
+    max-width: 1400px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.playlist-grid:after {
+    display: table;
+    clear: both;
+    content: "";
 }

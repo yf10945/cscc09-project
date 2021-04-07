@@ -11,6 +11,7 @@ function PlaylistsPage() {
     const [{ user }, dispatch] = useDataLayerValue();
     const [playlists, setPlaylists] = useState([]);
     const [open, setOpen] = useState(false);
+    const [playlistTitle, setPlaylistTitle] = useState("");
 
     const openCreatePlaylists = () => {
         setOpen(true);
@@ -31,17 +32,17 @@ function PlaylistsPage() {
                 query: `
                     query {
                         getPlaylistsByUser(username: "${username}") {
-                        _id 
-                        title 
-                        user 
-                        songs {
-                            songName
-                            artist
-                            filepath
-                            lyrics
+                            _id 
+                            title 
+                            user 
+                            songs {
+                                songName
+                                artist
+                                filepath
+                                lyrics
+                            }
                         }
                     }
-                  }
                 `
             }),
         })
@@ -53,16 +54,52 @@ function PlaylistsPage() {
             }
         })
         .then((response) => {
-            console.log(username);
-            console.log(user);
-            console.log(response.data.getPlaylistsByUser);
+            // console.log(username);
+            // console.log(user);
+            // console.log(response.data.getPlaylistsByUser);
             setPlaylists(response.data.getPlaylistsByUser);
         })
         .catch(error => console.log(error));
     };
 
     const createPlaylist = () => {
-        
+        fetch("/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"                
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        createPlaylist(title: "${playlistTitle}", user: "${user}") {
+                            _id
+                            title
+                            user
+                            songs {
+                                songName
+                                artist
+                                filepath
+                                lyrics
+                            }
+                        }
+                    }
+                `
+            }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((response) => {
+            console.log(response.data.createPlaylist);
+            getPlaylists(user);
+            closeCreatePlaylists();
+        })
+        .catch(error => console.log(error));
     };
 
     useEffect(() => {
@@ -84,8 +121,8 @@ function PlaylistsPage() {
                     PaperProps={{
                         style: {
                             borderRadius: "10px",
-                            width: "30vw",
-                            height: "30vh",
+                            width: "25vw",
+                            height: "25vh",
                         },
                     }}>
                     <DialogTitle className="create-playlists-form-title">Create Playlist</DialogTitle>
@@ -98,6 +135,7 @@ function PlaylistsPage() {
                             type="text"
                             fullWidth={true}
                             className="create-playlist-form-label"
+                            onChange={(e) => {setPlaylistTitle(e.target.value)}}
                         />
                     </DialogContent>
                     <DialogActions>

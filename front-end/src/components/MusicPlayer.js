@@ -203,14 +203,14 @@ function MusicPlayer() {
                 </div>
                 <div className="center-bottom">
                     <div className="song-progress-bar">
-                        <div className="current-song-time">{songTime(currentTime)}</div>
+                        <div className="current-song-time">{playingSong != null ? songTime(currentTime) : songTime(0)}</div>
                         <input
                             onChange={handleProgress}
-                            value={duration ? (currentTime * 100) / duration : 0}
+                            value={duration && (playingSong != null) ? (currentTime * 100) / duration : 0}
                             type="range" 
                             name="progress-bar" 
                             className="progress-bar" />
-                        <div className="total-song-time">{songTime(duration)}</div>                       
+                        <div className="total-song-time">{playingSong != null ? songTime(duration) : songTime(0)}</div>                       
                     </div>
                 </div>
             </div>

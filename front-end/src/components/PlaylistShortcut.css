@@ -1,7 +1,7 @@
 .playlist-shortcut {
     background-color: rgb(34, 33, 33);
     border-radius: 20px;
-    width: 300px;
+    width: calc((100% - 70px * 2) / 4);
     height: 100px;
     margin: 20px;
     transition: transform .2s;
@@ -9,10 +9,16 @@
     justify-content: center;
     align-items: center;
     user-select: none;
+    float: left;
 }
 
 .playlist-shortcut:hover {
     background-color: rgb(14, 13, 13);
     transform: scale(1.1);
     cursor: pointer;
+}
+
+.playlist-shortcut:nth-child(4n+4) {
+    margin-right: 0;
+    float: right;
 }

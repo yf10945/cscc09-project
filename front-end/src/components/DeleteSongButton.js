@@ -1,7 +1,10 @@
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useDataLayerValue } from "../dataLayer";
 
 function DeleteSongButton({ song, setSongs }) {
+    const [{ playingSong, playingSongTitle, playingSongArtists }, dispatch] = useDataLayerValue();
+
     const getSongs = (setSongs) => {
         fetch('/graphql', {
             method: 'POST',
@@ -67,6 +70,12 @@ function DeleteSongButton({ song, setSongs }) {
         .then((data) => {
             // console.log(data);
             getSongs(setSongs);
+            dispatch({
+                type: "SET_SONG",
+                playingSong: null,
+                playingSongTitle: null,
+                playingSongArtists: null
+            });
         })
         .catch(error => console.log(error));
     };

@@ -19,9 +19,12 @@
     height: 100px;
 }
 
-audio {
+/*
+messes up music control bar in Firefox
+*/
+/* audio {
     display:flex;
-}
+} */
 
 .lrc {
     height:120px;
