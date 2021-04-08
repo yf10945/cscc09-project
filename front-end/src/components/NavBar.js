@@ -59,7 +59,7 @@ function NavBar({ open, setOpen }) {
             <Link to="/addsong" className="navbar-link">
                 <NavBarOption Icon={Add} title="Add Song" />
             </Link>
-            <Link to="/profile" className="profile">
+            <Link to="/dashboard" className="profile">
                 <NavBarOption title={username}/>
             </Link>
             <Link to="/" className="sign-out">
