@@ -5,7 +5,7 @@ import "./AddSongPage.css";
 import logo from "../Logo";
 import { Lrc } from '@mebtte/react-lrc';
 
-export default function AddSongPage() {
+export default function AddSongPage(props) {
   const [SongName, setName] = useState("");
   const [SongArtist, setArtist] = useState("");
   const [SongLyric, setLyric] = useState("");
@@ -43,13 +43,23 @@ export default function AddSongPage() {
             return response.json();
           } else {
             setError(response.status + " " +  response.statusText);
-            throw new Error(response.statusText);
+            if (response.status === 401) {
+              throw new Error("Unauthorized!");
+            } else {
+                throw new Error(response.statusText);
+            }
+
           }
         })
         .then((data) => {
           setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
         })
-        .catch(error => setMessage("") );
+        .catch(error => {
+          setMessage("");
+          if (error.message === "Unauthorized!") {
+            props.history.push("/");
+          }
+        });
       }
   }  
 
