@@ -1,88 +1,17 @@
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useDataLayerValue } from "../dataLayer";
+import "../styles.css";
 
-function DeleteSongButton({ song, setSongs }) {
-    const [{ playingSong, playingSongTitle, playingSongArtists }, dispatch] = useDataLayerValue();
-
-    const getSongs = (setSongs) => {
-        fetch('/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `
-                    query {
-                        getAllSongs {
-                            _id
-                            songName
-                            artist
-                            filepath
-                            lyrics
-                        }
-                    }
-                `,
-            })
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.statusText);
-            }
-        })
-        .then((data) => {
-            setSongs(data.data.getAllSongs);
-        })
-        .catch(error => console.log(error));
-    };
-
-    const deleteSong = (id, setSongs) => {
-        fetch('./graphql', {
-            method: 'POST',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `
-                    mutation {
-                        deleteSongById( _id: "${id}") {
-                            _id
-                            songName
-                            artist
-                            filepath
-                            lyrics
-                        }
-                    }
-                `
-            }),
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.statusText);
-            }
-        })
-        .then((data) => {
-            // console.log(data);
-            getSongs(setSongs);
-            dispatch({
-                type: "SET_SONG",
-                playingSong: null,
-                playingSongTitle: null,
-                playingSongArtists: null
-            });
-        })
-        .catch(error => console.log(error));
-    };
+function DeleteSongButton({ song, setSongs, deleteSong, getSongs, playlistId }) {
+    const [, dispatch] = useDataLayerValue();
+    // console.log("playtlist" + playlistId);
 
     return (
         <div className="delete-song-button">
-            <DeleteIcon className="delete-icon" onClick={() => deleteSong(song, setSongs)} />
+            <DeleteIcon
+                className="pointer delete-icon"
+                onClick={() => playlistId != null ? deleteSong(song, setSongs, getSongs, playlistId) : deleteSong(song, setSongs, getSongs)} />
         </div>
     )
 }

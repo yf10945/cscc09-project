@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import SongListEntry from './SongListEntry';
 import "./SongList.css";
 
-function SongList({ songs, setSongs }) {
+function SongList({ songs, setSongs, getSongs, deleteSong, playlistId }) {
     // no-db mock data for testing
     // const renderSongs = [
     //     {
@@ -37,7 +37,14 @@ function SongList({ songs, setSongs }) {
                     </thead>
                     <tbody>
                         {songs.map((songlistentry) => (
-                            <SongListEntry key={songlistentry._id} songlistentry={songlistentry} setSongs={setSongs} />
+                            <SongListEntry
+                                key={songlistentry._id}
+                                songlistentry={songlistentry}
+                                setSongs={setSongs}
+                                getSongs={getSongs}
+                                deleteSong={deleteSong}
+                                songs={songs}
+                                playlistId={playlistId} />
                         ))}
                     </tbody>
                 </table>

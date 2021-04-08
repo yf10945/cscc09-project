@@ -14,7 +14,7 @@ import { Grid, Slider } from "@material-ui/core";
 import { useDataLayerValue } from "../dataLayer";
 import { useLocation } from "react-router-dom";
 import { Lrc } from '@mebtte/react-lrc';
-import Draggable, {DraggableCore} from 'react-draggable';
+import Draggable, { DraggableCore } from 'react-draggable';
 
 function MusicPlayer() {
     const [{ 
@@ -25,8 +25,7 @@ function MusicPlayer() {
         repeat, 
         random,
         playing,
-        volume,
-        timestamp
+        volume
     }, dispatch] = useDataLayerValue();
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
@@ -179,10 +178,10 @@ function MusicPlayer() {
             <div className="music-player-center">
                 <div className="center-top">
                     <div className="shuffle-button" onClick={toggleRandom}>
-                        <ShuffleIcon className={"music-player-" + (random ? "green" : "white")}  />
+                        <ShuffleIcon className={"pointer music-player-" + (random ? "green" : "white")}  />
                     </div>
                     <div className="previous-button" onClick={previousSong}>
-                        <SkipPreviousIcon className="music-player-icon" onClick={previousSong} />
+                        <SkipPreviousIcon className="pointer music-player-icon" onClick={previousSong} />
                     </div>
                     <div className="play-button" 
                         onClick={() => {
@@ -191,14 +190,14 @@ function MusicPlayer() {
                                 toggleAudio();
                             }
                         }}>
-                        <PlayCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
-                        <PauseCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
+                        <PlayCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
+                        <PauseCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
                     </div>
                     <div className="next-button" onClick={nextSong}>
-                        <SkipNextIcon className="music-player-icon" onClick={nextSong} />
+                        <SkipNextIcon className="pointer music-player-icon" onClick={nextSong} />
                     </div>
                     <div className="repeat-button" onClick={toggleRepeat}>
-                        <RepeatIcon className={"music-player-" + (repeat ? "green" : "white")} />
+                        <RepeatIcon className={"pointer music-player-" + (repeat ? "green" : "white")} />
                     </div>
                 </div>
                 <div className="center-bottom">
@@ -230,9 +229,9 @@ function MusicPlayer() {
                         <div></div>
                         }
                         {lyricsBox ? 
-                        <DescriptionIcon className="lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
+                        <DescriptionIcon className="pointer lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
                         :
-                        <DescriptionIconOutlined className="lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
+                        <DescriptionIconOutlined className="pointer lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
                         }
                     </Grid>
                     <Grid item>

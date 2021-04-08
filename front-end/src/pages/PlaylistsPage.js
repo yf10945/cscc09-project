@@ -12,6 +12,7 @@ function PlaylistsPage() {
     const [playlists, setPlaylists] = useState([]);
     const [open, setOpen] = useState(false);
     const [playlistTitle, setPlaylistTitle] = useState("");
+    var titleRef = {};
 
     const openCreatePlaylists = () => {
         setOpen(true);
@@ -77,6 +78,7 @@ function PlaylistsPage() {
                             title
                             user
                             songs {
+                                _id
                                 songName
                                 artist
                                 filepath
@@ -129,6 +131,8 @@ function PlaylistsPage() {
                     <DialogContent>
                         <TextField
                             autoFocus
+                            required
+                            inputRef={titleRef}
                             margin="dense"
                             id="playlist-name"
                             label="Playlist Name"
@@ -142,7 +146,7 @@ function PlaylistsPage() {
                         <Button onClick={closeCreatePlaylists} className="form-button">
                             Cancel
                         </Button>
-                        <Button onClick={createPlaylist} className="form-button">
+                        <Button onClick={() => {if (titleRef.current.reportValidity()) createPlaylist()}} className="form-button">
                             Create
                         </Button>
                     </DialogActions>

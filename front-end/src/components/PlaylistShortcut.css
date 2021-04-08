@@ -1,8 +1,8 @@
 .playlist-shortcut {
     background-color: rgb(34, 33, 33);
     border-radius: 20px;
-    width: calc((100% - 70px * 2) / 4);
-    height: 100px;
+    width: calc((100% - 100px * 2) / 4);
+    height: 125px;
     margin: 20px;
     transition: transform .2s;
     display: flex;
@@ -21,4 +21,20 @@
 .playlist-shortcut:nth-child(4n+4) {
     margin-right: 0;
     float: right;
+}
+
+.playlist-link {
+    text-decoration: none;
+}
+
+.playlist-shortcut > h3 {
+    font-size: 20px;
+    font-size: 1.25vw;
+    overflow: hidden;
+    /* word-wrap: break-word; */
+    white-space: nowrap;
+    margin: 20px;
+    text-overflow: ellipsis;
+    /* max-height: 100px; */
+    text-align: center;
 }

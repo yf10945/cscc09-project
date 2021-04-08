@@ -48,6 +48,47 @@ function SongsPage() {
         .catch(error => console.log(error));
     };
 
+    const deleteSong = (id, setSongs) => {
+        fetch('./graphql', {
+            method: 'POST',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        deleteSongById( _id: "${id}") {
+                            _id
+                            songName
+                            artist
+                            filepath
+                            lyrics
+                        }
+                    }
+                `
+            }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((data) => {
+            // console.log(data);
+            getSongs(setSongs);
+            dispatch({
+                type: "SET_SONG",
+                playingSong: null,
+                playingSongTitle: null,
+                playingSongArtists: null
+            });
+        })
+        .catch(error => console.log(error));
+    };
+
     useEffect(() => {
         // code to run on component mount
         getSongs();
@@ -57,7 +98,7 @@ function SongsPage() {
         <div className="songs-page main-theme">
             <div className="main">
                 <h1>Your Songs</h1>
-                <SongList songs={songs} setSongs={setSongs} />
+                <SongList songs={songs} setSongs={setSongs} getSongs={getSongs} deleteSong={deleteSong} />
                 {/* Add spacing between songs list and music control bar with footer*/}
                 <div className="footer"></div>
             </div>
