@@ -155,18 +155,20 @@ function MusicPlayer() {
             if (!audio.current.paused) togglePlaying();
             audio.current.pause();
         }
-
-        // if (location.pathname === "/songs") {
-        //     audio.current.pause();
-        //     audio.current.currentTime = 0;
-        //     dispatch({
-        //         type: "SET_SONG",
-        //         playingSong: null,
-        //         playingSongTitle: null,
-        //         playingSongArtists: null
-        //     });
-        // }
     }, [location]);
+
+    useEffect(() => {
+        if (location.pathname === "/songs") {
+            audio.current.pause();
+            audio.current.currentTime = 0;
+            dispatch({
+                type: "SET_SONG",
+                playingSong: null,
+                playingSongTitle: null,
+                playingSongArtists: null
+            });
+        }
+    }, [songlist]);
 
     return (
         <div className={"music-player" + (hideBar ? "-hide" : "")}>
