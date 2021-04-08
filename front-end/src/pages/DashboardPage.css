@@ -6,3 +6,26 @@
     margin: 0;
     padding-top: 30px;
 }
+
+.dashboard-link {
+    text-decoration: none;
+    font-size: 30px;
+    width: 500px;
+    justify-content: center;
+}
+
+.dashboard-link:hover {
+    text-decoration: underline;
+}
+
+.links {
+    display: block;
+}
+
+.link {
+    margin: 20px;
+}
+
+.description, .dashboard-link {
+    margin: 30px;
+}

@@ -1,3 +1,5 @@
+import { AcUnitTwoTone } from "@material-ui/icons";
+
 export const initialState = {
     user: null,
     playingSong: null,
@@ -9,7 +11,9 @@ export const initialState = {
     audio: null,
     volume: 0.5,
     timestamp: 0,
-    songlist: []
+    songlist: [],
+    playingPlaylist: null,
+    viewingPlaylist: null,
 };
 
 const reducer = (state, action) => {
@@ -67,6 +71,16 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 songlist: action.songlist
+            };
+        case "PLAY_PLAYLIST":
+            return {
+                ...state,
+                playingPlaylist: action.playingPlaylist
+            };
+        case "VIEW_PLAYLIST":
+            return {
+                ...state,
+                viewingPlaylist: action.viewingPlaylist
             };
         default:
             return state;

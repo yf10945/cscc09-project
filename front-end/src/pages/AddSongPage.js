@@ -187,7 +187,7 @@ export default function AddSongPage() {
             required
           />
           <div>
-            <button id="addsong" name="action" class="btn main-button-theme">
+            <button id="addsong" name="action" className="btn main-button-theme">
               Add Song
             </button>
           </div>

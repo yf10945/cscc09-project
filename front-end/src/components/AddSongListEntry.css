@@ -1,0 +1,26 @@
+.add-song-box {
+    background-color: transparent;
+    display: flex;
+    width: 100%;
+    /* border-top: 1px solid white; */
+    border-radius: 0;
+    margin-bottom: 15px;
+    height: 5vh;
+}
+
+.add-song-box > td {
+    margin: 20px;
+    font-size: 20px;
+}
+
+.play-pause-button {
+    width: 3vw;
+}
+
+.song-name {
+    width: 20vw;
+}
+
+.artists {
+    width: 20vw;
+}
