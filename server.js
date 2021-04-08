@@ -181,6 +181,7 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
+
 const { 
   v4: uuidv4,
 } = require('uuid');
