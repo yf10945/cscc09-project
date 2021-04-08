@@ -14,7 +14,7 @@ const Room = require('./models/Room');
 const ObjectId = require('mongoose').Types.ObjectId; 
 const { buildSchema } = require('graphql');
 var enforce = require('express-sslify');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 
 const aws = require('aws-sdk');
 aws.config.region = 'us-east-2';
@@ -177,8 +177,8 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.generateToken({ _id: req.user._id });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.cookie('jwt', token , { expires: new Date(Date.now() + 500000), httpOnly: true, secure: true, sameSite:"strict" });
-  res.cookie('username', req.user.username , { expires: new Date(Date.now() + 500000), httpOnly: false, secure: true, sameSite:"strict" });
+  res.cookie('jwt', token , { expires: new Date(Date.now() + 5000000000), httpOnly: true, secure: true, sameSite:"strict" });
+  res.cookie('username', req.user.username , { expires: new Date(Date.now() + 5000000000), httpOnly: false, secure: true, sameSite:"strict" });
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
@@ -215,7 +215,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.use(
-  '/graphql', 
+  '/graphql', authenticate.verifyUser,
   graphqlHTTP({
     schema: schema,
     rootValue: root,
@@ -238,12 +238,12 @@ const http = require("http");
 const socket = require("socket.io");
 const server = http.createServer(app);
 const io = socket(server);
-
 const users = {};
 
 const socketToRoom = {};
 
 io.on('connection', socket => {
+  
     socket.on("join room", roomID => {
         if (users[roomID]) {
             const length = users[roomID].length;

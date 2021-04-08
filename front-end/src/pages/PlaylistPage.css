@@ -1,0 +1,36 @@
+.playlist-page {
+    display: flex;
+}
+
+.main > h1 {
+    margin: 0;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.footer {
+    height: 100px;
+}
+
+.main {
+    min-height: 100vh;
+}
+
+.playlist-header {
+    word-wrap: break-word;
+    white-space: normal;
+    width: 80vw;
+}
+
+.playlist-options {
+    margin-bottom: 15px;
+}
+
+.delete-playlist, .add-song {
+    margin-right: 20px;
+}
+
+.delete-playlist:hover, .add-song:hover {
+    transition: transform 0.2s ease-in-out;
+    transform: scale(1.2) !important;
+}

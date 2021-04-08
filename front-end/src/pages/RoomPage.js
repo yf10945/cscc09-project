@@ -37,6 +37,7 @@ const RoomPage = (props) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
     const lrcRef = useRef();
+    const [authorized, setAuthorized] = useState(false);
     const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
     const songsRef = useRef();
@@ -73,10 +74,15 @@ const RoomPage = (props) => {
             if (response.ok) {
                 return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                } else {
+                    throw new Error(response.statusText);
+                }
             }
         })
         .then((data) => {
+            setAuthorized(true);
             let songsArray = data.data.getAllSongs;
             setSongs(songsArray);
             if (songsArray.length > 0) {
@@ -97,6 +103,15 @@ const RoomPage = (props) => {
     
     useEffect(() => {
         getSongs();
+
+
+
+//          console.log(audioPlayer.current.currentTime);
+//          console.log(songLyric); 
+//          console.log(parseLrc(songLyric))
+    }, []);
+
+    function init() {
         socketRef.current = io.connect("/");
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
@@ -208,12 +223,7 @@ const RoomPage = (props) => {
                 }, 2000 )   
             } 
          });
-
-
-//          console.log(audioPlayer.current.currentTime);
-//          console.log(songLyric); 
-//          console.log(parseLrc(songLyric))
-    }, []);
+    }
 
     function createPeer(userToSignal, callerID, stream) {
 
@@ -348,6 +358,7 @@ const RoomPage = (props) => {
     
 
     return (
+        authorized ? 
         <div className="room-page main-theme">
         <div className="main">
         <div>
@@ -370,7 +381,7 @@ const RoomPage = (props) => {
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
 
-//                 onCurrentLineChange={onCurrentLineChange}
+                // onCurrentLineChange={onCurrentLineChange}
 
                 className = "lrc"
             />
@@ -385,7 +396,9 @@ const RoomPage = (props) => {
             </div>
         </div>
         </div>
-      </div>
+      </div> : <div> </div>
+    
+
   );
 };
 

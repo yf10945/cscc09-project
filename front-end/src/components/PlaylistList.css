@@ -1,0 +1,11 @@
+.playlist-list {
+    max-width: 85vw;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.playlist-grid:after {
+    display: table;
+    clear: both;
+    content: "";
+}

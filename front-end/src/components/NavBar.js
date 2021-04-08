@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import logo from "../Logo";
 import { Add, Chat, Dashboard, ExitToApp, LibraryMusic, MusicNote } from '@material-ui/icons';
 import NavBarOption from "./NavBarOption";
-import { Menu } from '@material-ui/core';
+import { Divider, Menu } from '@material-ui/core';
 import { bool, func } from 'prop-types';
 import { StyledNav } from "./NavBar.styled";
 import { useDataLayerValue } from "../dataLayer";
@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 function NavBar({ open, setOpen }) {
     const [{ user }, dispatch] = useDataLayerValue();
     const [username, setName] = useState("");
+    const location = useLocation();
     useEffect(() => {
         let username = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)'));
         if (username !== null) {
@@ -25,9 +26,7 @@ function NavBar({ open, setOpen }) {
             });
             setName(username[2]);
         }
-    }, [dispatch, username]);
-
-    const location = useLocation();
+    }, [location, dispatch]);
 
     if (location.pathname === "/" ||
         location.pathname === "/aboutus" ||
@@ -60,9 +59,9 @@ function NavBar({ open, setOpen }) {
             <Link to="/addsong" className="navbar-link">
                 <NavBarOption Icon={Add} title="Add Song" />
             </Link>
-            <Link to="/profile" className="profile">
+            <div className="profile">
                 <NavBarOption title={username}/>
-            </Link>
+            </div>
             <Link to="/" className="sign-out">
                 <NavBarOption Icon={ExitToApp} title="Sign Out" />
             </Link>

@@ -1,7 +1,8 @@
-.song-list {
+.add-song-list {
     padding-bottom: 50px;
     display: flex;
 }
+
 .no-songs {
     font-size: 30px;
     width: 80vw;
@@ -24,13 +25,16 @@
     overflow: auto;
 } */
 
-.table-labels {
+.add-song-table-labels {
     border-bottom: 1px solid white;
+    font-size: 20px;
+    text-align: left;
+    height: 50px;
 }
 
-.play-pause-button-header {
-    width: 1vw;
-}
+.add-song-button-header {
+    max-width: 1vw;
+} 
 
 .song-name-header {
     width: 10vw;

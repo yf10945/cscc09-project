@@ -8,11 +8,13 @@ import ShuffleIcon from "@material-ui/icons/Shuffle";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
-// import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
+import DescriptionIcon from '@material-ui/icons/Description';
+import DescriptionIconOutlined from '@material-ui/icons/DescriptionOutlined';
 import { Grid, Slider } from "@material-ui/core";
 import { useDataLayerValue } from "../dataLayer";
-import { ToggleOnOutlined } from '@material-ui/icons';
 import { useLocation } from "react-router-dom";
+import { Lrc } from '@mebtte/react-lrc';
+import Draggable, { DraggableCore } from 'react-draggable';
 
 function MusicPlayer() {
     const [{ 
@@ -23,16 +25,33 @@ function MusicPlayer() {
         repeat, 
         random,
         playing,
-        volume,
-        timestamp
+        volume
     }, dispatch] = useDataLayerValue();
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
+    const [lyricsBox, toggleLyrics] = useState(false);
 
     const toggleAudio = useCallback(() => {
-        (audio.current.paused && playing) ? audio.current.play() : audio.current.pause();
-    }, [playing]);
+        (audio.current.paused && playing && playingSong != null) ? audio.current.play() : audio.current.pause();
+    }, [playing, playingSong]);
+
+    const lineRenderer = useCallback(({ lrcLine, index, active }) => {
+        const { content } = lrcLine;
+        return (
+          <div
+            style={{
+              textAlign: 'center',
+              padding: '10px 0',
+              color: active ? 'green' : 'inherit',
+              transform: `scale(${active ? 1.2 : 1})`,
+              transition: 'transform 300ms',
+            }}
+          >
+            {content}
+          </div>
+        );
+    }, []);
 
     const changeVolume = (e, newVolume) => {
         dispatch({
@@ -101,19 +120,21 @@ function MusicPlayer() {
         if (random) {
             setCurrentSong(Math.floor(Math.random() * songlist.length));
         } else if (playingSong === songlist.length - 1 || repeat) {
-            return;
+            togglePlaying();
+            setCurrentSong(0);
         } else {
             nextSong();
         }
     };
 
     useEffect(() => {
-        if (playing) {
+        if (playing && songlist != null) {
             toggleAudio();
         }
-    }, [playing, playingSong, toggleAudio]);
+    }, [playing, playingSong]);
 
     const location = useLocation();
+    var hideBar = false;
 
     if (location.pathname === "/" ||
         location.pathname === "/aboutus" ||
@@ -121,11 +142,36 @@ function MusicPlayer() {
         location.pathname === "/signup" ||
         location.pathname === "/404" ||
         location.pathname === "/addsong") {
-      return null;
+        hideBar = true;
     }
 
+    useEffect(() => {
+        if (location.pathname === "/" ||
+            location.pathname === "/aboutus" ||
+            location.pathname === "/login" ||
+            location.pathname === "/signup" ||
+            location.pathname === "/404" ||
+            location.pathname === "/addsong") {
+            if (!audio.current.paused) togglePlaying();
+            audio.current.pause();
+        }
+    }, [location]);
+
+    useEffect(() => {
+        if (location.pathname === "/songs") {
+            audio.current.pause();
+            audio.current.currentTime = 0;
+            dispatch({
+                type: "SET_SONG",
+                playingSong: null,
+                playingSongTitle: null,
+                playingSongArtists: null
+            });
+        }
+    }, [songlist]);
+
     return (
-        <div className="music-player">
+        <div className={"music-player" + (hideBar ? "-hide" : "")}>
             <audio 
                 onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
                 onCanPlay={(e) => setDuration(e.target.duration)}
@@ -145,10 +191,10 @@ function MusicPlayer() {
             <div className="music-player-center">
                 <div className="center-top">
                     <div className="shuffle-button" onClick={toggleRandom}>
-                        <ShuffleIcon className={"music-player-" + (random ? "green" : "white")}  />
+                        <ShuffleIcon className={"pointer music-player-" + (random ? "green" : "white")}  />
                     </div>
                     <div className="previous-button" onClick={previousSong}>
-                        <SkipPreviousIcon className="music-player-icon" onClick={previousSong} />
+                        <SkipPreviousIcon className="pointer music-player-icon" onClick={previousSong} />
                     </div>
                     <div className="play-button" 
                         onClick={() => {
@@ -157,34 +203,50 @@ function MusicPlayer() {
                                 toggleAudio();
                             }
                         }}>
-                        <PlayCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
-                        <PauseCircleOutlineIcon className={"music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
+                        <PlayCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
+                        <PauseCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
                     </div>
                     <div className="next-button" onClick={nextSong}>
-                        <SkipNextIcon className="music-player-icon" onClick={nextSong} />
+                        <SkipNextIcon className="pointer music-player-icon" onClick={nextSong} />
                     </div>
                     <div className="repeat-button" onClick={toggleRepeat}>
-                        <RepeatIcon className={"music-player-" + (repeat ? "green" : "white")} />
+                        <RepeatIcon className={"pointer music-player-" + (repeat ? "green" : "white")} />
                     </div>
                 </div>
                 <div className="center-bottom">
                     <div className="song-progress-bar">
-                        <div className="current-song-time">{songTime(currentTime)}</div>
+                        <div className="current-song-time">{playingSong != null ? songTime(currentTime) : songTime(0)}</div>
                         <input
                             onChange={handleProgress}
-                            value={duration ? (currentTime * 100) / duration : 0}
+                            value={duration && (playingSong != null) ? (currentTime * 100) / duration : 0}
                             type="range" 
                             name="progress-bar" 
                             className="progress-bar" />
-                        <div className="total-song-time">{songTime(duration)}</div>                       
+                        <div className="total-song-time">{playingSong != null ? songTime(duration) : songTime(0)}</div>                       
                     </div>
                 </div>
             </div>
             <div className="music-player-right">
-                <Grid container spacing={2}>
-                    {/* <Grid item>
-                        <PlaylistPlayIcon />
-                    </Grid> */}
+                <Grid container spacing={3}>
+                    <Grid item className="lyrics-box">
+                        {songlist !== undefined && songlist.length > 0 && playingSong !== null ?
+                        <Draggable>
+                            <Lrc
+                                lrc={songlist[playingSong].lyrics.replaceAll("\\n",'\n')}
+                                currentTime={currentTime * 1000}
+                                lineRenderer={lineRenderer}
+                                className = {"music-player-lrc" + (lyricsBox ? "" : "-hide") +" lrc"}
+                            />
+                        </Draggable>
+                        :
+                        <div></div>
+                        }
+                        {lyricsBox ? 
+                        <DescriptionIcon className="pointer lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
+                        :
+                        <DescriptionIconOutlined className="pointer lyrics-button" fontSize="default" onClick={() => toggleLyrics(!lyricsBox)} />
+                        }
+                    </Grid>
                     <Grid item>
                         <VolumeDownIcon />
                     </Grid>

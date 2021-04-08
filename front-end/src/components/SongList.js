@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import SongListEntry from './SongListEntry';
 import "./SongList.css";
 
-function SongList({ songs, setSongs }) {
+function SongList({ songs, setSongs, getSongs, deleteSong, playlistId }) {
     // no-db mock data for testing
     // const renderSongs = [
     //     {
@@ -20,6 +20,7 @@ function SongList({ songs, setSongs }) {
     //         lyrics: 'lyrics here 2',
     //     }
     // ];
+
     return (
         <div className="song-list">
             {songs.length <= 0 ? (
@@ -32,12 +33,18 @@ function SongList({ songs, setSongs }) {
                             <th className="song-name-header">Title</th>
                             <th className="artists-header">Artist(s)</th>
                             <th className="delete-header" />
-                            {/* <th>Duration</th> */}
                         </tr>
                     </thead>
                     <tbody>
                         {songs.map((songlistentry) => (
-                            <SongListEntry key={songlistentry._id} songlistentry={songlistentry} setSongs={setSongs} />
+                            <SongListEntry
+                                key={songlistentry._id}
+                                songlistentry={songlistentry}
+                                setSongs={setSongs}
+                                getSongs={getSongs}
+                                deleteSong={deleteSong}
+                                songs={songs}
+                                playlistId={playlistId} />
                         ))}
                     </tbody>
                 </table>
