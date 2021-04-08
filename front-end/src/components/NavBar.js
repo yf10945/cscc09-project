@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import logo from "../Logo";
 import { Add, Chat, Dashboard, ExitToApp, LibraryMusic, MusicNote } from '@material-ui/icons';
 import NavBarOption from "./NavBarOption";
-import { Menu } from '@material-ui/core';
+import { Divider, Menu } from '@material-ui/core';
 import { bool, func } from 'prop-types';
 import { StyledNav } from "./NavBar.styled";
 import { useDataLayerValue } from "../dataLayer";
@@ -59,9 +59,9 @@ function NavBar({ open, setOpen }) {
             <Link to="/addsong" className="navbar-link">
                 <NavBarOption Icon={Add} title="Add Song" />
             </Link>
-            <Link to="/dashboard" className="profile">
+            <div className="profile">
                 <NavBarOption title={username}/>
-            </Link>
+            </div>
             <Link to="/" className="sign-out">
                 <NavBarOption Icon={ExitToApp} title="Sign Out" />
             </Link>
