@@ -141,7 +141,8 @@ function MusicPlayer() {
         location.pathname === "/login" ||
         location.pathname === "/signup" ||
         location.pathname === "/404" ||
-        location.pathname === "/addsong") {
+        location.pathname === "/addsong" ||
+        location.pathname.match(/.+?(?=rooms\/room)/) !== null) {
         hideBar = true;
     }
 
@@ -151,7 +152,8 @@ function MusicPlayer() {
             location.pathname === "/login" ||
             location.pathname === "/signup" ||
             location.pathname === "/404" ||
-            location.pathname === "/addsong") {
+            location.pathname === "/addsong" || 
+            location.pathname.match(/.+?(?=rooms\/room)/) !== null) {
             if (!audio.current.paused) togglePlaying();
             audio.current.pause();
         }
