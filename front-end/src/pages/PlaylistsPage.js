@@ -97,7 +97,7 @@ function PlaylistsPage() {
             }
         })
         .then((response) => {
-            console.log(response.data.createPlaylist);
+            // console.log(response.data.createPlaylist);
             getPlaylists(user);
             closeCreatePlaylists();
         })

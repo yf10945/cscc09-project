@@ -33,8 +33,8 @@ function MusicPlayer() {
     const [lyricsBox, toggleLyrics] = useState(false);
 
     const toggleAudio = useCallback(() => {
-        (audio.current.paused && playing) ? audio.current.play() : audio.current.pause();
-    }, [playing]);
+        (audio.current.paused && playing && playingSong != null) ? audio.current.play() : audio.current.pause();
+    }, [playing, playingSong]);
 
     const lineRenderer = useCallback(({ lrcLine, index, active }) => {
         const { content } = lrcLine;
@@ -128,10 +128,10 @@ function MusicPlayer() {
     };
 
     useEffect(() => {
-        if (playing) {
+        if (playing && songlist != null) {
             toggleAudio();
         }
-    }, [playing, playingSong, toggleAudio]);
+    }, [playing, playingSong]);
 
     const location = useLocation();
     var hideBar = false;
@@ -155,6 +155,17 @@ function MusicPlayer() {
             if (!audio.current.paused) togglePlaying();
             audio.current.pause();
         }
+
+        // if (location.pathname === "/songs") {
+        //     audio.current.pause();
+        //     audio.current.currentTime = 0;
+        //     dispatch({
+        //         type: "SET_SONG",
+        //         playingSong: null,
+        //         playingSongTitle: null,
+        //         playingSongArtists: null
+        //     });
+        // }
     }, [location]);
 
     return (
