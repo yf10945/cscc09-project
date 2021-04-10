@@ -103,13 +103,13 @@ const RoomPage = (props) => {
     
     useEffect(() => {
         getSongs();
-
+        console.log(audioPlayer.current);
 
 
 //          console.log(audioPlayer.current.currentTime);
 //          console.log(songLyric); 
 //          console.log(parseLrc(songLyric))
-    }, []);
+    }, [audioPlayer]);
 
     function init() {
         socketRef.current = io.connect("/");
@@ -161,7 +161,10 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.play();
+                if (audioPlayer.current) {
+                    audioPlayer.current.play();
+                }
+               
             }
          });
         socketRef.current.on("pause audio", data => {
@@ -170,7 +173,9 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.pause();
+                if (audioPlayer.current) {
+                    audioPlayer.current.pause();
+                }
             }
          });
          socketRef.current.on("set audio time", data => {
@@ -179,10 +184,12 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.pause();
-                if (Math.abs(audioPlayer.current.currentTime - data.time) > 2) { 
-                    audioPlayer.current.currentTime = data.time;
-                    setTime(data.time);
+                if (audioPlayer.current) {
+                    audioPlayer.current.pause();
+                    if (Math.abs(audioPlayer.current.currentTime - data.time) > 2) { 
+                        audioPlayer.current.currentTime = data.time;
+                        setTime(data.time);
+                    }
                 }
             }
          });
@@ -193,7 +200,9 @@ const RoomPage = (props) => {
                     setMessage(" ");
                 }, 2000 )   
                 setSongurl(data.filepath);
-                audioPlayer.current.load();
+                if (audioPlayer.current) {
+                    audioPlayer.current.load();
+                }
             }
          });
          socketRef.current.on("set lyrics", data => {
@@ -268,29 +277,32 @@ const RoomPage = (props) => {
 
     function loadSong() {
         socketRef.current.emit("send pause signal", {roomId: roomID});
-        if (audioPlayer.current.src !== "") {
-            socketRef.current.emit("set song file signal",{roomId:roomID, filepath:audioPlayer.current.src});
-        }
-        
-        if (lyricRef.current !== "") {
-            socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyricRef.current});
-        }
-        if (audioPlayer.current.currentTime !== 0) {
-            socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+        if (audioPlayer.current) {
+            if (audioPlayer.current.src !== "") {
+                socketRef.current.emit("set song file signal",{roomId:roomID, filepath:audioPlayer.current.src});
+            }
+            
+            if (lyricRef.current !== "") {
+                socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyricRef.current});
+            }
+            if (audioPlayer.current.currentTime !== 0) {
+                socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+            }
         }
     }
 
     function setAudioTime() {
-        if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
-            let time = audioPlayer.current.currentTime;
-            audioPlayer.current.load();
-            audioPlayer.current.pause();
-            setTimeout(function() {
-                socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
-            }, 1000 )   
-            setTime(time);
+        if (audioPlayer.current) {
+            if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
+                let time = audioPlayer.current.currentTime;
+                audioPlayer.current.pause();
+                setTimeout(function() {
+                    socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
+                }, 1000 )   
+                setTime(time);
+            }
+            setTime(audioPlayer.current.currentTime);
         }
-        setTime(audioPlayer.current.currentTime);
     }
 
     function changeTrack(filepath, lyrics) {
