@@ -12,13 +12,26 @@
     font-family:verdana;
     font-size:150%;
 }
-
+.videosContainer {
+    background-color: rgb(98, 100, 98);
+    min-height: calc(30vw/16*9);
+    min-width: 90vw;
+    margin:auto;
+}
 video {
+    margin:auto;
     border:1px solid greenyellow;
-    min-height: 48%;
-    min-width: 48%;
-    height:48%;
-    width:48%;
+}
+.othersVideo {  
+    width: 30vw;
+}
+.uservideo {
+    position:absolute;
+    z-index: 1;
+    right:0;
+    bottom:0;
+    max-height: 10%;
+    max-width: 10%;
 }
 .songs-box {
     display: flex;

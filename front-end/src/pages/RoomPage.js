@@ -24,7 +24,7 @@ const Video = (props) => {
 
     return (
             closed ? null :
-                <video playsInline autoPlay ref={ref}/>
+                <video className="othersVideo" playsInline autoPlay ref={ref}/>
             
     );
 }
@@ -365,10 +365,12 @@ const RoomPage = (props) => {
             <div className="message">
                 {message}
             </div>
-            <video muted ref={userVideo} autoPlay playsInline />
-            {peersRef.current.map((peerRef) =>
-                    <Video key={peerRef.peerID} peer={peerRef.peer} />
-            )}
+            <div className="videosContainer"> 
+                <video className="uservideo" muted ref={userVideo} autoPlay playsInline />
+                {peersRef.current.map((peerRef) =>
+                        <Video key={peerRef.peerID} peer={peerRef.peer} />
+                )}
+            </div>
             <audio controls 
               ref={audioPlayer}
               onPlay={setPlay} onPause={setPause}
@@ -394,6 +396,8 @@ const RoomPage = (props) => {
                     <SkipNextIcon className="karaoke-icon" onClick={nextSong} />
                 </div>
             </div>
+
+
         </div>
         </div>
       </div> : <div> </div>
