@@ -4,6 +4,8 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
+import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { Lrc, useLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
@@ -22,13 +24,13 @@ const Video = (props) => {
 
     return (
             closed ? null :
-                <video playsInline autoPlay ref={ref}/>
+                <video className="othersVideo" playsInline autoPlay ref={ref}/>
             
     );
 }
 
 
-const Room = (props) => {
+const RoomPage = (props) => {
     const [peers, setPeers] = useState([]);
     const [message, setMessage] = useState(" ");
     const socketRef = useRef();
@@ -38,6 +40,9 @@ const Room = (props) => {
     const [authorized, setAuthorized] = useState(false);
     const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
+    const songsRef = useRef();
+    const [currentSong, setCurrentSong] = useState(null);
+    const currentPosRef = useRef();
     const [songLyric, setLyric] = useState("");
     const [songUrl, setSongurl] = useState("");
     const lyricRef = useRef("");
@@ -80,7 +85,11 @@ const Room = (props) => {
             setAuthorized(true);
             let songsArray = data.data.getAllSongs;
             setSongs(songsArray);
-            
+            if (songsArray.length > 0) {
+                setCurrentSong(songsArray[0]);
+            }
+            songsRef.current = songsArray;
+            currentPosRef.current = 0;
             init();
             
         })
@@ -313,17 +322,38 @@ const Room = (props) => {
       }, []);
 
 //       const onCurrentLineChange = useCallback((line) => console.log(line), []);
+    
+    function nextSong() {
+        if (currentPosRef.current === songsRef.current.length-1) {
+            currentPosRef.current = 0;
+        } else {
+            currentPosRef.current += 1;
+        }
+        setCurrentSong(songsRef.current[currentPosRef.current]);
+
+    }
+
+    function previousSong() {
+        if (currentPosRef.current === 0) {
+            currentPosRef.current = songsRef.current.length-1;
+        } else {
+            currentPosRef.current -= 1;
+        }
+        setCurrentSong(songsRef.current[currentPosRef.current]);
+    }
 
 
-    const songsHTML = songs.map((element) =>
-    <div className="songs-box" key={element._id}>
-        <div>Song ID: {element._id}</div>
-        <div>Song name: {element.songName}</div>
-        <div>Song artist: {element.artist}</div>
-        <div>Song file: {element.filepath}</div>
-        <button className = "btn" 
-                    onClick = {()=>changeTrack(element.filepath, element.lyrics)}>Change Song </button>
-    </div>)
+    const songsHTML = (currentSong===null) ? null :
+    <div className="songs-box" key={currentSong._id}>
+        <div className="song-info">
+            <div className="song-name">{currentSong.songName}</div>
+            <div className="song-artist">{currentSong.artist}</div>
+        </div>
+        <button className = "btn-blue" 
+                    onClick = {()=>changeTrack(currentSong.filepath, currentSong.lyrics)}>
+                    Change Song
+        </button>
+        </div>
     ;
     
 
@@ -335,24 +365,42 @@ const Room = (props) => {
             <div className="message">
                 {message}
             </div>
-            <video muted ref={userVideo} autoPlay playsInline />
-            {peersRef.current.map((peerRef) =>
-                    <Video key={peerRef.peerID} peer={peerRef.peer} />
-            )}
-            <audio controls ref={audioPlayer} onPlay={setPlay} onPause={setPause} onTimeUpdate={setAudioTime} room={roomID} src={songUrl}></audio>
+            <div className="videosContainer"> 
+                <video className="uservideo" muted ref={userVideo} autoPlay playsInline />
+                {peersRef.current.map((peerRef) =>
+                        <Video key={peerRef.peerID} peer={peerRef.peer} />
+                )}
+            </div>
+            <audio controls 
+              ref={audioPlayer}
+              onPlay={setPlay} onPause={setPause}
+              onTimeUpdate={setAudioTime} room={roomID} src={songUrl}
+              className="audio-control">
+            </audio>
             <Lrc
                 ref={lrcRef}
                 lrc={songLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
-
+                autoScrollAfterUserScroll={0}
                 // onCurrentLineChange={onCurrentLineChange}
 
-                className = "lrc"
+                className = "karaoke-lrc"
             />
-            {songsHTML}
+            <div className="song-outer">
+                <div className="song-selection">
+                    <div>
+                        <SkipPreviousIcon className="karaoke-icon" onClick={previousSong} />
+                    </div>
+                    {songsHTML}
+                    <div>
+                        <SkipNextIcon className="karaoke-icon" onClick={nextSong} />
+                    </div>
+                </div>
+            </div>
+
+
         </div>
-  
         </div>
       </div> : <div> </div>
     
@@ -360,4 +408,4 @@ const Room = (props) => {
   );
 };
 
-export default Room;
+export default RoomPage;
