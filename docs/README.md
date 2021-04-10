@@ -17,7 +17,7 @@ $ curl -X POST -H "Content-Type: `application/json`" -d '{"query":"query string 
 ```
 
 ### getSongById
-- description: retrieve song given its database ID `_id)`
+- description: retrieve song given its database ID `_id`
 - request body example: 
  ```
 query {
