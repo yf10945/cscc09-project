@@ -14,15 +14,15 @@
 }
 .videosContainer {
     background-color: rgb(98, 100, 98);
-    min-height: calc(30vw/16*9);
-    min-width: 90vw;
+    min-height: calc(calc(100vw-120px)*.3/16*9);
+    min-width: calc(calc(100vw-120px)*.9);
     margin:auto;
 }
 video {
     margin:auto;
 }
 .othersVideo {  
-    width: 30vw;
+    width: calc((100vw-120px)*.3);
 }
 .uservideo {
     position:absolute;
@@ -84,9 +84,10 @@ video {
     background-color:rgba(31, 30, 30, 0.9);
     border-radius: 20px;
     min-height: 120px;
+    max-height: 120px;
     overflow: hidden !important;
     flex: 1;
-    width:100%;
+    width:calc((100vw-120px)*.9);
 }
 .song-name {
     font-size: larger;
