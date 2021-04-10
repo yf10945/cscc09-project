@@ -66,6 +66,8 @@ video {
     padding:15px;
     display:flex;
     flex-direction: row important; 
+    place-items: center;
+    justify-content: center;
     min-width: 81vw;
     margin:auto;
 }

@@ -277,8 +277,16 @@ const RoomPage = (props) => {
     }
 
     function setPlay() {
-        setPaused(false);
-        socketRef.current.emit("send play signal", {roomId: roomID});
+        if (audioPlayer.current) {
+            if (audioPlayer.current.readyState !== 0) {
+                setPaused(false);
+                let d = audioPlayer.current.duration;
+                if (d !== 0) {
+                    sliderRef.current.value = audioPlayer.current.currentTime*100/d;
+                }
+                socketRef.current.emit("send play signal", {roomId: roomID});
+            }
+        }
     }
 
     function setPause() {
@@ -299,6 +307,8 @@ const RoomPage = (props) => {
             if (audioPlayer.current.currentTime !== 0) {
                 socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
             }
+            sliderRef.current.value = 0;
+        
         }
     }
 
@@ -328,7 +338,7 @@ const RoomPage = (props) => {
         } else {
             let minute = Math.floor(seconds/60);
             let second = Math.floor(seconds%60);
-            let returnedSeconds = seconds < 10 ? `0${second}` : `${second}`;
+            let returnedSeconds = second < 10 ? `0${second}` : `${second}`;
             returnString = minute.toString()+ ":" +returnedSeconds;
         }
         return returnString;
@@ -382,16 +392,22 @@ const RoomPage = (props) => {
 
     function handleSlide(e) {
         if (audioPlayer.current) {
-            if (audioPlayer.current.paused) {
+            if (audioPlayer.current.paused&& audioPlayer.current.readyState !== 0) {
                 let d = audioPlayer.current.duration;
                 if (d !== 0) {
                     audioPlayer.current.currentTime = e.target.value*d/100;
                 }
             } else {
-                setMessage("Please pause the song first before changing the time");
-                setTimeout(function() {
-                    setMessage(" ");
-                }, 2000 )   
+                if (audioPlayer.current.readyState !== 0) {
+                    setMessage("Please pause the song first before changing the time");
+                    setTimeout(function() {
+                        setMessage(" ");
+                    }, 2000 )
+                    let d = audioPlayer.current.duration;
+                    if (d !== 0) {
+                         e.target.value = audioPlayer.current.currentTime*100/d;
+                    }
+                }
             }
         }
     }
@@ -429,7 +445,7 @@ const RoomPage = (props) => {
             <div className="audio-control">
             {audioPlayPause}
             {currentTimeString}
-            <input type="range" className="karaoke-slider" max="100" onChange={handleSlide}/>
+            <input ref={sliderRef} type="range" className="karaoke-slider" max="100" onChange={handleSlide}/>
             {duration}
             </div>
             <audio
