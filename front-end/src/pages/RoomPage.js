@@ -385,7 +385,7 @@ const RoomPage = (props) => {
                 autoScrollAfterUserScroll={0}
                 // onCurrentLineChange={onCurrentLineChange}
 
-                className = "lrc"
+                className = "karaoke-lrc"
             />
             <div className="song-outer">
                 <div className="song-selection">

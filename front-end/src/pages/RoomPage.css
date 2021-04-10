@@ -14,7 +14,7 @@
 }
 .videosContainer {
     background-color: rgb(98, 100, 98);
-    min-height: calc(31vw/16*9);
+    min-height: calc(30vw/16*9);
     min-width: 90vw;
     margin:auto;
 }
@@ -81,10 +81,10 @@ video {
     margin:auto;
 }
 
-.lrc {
+.karaoke-lrc {
     background-color:rgba(31, 30, 30, 0.9);
     border-radius: 20px;
-    min-height:200px;
+    min-height:120px;
     overflow: hidden !important;
     flex: 1;
     width:100%;
