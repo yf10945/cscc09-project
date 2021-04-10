@@ -48,7 +48,6 @@ video {
 .footer {
     height: 100px;
 }
-
 .btn-blue {
 	border-radius: 10px;
 	text-align: center;
@@ -66,8 +65,12 @@ video {
 .audio-control {
     padding:15px;
     display:flex;
-    min-width:calc(100%-60px);
+    flex-direction: row important; 
+    min-width: 81vw;
     margin:auto;
+}
+.karoke-slider {
+    min-width: 60vw;
 }
 .song-selection {
     display:flex;

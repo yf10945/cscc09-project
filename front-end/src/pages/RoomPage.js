@@ -6,6 +6,8 @@ import "../styles.css";
 import "./RoomPage.css";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { Lrc, useLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
@@ -36,11 +38,13 @@ const RoomPage = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
+    const [paused,setPaused] = useState(true);
     const lrcRef = useRef();
     const [authorized, setAuthorized] = useState(false);
     const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
     const songsRef = useRef();
+    const sliderRef = useRef();
     const [currentSong, setCurrentSong] = useState(null);
     const currentPosRef = useRef();
     const [songLyric, setLyric] = useState("");
@@ -273,10 +277,12 @@ const RoomPage = (props) => {
     }
 
     function setPlay() {
+        setPaused(false);
         socketRef.current.emit("send play signal", {roomId: roomID});
     }
 
     function setPause() {
+        setPaused(true);
         socketRef.current.emit("send pause signal", {roomId: roomID});
     }
 
@@ -300,14 +306,14 @@ const RoomPage = (props) => {
         if (audioPlayer.current) {
             if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
                 let time = audioPlayer.current.currentTime;
-                audioPlayer.current.pause();
                 setTimeout(function() {
                     socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
                 }, 1000 )   
                 setTime(time);
             }
             setTime(audioPlayer.current.currentTime);
-        }
+       }
+        
     }
 
     function changeTrack(filepath, lyrics) {
@@ -316,9 +322,16 @@ const RoomPage = (props) => {
     }
 
     function timeConverter(seconds) {
-        let minute = Math.floor(seconds/60);
-        let second = Math.floor(seconds%60);
-        return (minute.toString()+ ":" +second.toString());
+        let returnString = "";
+        if (isNaN(seconds)) {
+            returnString = "0.00";
+        } else {
+            let minute = Math.floor(seconds/60);
+            let second = Math.floor(seconds%60);
+            let returnedSeconds = seconds < 10 ? `0${second}` : `${second}`;
+            returnString = minute.toString()+ ":" +returnedSeconds;
+        }
+        return returnString;
     }
 
     const lineRenderer = useCallback(({ lrcLine, index, active }) => {
@@ -358,8 +371,30 @@ const RoomPage = (props) => {
         }
         setCurrentSong(songsRef.current[currentPosRef.current]);
     }
+    const audioPlayPause =  (paused) ?
+        <div>
+            <PlayCircleOutlineIcon className="karaoke-icon" onClick={setPlay}/>
+        </div> : 
+        <div>
+              <PauseCircleOutlineIcon className="karaoke-icon" onClick={setPause}/>
+        </div>
+     ; 
 
-
+    function handleSlide(e) {
+        if (audioPlayer.current) {
+            if (audioPlayer.current.paused) {
+                let d = audioPlayer.current.duration;
+                if (d !== 0) {
+                    audioPlayer.current.currentTime = e.target.value*d/100;
+                }
+            } else {
+                setMessage("Please pause the song first before changing the time");
+                setTimeout(function() {
+                    setMessage(" ");
+                }, 2000 )   
+            }
+        }
+    }
     const songsHTML = (currentSong===null) ? null :
     <div className="songs-box" key={currentSong._id}>
         <div className="song-info">
@@ -373,6 +408,9 @@ const RoomPage = (props) => {
         </div>
     ;
     
+    const duration = (!audioPlayer.current) ? "0.00" : timeConverter(audioPlayer.current.duration);
+
+    const currentTimeString = (!audioPlayer.current) ? "0.00" : timeConverter(audioPlayer.current.currentTime);
 
     return (
         authorized ? 
@@ -388,11 +426,17 @@ const RoomPage = (props) => {
                         <Video key={peerRef.peerID} peer={peerRef.peer} />
                 )}
             </div>
-            <audio controls 
+            <div className="audio-control">
+            {audioPlayPause}
+            {currentTimeString}
+            <input type="range" className="karaoke-slider" max="100" onChange={handleSlide}/>
+            {duration}
+            </div>
+            <audio
               ref={audioPlayer}
               onPlay={setPlay} onPause={setPause}
               onTimeUpdate={setAudioTime} room={roomID} src={songUrl}
-              className="audio-control">
+            >
             </audio>
             <Lrc
                 ref={lrcRef}
