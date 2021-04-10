@@ -322,6 +322,7 @@ const RoomPage = (props) => {
                 setTime(time);
             }
             setTime(audioPlayer.current.currentTime);
+            sliderRef.current.value = audioPlayer.current.currentTime*100/audioPlayer.current.duration;
        }
         
     }
@@ -445,7 +446,9 @@ const RoomPage = (props) => {
             <div className="audio-control">
             {audioPlayPause}
             {currentTimeString}
-            <input ref={sliderRef} type="range" className="karaoke-slider" max="100" onChange={handleSlide}/>
+            <input ref={sliderRef} type="range"
+            className="karaoke-slider" max="100" 
+            onChange={handleSlide}/>
             {duration}
             </div>
             <audio

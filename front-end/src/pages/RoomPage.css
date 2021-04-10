@@ -71,9 +71,36 @@ video {
     min-width: 81vw;
     margin:auto;
 }
-.karoke-slider {
-    min-width: 60vw;
-}
+.karaoke-slider {
+    -webkit-appearance: none;
+    min-width:50vw;
+    margin:10px;
+    height: 15px;
+    border-radius: 5px;  
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .karaoke-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .karaoke-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }
 .song-selection {
     display:flex;
     flex-direction: row !important;
