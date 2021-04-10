@@ -1,5 +1,5 @@
   
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
@@ -100,6 +100,11 @@ const RoomPage = (props) => {
             console.log(error);
         })
     };
+    useLayoutEffect(() => {
+        if (socketRef.current) {
+            socketRef.current.close();
+        }
+    })
     
     useEffect(() => {
         getSongs();
