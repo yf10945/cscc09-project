@@ -386,11 +386,11 @@ const RoomPage = (props) => {
                 className = "lrc"
             />
             <div className="song-selection">
-                <div onClick={previousSong}>
+                <div>
                     <SkipPreviousIcon className="karaoke-icon" onClick={previousSong} />
                 </div>
                 {songsHTML}
-                <div onClick={nextSong}>
+                <div>
                     <SkipNextIcon className="karaoke-icon" onClick={nextSong} />
                 </div>
             </div>

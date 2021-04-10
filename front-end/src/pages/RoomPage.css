@@ -60,9 +60,7 @@ video {
     width:100%;
     display:flex;
     flex-direction: row !important;
-    
-    margin-left:auto;
-    margin-right: auto;
+    margin:auto
 }
 
 .lrc {

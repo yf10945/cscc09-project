@@ -195,7 +195,7 @@ function MusicPlayer() {
                     <div className="shuffle-button" onClick={toggleRandom}>
                         <ShuffleIcon className={"pointer music-player-" + (random ? "green" : "white")}  />
                     </div>
-                    <div className="previous-button" onClick={previousSong}>
+                    <div className="previous-button">
                         <SkipPreviousIcon className="pointer music-player-icon" onClick={previousSong} />
                     </div>
                     <div className="play-button" 
@@ -208,7 +208,7 @@ function MusicPlayer() {
                         <PlayCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "hide" : "")} fontSize="large" />
                         <PauseCircleOutlineIcon className={"pointer music-player-icon-" + ((playing && playingSong != null) ? "" : "hide")} fontSize="large" />
                     </div>
-                    <div className="next-button" onClick={nextSong}>
+                    <div className="next-button">
                         <SkipNextIcon className="pointer music-player-icon" onClick={nextSong} />
                     </div>
                     <div className="repeat-button" onClick={toggleRepeat}>
