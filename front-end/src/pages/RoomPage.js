@@ -1,11 +1,13 @@
   
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import "../styles.css";
 import "./RoomPage.css";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { Lrc, useLrc } from '@mebtte/react-lrc';
 
 const Video = (props) => {
@@ -36,11 +38,13 @@ const RoomPage = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
+    const [paused,setPaused] = useState(true);
     const lrcRef = useRef();
     const [authorized, setAuthorized] = useState(false);
     const [prevTime, setTime] = useState(0);
     const [songs, setSongs] = useState([]);
     const songsRef = useRef();
+    const sliderRef = useRef();
     const [currentSong, setCurrentSong] = useState(null);
     const currentPosRef = useRef();
     const [songLyric, setLyric] = useState("");
@@ -100,16 +104,21 @@ const RoomPage = (props) => {
             console.log(error);
         })
     };
+    useLayoutEffect(() => {
+        if (socketRef.current) {
+            socketRef.current.close();
+        }
+    },[])
     
     useEffect(() => {
         getSongs();
-
+        console.log(audioPlayer.current);
 
 
 //          console.log(audioPlayer.current.currentTime);
 //          console.log(songLyric); 
 //          console.log(parseLrc(songLyric))
-    }, []);
+    }, [audioPlayer]);
 
     function init() {
         socketRef.current = io.connect("/");
@@ -161,7 +170,10 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.play();
+                if (audioPlayer.current) {
+                    audioPlayer.current.play();
+                }
+               
             }
          });
         socketRef.current.on("pause audio", data => {
@@ -170,7 +182,9 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.pause();
+                if (audioPlayer.current) {
+                    audioPlayer.current.pause();
+                }
             }
          });
          socketRef.current.on("set audio time", data => {
@@ -179,10 +193,12 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
-                audioPlayer.current.pause();
-                if (Math.abs(audioPlayer.current.currentTime - data.time) > 2) { 
-                    audioPlayer.current.currentTime = data.time;
-                    setTime(data.time);
+                if (audioPlayer.current) {
+                    audioPlayer.current.pause();
+                    if (Math.abs(audioPlayer.current.currentTime - data.time) > 2) { 
+                        audioPlayer.current.currentTime = data.time;
+                        setTime(data.time);
+                    }
                 }
             }
          });
@@ -193,7 +209,9 @@ const RoomPage = (props) => {
                     setMessage(" ");
                 }, 2000 )   
                 setSongurl(data.filepath);
-                audioPlayer.current.load();
+                if (audioPlayer.current) {
+                    audioPlayer.current.load();
+                }
             }
          });
          socketRef.current.on("set lyrics", data => {
@@ -259,38 +277,54 @@ const RoomPage = (props) => {
     }
 
     function setPlay() {
-        socketRef.current.emit("send play signal", {roomId: roomID});
+        if (audioPlayer.current) {
+            if (audioPlayer.current.readyState !== 0) {
+                setPaused(false);
+                let d = audioPlayer.current.duration;
+                if (d !== 0) {
+                    sliderRef.current.value = audioPlayer.current.currentTime*100/d;
+                }
+                socketRef.current.emit("send play signal", {roomId: roomID});
+            }
+        }
     }
 
     function setPause() {
+        setPaused(true);
         socketRef.current.emit("send pause signal", {roomId: roomID});
     }
 
     function loadSong() {
         socketRef.current.emit("send pause signal", {roomId: roomID});
-        if (audioPlayer.current.src !== "") {
-            socketRef.current.emit("set song file signal",{roomId:roomID, filepath:audioPlayer.current.src});
-        }
+        if (audioPlayer.current) {
+            if (audioPlayer.current.src !== "") {
+                socketRef.current.emit("set song file signal",{roomId:roomID, filepath:audioPlayer.current.src});
+            }
+            
+            if (lyricRef.current !== "") {
+                socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyricRef.current});
+            }
+            if (audioPlayer.current.currentTime !== 0) {
+                socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
+            }
+            sliderRef.current.value = 0;
         
-        if (lyricRef.current !== "") {
-            socketRef.current.emit("set lyrics signal", {roomId:roomID, lyrics:lyricRef.current});
-        }
-        if (audioPlayer.current.currentTime !== 0) {
-            socketRef.current.emit("send change time signal", {roomId:roomID, time: audioPlayer.current.currentTime});
         }
     }
 
     function setAudioTime() {
-        if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
-            let time = audioPlayer.current.currentTime;
-            audioPlayer.current.load();
-            audioPlayer.current.pause();
-            setTimeout(function() {
-                socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
-            }, 1000 )   
-            setTime(time);
-        }
-        setTime(audioPlayer.current.currentTime);
+        if (audioPlayer.current) {
+            if (Math.abs(audioPlayer.current.currentTime - prevTime) > 2) {
+                let time = audioPlayer.current.currentTime;
+                setTimeout(function() {
+                    socketRef.current.emit("send change time signal", {roomId:roomID, time: time});
+                }, 1000 )   
+                setTime(time);
+            }
+            setTime(audioPlayer.current.currentTime);
+            sliderRef.current.value = audioPlayer.current.currentTime*100/audioPlayer.current.duration;
+       }
+        
     }
 
     function changeTrack(filepath, lyrics) {
@@ -299,9 +333,16 @@ const RoomPage = (props) => {
     }
 
     function timeConverter(seconds) {
-        let minute = Math.floor(seconds/60);
-        let second = Math.floor(seconds%60);
-        return (minute.toString()+ ":" +second.toString());
+        let returnString = "";
+        if (isNaN(seconds)) {
+            returnString = "0.00";
+        } else {
+            let minute = Math.floor(seconds/60);
+            let second = Math.floor(seconds%60);
+            let returnedSeconds = second < 10 ? `0${second}` : `${second}`;
+            returnString = minute.toString()+ ":" +returnedSeconds;
+        }
+        return returnString;
     }
 
     const lineRenderer = useCallback(({ lrcLine, index, active }) => {
@@ -341,8 +382,36 @@ const RoomPage = (props) => {
         }
         setCurrentSong(songsRef.current[currentPosRef.current]);
     }
+    const audioPlayPause =  (paused) ?
+        <div>
+            <PlayCircleOutlineIcon className="karaoke-icon" onClick={setPlay}/>
+        </div> : 
+        <div>
+              <PauseCircleOutlineIcon className="karaoke-icon" onClick={setPause}/>
+        </div>
+     ; 
 
-
+    function handleSlide(e) {
+        if (audioPlayer.current) {
+            if (audioPlayer.current.paused&& audioPlayer.current.readyState !== 0) {
+                let d = audioPlayer.current.duration;
+                if (d !== 0) {
+                    audioPlayer.current.currentTime = e.target.value*d/100;
+                }
+            } else {
+                if (audioPlayer.current.readyState !== 0) {
+                    setMessage("Please pause the song first before changing the time");
+                    setTimeout(function() {
+                        setMessage(" ");
+                    }, 2000 )
+                    let d = audioPlayer.current.duration;
+                    if (d !== 0) {
+                         e.target.value = audioPlayer.current.currentTime*100/d;
+                    }
+                }
+            }
+        }
+    }
     const songsHTML = (currentSong===null) ? null :
     <div className="songs-box" key={currentSong._id}>
         <div className="song-info">
@@ -356,6 +425,9 @@ const RoomPage = (props) => {
         </div>
     ;
     
+    const duration = (!audioPlayer.current) ? "0.00" : timeConverter(audioPlayer.current.duration);
+
+    const currentTimeString = (!audioPlayer.current) ? "0.00" : timeConverter(audioPlayer.current.currentTime);
 
     return (
         authorized ? 
@@ -371,11 +443,19 @@ const RoomPage = (props) => {
                         <Video key={peerRef.peerID} peer={peerRef.peer} />
                 )}
             </div>
-            <audio controls 
+            <div className="audio-control">
+            {audioPlayPause}
+            {currentTimeString}
+            <input ref={sliderRef} type="range"
+            className="karaoke-slider" max="100" 
+            onChange={handleSlide}/>
+            {duration}
+            </div>
+            <audio
               ref={audioPlayer}
               onPlay={setPlay} onPause={setPause}
               onTimeUpdate={setAudioTime} room={roomID} src={songUrl}
-              className="audio-control">
+            >
             </audio>
             <Lrc
                 ref={lrcRef}
