@@ -14,15 +14,15 @@
 }
 .videosContainer {
     background-color: rgb(98, 100, 98);
-    min-height: calc(calc(100vw-120px)*.3/16*9);
-    min-width: calc(calc(100vw-120px)*.9);
+    min-height: calc(27vw/16*9);
+    min-width: 81vw;
     margin:auto;
 }
 video {
     margin:auto;
 }
 .othersVideo {  
-    width: calc((100vw-120px)*.3);
+    width: 27vw;
 }
 .uservideo {
     position:absolute;
@@ -87,7 +87,7 @@ video {
     max-height: 120px;
     overflow: hidden !important;
     flex: 1;
-    width:calc((100vw-120px)*.9);
+    width: 81vw;
 }
 .song-name {
     font-size: larger;
