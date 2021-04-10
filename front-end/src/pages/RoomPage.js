@@ -382,18 +382,20 @@ const RoomPage = (props) => {
                 lrc={songLyric}
                 currentTime={prevTime*1000}
                 lineRenderer={lineRenderer}
-
+                autoScrollAfterUserScroll={0}
                 // onCurrentLineChange={onCurrentLineChange}
 
                 className = "lrc"
             />
-            <div className="song-selection">
-                <div>
-                    <SkipPreviousIcon className="karaoke-icon" onClick={previousSong} />
-                </div>
-                {songsHTML}
-                <div>
-                    <SkipNextIcon className="karaoke-icon" onClick={nextSong} />
+            <div className="song-outer">
+                <div className="song-selection">
+                    <div>
+                        <SkipPreviousIcon className="karaoke-icon" onClick={previousSong} />
+                    </div>
+                    {songsHTML}
+                    <div>
+                        <SkipNextIcon className="karaoke-icon" onClick={nextSong} />
+                    </div>
                 </div>
             </div>
 

@@ -14,7 +14,7 @@
 }
 .videosContainer {
     background-color: rgb(98, 100, 98);
-    min-height: calc(30vw/16*9);
+    min-height: calc(31vw/16*9);
     min-width: 90vw;
     margin:auto;
 }
@@ -30,8 +30,8 @@ video {
     z-index: 1;
     right:0;
     bottom:0;
-    max-height: 10%;
-    max-width: 10%;
+    max-height: 15%;
+    max-width: 15%;
 }
 .songs-box {
     display: flex;
@@ -65,24 +65,29 @@ video {
 }
 
 .audio-control {
+    padding:15px;
     display:flex;
     min-width:calc(100%-60px);
     margin:auto;
 }
 .song-selection {
-    width:100%;
     display:flex;
     flex-direction: row !important;
-    margin:auto
+    margin:auto;
+    padding:5px;
+}
+.song-outer {
+    display:flex;
+    margin:auto;
 }
 
 .lrc {
-    height:120px;
+    background-color:rgba(31, 30, 30, 0.9);
+    border-radius: 20px;
+    min-height:200px;
+    overflow: hidden !important;
     flex: 1;
     width:100%;
-    overflow-y: scroll;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
 }
 .song-name {
     font-size: larger;
@@ -93,6 +98,7 @@ video {
 .karaoke-icon {
     min-height:100px;
     min-width: 100px;
+    margin-top: 10px;
 }
   
   /* Hide scrollbar for Chrome, Safari and Opera */
