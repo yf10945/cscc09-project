@@ -104,7 +104,7 @@ const RoomPage = (props) => {
         if (socketRef.current) {
             socketRef.current.close();
         }
-    })
+    },[])
     
     useEffect(() => {
         getSongs();
