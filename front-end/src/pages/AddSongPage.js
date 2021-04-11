@@ -52,7 +52,8 @@ export default function AddSongPage(props) {
           }
         })
         .then((data) => {
-          setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");
+          // setMessage("Song with id "+ data.data.addSong._id +" is successfully added to database.");\
+          setMessage("Song successfully added to database.");
         })
         .catch(error => {
           setMessage("");
