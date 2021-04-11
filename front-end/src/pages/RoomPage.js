@@ -209,6 +209,8 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
+                
+                setPaused(true);
                 setSongurl(data.filepath);
                 if (audioPlayer.current) {
                     audioPlayer.current.load();
