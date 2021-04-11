@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./WelcomePage.css";
 import "../styles.css";
 import { Link } from 'react-router-dom';
 import logo from "../Logo";
 
 function WelcomePage() {
+    const signout = async() => {
+        var fetchOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: null,
+        };
+        return fetch("/logout", fetchOptions)
+        .then((res) => {
+            if (res.status !== 200 ){
+              console.log({errorMessage: res.status + " " + res.statusText});
+            }
+            return res;
+        });
+    };
+
+    useEffect(() => {
+        signout();
+    });
 
     return (
         <div className="welcome-page main-theme">
