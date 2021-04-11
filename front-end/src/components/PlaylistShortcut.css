@@ -1,15 +1,15 @@
 .playlist-shortcut {
-    background-color: rgb(34, 33, 33);
-    border-radius: 20px;
-    width: calc((100% - 100px * 2) / 4);
-    height: 125px;
-    margin: 20px;
-    transition: transform .2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-    float: left;
+    background-color: rgb(34, 33, 33) !important;
+    border-radius: 20px !important;
+    min-width: 275px !important;
+    min-height: 150px !important;
+    margin: 20px !important;
+    transition: transform .2s !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    user-select: none !important;
+    float: left !important;
 }
 
 .playlist-shortcut:hover {

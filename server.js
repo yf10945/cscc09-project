@@ -182,6 +182,12 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   res.json({ token: token, status: 'Successfully Logged In' });
 });
 
+app.get("/logout", function(req, res, next) {
+  res.cookie("jwt", {}, {maxAge: -1});
+  res.cookie("username", {}, {maxAge: -1});
+  res.redirect("/");
+});
+
 const { 
   v4: uuidv4,
 } = require('uuid');

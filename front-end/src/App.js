@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import AddSongPage from "./pages/AddSongPage";
 import LoginPage from "./pages/LoginPage";
@@ -32,6 +32,10 @@ function App() {
       }
     },
   });
+
+  useEffect(() => {
+    document.title = "catJAM";
+  }, []);
 
   return (
     <React.Fragment>

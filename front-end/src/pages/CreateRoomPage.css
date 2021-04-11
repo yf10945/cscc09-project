@@ -1,0 +1,47 @@
+.create-room {
+    display: flex;
+    background-color: rgb(34, 33, 33);
+    width: 160px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: transform .2s linear;
+    margin-bottom: 30px;
+}
+
+.create-room:hover {
+    background-color: rgb(14, 13, 13);
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.create-room-text {
+    margin: 5px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.footer {
+    height: 100px;
+}
+
+.create-room-page {
+    min-height: 100vh;
+}
+
+.room {
+    background-color: rgb(34, 33, 33);
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 60vw;
+    transition: transform .5s;
+}
+
+.room:hover {
+    background-color: rgb(14, 13, 13);
+    transform: scale(1.05);
+}
+
+.room-info {
+    font-size: 20px;
+}

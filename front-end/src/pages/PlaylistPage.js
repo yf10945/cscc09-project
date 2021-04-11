@@ -14,7 +14,7 @@ import { SignalCellular0Bar } from "@material-ui/icons";
 // import Snackbar from '@material-ui/core/Snackbar';
 
 
-function PlaylistPage() {
+function PlaylistPage(props) {
     const [{ playingPlaylist, viewingPlaylist, songlist, playingSong, playingSongTitle, playingSongArtists }, dispatch] = useDataLayerValue();
     const [songs, setSongs] = useState([]);
     const [addSongs, setAddSongs] = useState([]);
@@ -54,9 +54,15 @@ function PlaylistPage() {
         })
         .then((response) => {
             if (response.ok) {
-                return response.json();
+              return response.json();
             } else {
-                throw new Error(response.statusText);
+              console.log(response.status + " " +  response.statusText);
+              if (response.status === 401) {
+                throw new Error("Unauthorized!");
+              } else {
+                  throw new Error(response.statusText);
+              }
+  
             }
         })
         .then((response) => {
@@ -78,7 +84,13 @@ function PlaylistPage() {
                 songlist: response.data.getPlaylistById.songs
             });
         })
-        .catch(error => console.log(error));
+        .catch(error => { 
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+            console.log("asdasdasd");
+            console.log(error);
+        });
     };
 
     const deleteSongFromPlaylist = (songId, setSongs, getPlaylistSongs, playlistId) => {

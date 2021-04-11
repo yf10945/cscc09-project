@@ -1,3 +1,3 @@
-const logo = "http://cdn.onlinewebfonts.com/svg/img_496903.png";
+const logo = "https://i.imgur.com/INiorgZ.png";
 
 export default logo;
