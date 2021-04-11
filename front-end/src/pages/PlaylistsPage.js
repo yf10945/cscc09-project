@@ -6,8 +6,7 @@ import PlaylistList from "../components/PlaylistList";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@material-ui/core";
 
-
-function PlaylistsPage() {
+function PlaylistsPage(props) {
     const [{ user }, dispatch] = useDataLayerValue();
     const [playlists, setPlaylists] = useState([]);
     const [open, setOpen] = useState(false);
@@ -49,9 +48,13 @@ function PlaylistsPage() {
         })
         .then((response) => {
             if (response.ok) {
-                return response.json();
+              return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                } else {
+                    throw new Error(response.statusText);
+                }
             }
         })
         .then((response) => {
@@ -60,7 +63,12 @@ function PlaylistsPage() {
             // console.log(response.data.getPlaylistsByUser);
             setPlaylists(response.data.getPlaylistsByUser);
         })
-        .catch(error => console.log(error));
+        .catch(error => { 
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+            console.log(error);
+        });
     };
 
     const createPlaylist = () => {
@@ -91,9 +99,13 @@ function PlaylistsPage() {
         })
         .then((response) => {
             if (response.ok) {
-                return response.json();
+              return response.json();
             } else {
-                throw new Error(response.statusText);
+                if (response.status === 401) {
+                    throw new Error("Unauthorized!");
+                } else {
+                    throw new Error(response.statusText);
+                }
             }
         })
         .then((response) => {
@@ -101,7 +113,12 @@ function PlaylistsPage() {
             getPlaylists(user);
             closeCreatePlaylists();
         })
-        .catch(error => console.log(error));
+        .catch(error => { 
+            if (error.message === "Unauthorized!") {
+                props.history.push("/");
+            }
+            console.log(error);
+        });
     };
 
     useEffect(() => {
