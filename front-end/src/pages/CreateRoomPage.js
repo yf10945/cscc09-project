@@ -1,7 +1,9 @@
 import React, {useState, useRef, useEffect} from "react";
 import "../styles.css";
+import "./CreateRoomPage.css";
 import { element } from "prop-types";
 import { join } from "path";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export default function CreateRoomPage (props) {
     const [roomList, setRoomList] = useState([]);
@@ -97,21 +99,27 @@ export default function CreateRoomPage (props) {
         props.history.push(`rooms/room/${_id}`);
     }
     const roomListHTML = roomList.map((element) =>
-        <div className="Room" key={element._id}>
-            <div>Room ID: {element._id}</div>
-            <div>Room Host: {element.host}</div>
-            <div>Currently Playing: {element.currentSong===null?"":element.currentSong}</div>
-            <button className = "btn" 
+        <div className="room" key={element._id}>
+            <div className="room-info"><strong>Room ID: </strong>{element._id}</div>
+            <div className="room-info"><strong>Room Host:</strong> {element.host}</div>
+            <div className="room-info"><strong>Currently Playing:</strong> {element.currentSong===null?"":element.currentSong}</div>
+            <button className = "main-button-theme btn pointer" 
                         onClick = {()=>joinRoom(element._id)}>Join room </button>
         </div>)
         ;
     return (
-        <div className="dashboard main-theme">
+        <div className="create-room-page main-theme">
             <div className="main">
-                <button className = "btn" 
-                        onClick = {createRoom}> Create a room </button>
+                <h1>Karaoke Rooms</h1>
+                <div 
+                    className = "create-room" 
+                    onClick = {createRoom}>
+                    <AddCircleOutlineIcon fontSize="large" />
+                    <div className="create-room-text">Create Room</div>
+                </div>
                 {roomListHTML}
             </div>
+            <div className="footer"></div>
         </div>
       );
 
