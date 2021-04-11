@@ -35,6 +35,23 @@ function NavBar({ open, setOpen }) {
         location.pathname === "/404") {
       return null;
     }
+
+    const signout = async() => {
+        var fetchOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: null,
+        };
+        return fetch("/logout", fetchOptions)
+        .then((res) => {
+            if (res.status !== 200 ){
+              console.log({errorMessage: res.status + " " + res.statusText});
+            }
+            return res;
+        });
+    };
     
     return (
         <StyledNav open={open} className="nav-bar">
@@ -62,7 +79,7 @@ function NavBar({ open, setOpen }) {
             <div className="profile">
                 <NavBarOption title={username}/>
             </div>
-            <Link to="/" className="sign-out">
+            <Link to="/" className="sign-out" onClick={signout}>
                 <NavBarOption Icon={ExitToApp} title="Sign Out" />
             </Link>
         </StyledNav>
