@@ -106,7 +106,7 @@ function SongsPage(props) {
     return (
         <div className="songs-page main-theme">
             <div className="main">
-                <h1>Your Songs</h1>
+                <h1>Songs</h1>
                 <SongList songs={songs} setSongs={setSongs} getSongs={getSongs} deleteSong={deleteSong} />
                 {/* Add spacing between songs list and music control bar with footer*/}
                 <div className="footer"></div>

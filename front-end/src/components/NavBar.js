@@ -68,7 +68,7 @@ function NavBar({ open, setOpen }) {
                 <NavBarOption Icon={Chat} title="Karaoke Rooms" />
             </Link>
             <Link to="/songs" className="navbar-link">
-                <NavBarOption Icon={MusicNote} title="Your Songs" />
+                <NavBarOption Icon={MusicNote} title="Songs" />
             </Link>
             <Link to="/playlists" className="navbar-link">
                 <NavBarOption Icon={LibraryMusic} title="Your Playlists" />
