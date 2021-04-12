@@ -539,7 +539,7 @@ mutation {
 
  
 ## Create
-
+### Signup
 - description: signup for an account
 - request: `POST /signup`
     - content-type: `application/json`
@@ -559,7 +559,7 @@ curl -X POST  https://www.project-catjam.me/signup
   	-H "Content-Type: application/json" 
    	 -d "{\"username\":\"c\", \"password\":\"c\"}"
 ```
-
+### Login
 - description: login to an account
 - request: `POST /login`
     - content-type: `application/json`
@@ -578,4 +578,17 @@ curl -X POST  https://www.project-catjam.me/signup
 curl -X POST  https://www.project-catjam.me/login 
   	-H "Content-Type: application/json" 
    	 -d "{\"username\":\"a\", \"password\":\"a\"}"
+```
+### Logout
+- description: log out of account
+- request: `GET /logout`
+    - content-type: `application/json`
+    - body: null
+- response: 302
+    - content-type: `application/json`
+    - body: null
+
+```
+curl -X POST  https://www.project-catjam.me/logout 
+  	-H "Content-Type: application/json" 
 ```
