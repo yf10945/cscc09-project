@@ -579,6 +579,7 @@ curl -X POST  https://www.project-catjam.me/login
   	-H "Content-Type: application/json" 
    	 -d "{\"username\":\"a\", \"password\":\"a\"}"
 ```
+## Read
 ### Logout
 - description: log out of account
 - request: `GET /logout`

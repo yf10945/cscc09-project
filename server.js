@@ -194,8 +194,8 @@ const {
 
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3({
-    accessKeyId: "process.env.AWSAccessKey",
-    secretAccessKey: "process.env.AWSSecretKey"
+    accessKeyId: process.env.AWSAccessKey,
+    secretAccessKey: proccess.env.AWSSecretKey
   });
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
