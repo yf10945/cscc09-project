@@ -14,7 +14,8 @@ export const initialState = {
     songlist: [],
     playingPlaylist: null,
     viewingPlaylist: null,
-    socket: null
+    socket: null,
+    stream: null,
 };
 
 const reducer = (state, action) => {
@@ -87,6 +88,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 socket: action.socket
+            };
+        case "SET_STREAM":
+            return {
+                ...state,
+                stream: action.stream
             };
         default:
             return state;

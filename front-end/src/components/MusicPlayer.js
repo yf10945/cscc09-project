@@ -25,7 +25,9 @@ function MusicPlayer() {
         repeat, 
         random,
         playing,
-        volume
+        volume,
+        socket,
+        stream
     }, dispatch] = useDataLayerValue();
     const audio = useRef("audio-tag");
     const [duration, setDuration] = useState(0);
@@ -157,6 +159,22 @@ function MusicPlayer() {
             if (!audio.current.paused) togglePlaying();
             audio.current.pause();
         }
+        setTimeout(function() {
+            if (location.pathname.match(/.+?(?=rooms\/room)/) === null) {
+                if (stream) {
+                    stream.getTracks().forEach(function(track) {
+                        track.stop();
+                    });
+                }
+                if (socket) {
+                    if (socket.current) {
+                        socket.current.close();
+                    }
+                }
+            }
+        }, 500 )   
+       
+ 
     }, [location]);
 
     useEffect(() => {
