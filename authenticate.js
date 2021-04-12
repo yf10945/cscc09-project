@@ -1,3 +1,4 @@
+// authentication code is based on https://htoopyae5.medium.com/graphql-with-express-mongodb-58ca98172c79
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
