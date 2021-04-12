@@ -54,7 +54,7 @@ const RoomPage = (props) => {
     const lyricRef = useRef("");
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
-    const [{ socket }, dispatch] = useDataLayerValue();
+    const [{ socket, stream }, dispatch] = useDataLayerValue();
 
     const getSongs = () => {
         fetch('/graphql', {
@@ -108,13 +108,21 @@ const RoomPage = (props) => {
         })
     };
     useLayoutEffect(() => {
+        
         if (socketRef.current) {
             socketRef.current.close();
         }
     },[])
     
     useEffect(() => {
+        
+        if (socket) {
+            if (socket.current) {
+                socket.current.close();
+            }
+        }
         getSongs();
+
         console.log(audioPlayer.current);
 
 
@@ -131,6 +139,10 @@ const RoomPage = (props) => {
         });
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
+            dispatch({
+                type: "SET_STREAM",
+                stream: stream          
+            });
             setMessage("Welcome to the room!");
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
@@ -384,6 +396,7 @@ const RoomPage = (props) => {
     }
 
     function previousSong() {
+        console.log(socket);
         if (currentPosRef.current === 0) {
             currentPosRef.current = songsRef.current.length-1;
         } else {
