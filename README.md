@@ -1,5 +1,11 @@
 # Karaoke Music Player
 
+How to Use
+------------
+Website: https://www.project-catjam.me/  
+Demo: https://www.youtube.com/watch?v=U-uUsMbrEfk  
+Documentation: https://github.com/UTSCC09/project-catjam/blob/master/docs/README.md  
+
 Team members
 ------------
 

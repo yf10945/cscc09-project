@@ -1,4 +1,5 @@
   
+//webrtc code based on https://www.youtube.com/watch?v=R1sfHPwEH7A
 import React, { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
@@ -214,6 +215,8 @@ const RoomPage = (props) => {
                 setTimeout(function() {
                     setMessage(" ");
                 }, 2000 )   
+                
+                setPaused(true);
                 setSongurl(data.filepath);
                 if (audioPlayer.current) {
                     audioPlayer.current.load();
