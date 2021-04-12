@@ -9,6 +9,7 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import { Lrc, useLrc } from '@mebtte/react-lrc';
+import { useDataLayerValue } from "../dataLayer";
 
 const Video = (props) => {
     const ref = useRef();
@@ -52,6 +53,7 @@ const RoomPage = (props) => {
     const lyricRef = useRef("");
     const audioPlayer = useRef();
     const roomID = props.match.params.roomID;
+    const [{ socket }, dispatch] = useDataLayerValue();
 
     const getSongs = () => {
         fetch('/graphql', {
@@ -122,6 +124,10 @@ const RoomPage = (props) => {
 
     function init() {
         socketRef.current = io.connect("/");
+        dispatch({
+            type: "SET_SOCKET",
+            socket: socketRef            
+        });
         navigator.mediaDevices.getUserMedia({ video:true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
             setMessage("Welcome to the room!");
