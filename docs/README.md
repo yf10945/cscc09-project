@@ -589,6 +589,6 @@ curl -X POST  https://www.project-catjam.me/login
     - body: null
 
 ```
-curl -X POST  https://www.project-catjam.me/logout 
+curl -X GET https://www.project-catjam.me/logout 
   	-H "Content-Type: application/json" 
 ```
