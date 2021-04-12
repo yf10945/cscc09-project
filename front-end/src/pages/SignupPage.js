@@ -71,7 +71,7 @@ class SignupPage extends Component {
                     required
                 />
                 <input
-                    type="password"
+                    type="text"
                     name="password"
                     className="form_element"
                     placeholder="Password"
